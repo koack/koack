@@ -1,0 +1,3 @@
+export {
+  token: 'abcdefgh',
+};
