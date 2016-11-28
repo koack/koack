@@ -103,6 +103,13 @@ process.on('SIGINT', () => bot.close());
 process.on('SIGTERM', () => bot.close());
 ```
 
+# Extends the context
+
+```js
+bot.context.myOwnContextMethod = () => console.log('Hello !');
+
+```
+
 [npm-image]: https://img.shields.io/npm/v/koack.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/koack
 [daviddm-image]: https://david-dm.org/koack/koack.svg?style=flat-square

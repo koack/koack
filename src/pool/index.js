@@ -13,7 +13,7 @@ type PoolOptionsType = {|
 export default class Pool {
   size: number;
   path: string;
-  _id = 1;
+  processNextId = 1;
   processes = new Set();
   teamsToProcess = new Map();
 

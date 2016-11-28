@@ -1,4 +1,4 @@
-import { RtmClient, WebClient, MemoryDataStore, CLIENT_EVENTS } from '@slack/client';
+import { RtmClient, WebClient, MemoryDataStore } from '@slack/client';
 import Bot from './Bot';
 import type { TeamType } from '../types/';
 
@@ -15,10 +15,6 @@ export default function createBot(team: TeamType) {
   const installerUsersWebClients = !team.installerUsers ? null : new Map(
     team.installerUsers.map(user => [user.slackId, new WebClient(user.token)]),
   );
-
-  const ctx = Object.create(contextPrototype);
-  Object.assign(ctx, { rtm, webClient, installerUsersWebClients, token, status });
-  ctx.logger = logger.context({ team });
 
   rtm.start();
 
