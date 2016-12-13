@@ -18,5 +18,5 @@ export default function createBot(team: TeamType) {
 
   rtm.start();
 
-  return new Bot({ rtm, webClient, installerUsersWebClients });
+  return new Bot({ team, rtm, webClient, installerUsersWebClients });
 }

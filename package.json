@@ -1,13 +1,15 @@
 {
-  "name": "slacklib",
+  "name": "koack",
   "version": "0.0.0",
   "description": "",
   "keywords": [],
   "author": "Christophe Hurpeau <christophe@hurpeau.com> (https://christophe.hurpeau.com)",
   "license": "ISC",
-  "repository": "git@github.com:christophehurpeau/slacklib.git",
-  "homepage": "https://github.com/christophehurpeau/slacklib",
+  "repository": "git@github.com:koack/koack.git",
+  "homepage": "https://github.com/koack/koack",
   "main": "./index.js",
+  "webpack:node": "./lib-node6/index.js",
+  "webpack:node-dev": "./lib-node6-dev/index.js",
   "scripts": {
     "build": "pob-build",
     "clean": "rm -Rf docs dist test/node6 coverage",
@@ -23,30 +25,32 @@
     "version": "pob-version",
     "watch": "pob-watch"
   },
+  "dependencies": {
+    "@slack/client": "^3.7.0",
+    "koa-compose": "next",
+    "nightingale": "^6.0.1",
+    "nightingale-logger": "^3.1.0"
+  },
   "devDependencies": {
-    "babel-eslint": "^7.1.0",
+    "babel-eslint": "^7.1.1",
     "babel-plugin-add-jsdoc-annotations": "^5.1.0",
     "babel-preset-es2015-node6": "^0.4.0",
     "babel-preset-jsdoc": "^0.4.0",
-    "eslint": "^3.10.2",
-    "eslint-config-airbnb-base": "^10.0.1",
-    "eslint-config-pob": "^9.0.1",
-    "eslint-plugin-babel": "^3.3.0",
+    "eslint": "^3.12.1",
+    "eslint-config-airbnb-base": "^11.0.0",
+    "eslint-config-pob": "^10.0.1",
+    "eslint-plugin-babel": "^4.0.0",
     "eslint-plugin-import": "^2.2.0",
     "istanbul": "^0.4.5",
     "jsdoc": "^3.4.3",
     "komet": "^0.1.3",
     "komet-karma": "^0.2.3",
     "minami": "^1.1.1",
-    "mocha": "^3.1.2",
-    "pob-babel": "^12.7.1",
+    "mocha": "^3.2.0",
+    "nightingale-app-console": "^0.2.0",
+    "pob-babel": "^12.8.1",
     "pob-release": "^2.3.0",
     "tcomb-forked": "^3.4.0",
     "xunit-file": "^1.0.0"
-  },
-  "dependencies": {
-    "@slack/client": "^3.6.1",
-    "koa-compose": "next",
-    "nightingale": "^6.0.0"
   }
 }

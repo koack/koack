@@ -1,6 +1,6 @@
-import { RTM_EVENTS } from '../../../src/bot';
-import messageRouter from '../../../src/message-router';
-import type { Bot } from '../../../src/types';
+import { RTM_EVENTS } from 'koack/src/bot';
+import messageRouter from 'koack/src/message-router';
+import type { Bot } from 'koack/src/types';
 
 export default (bot: Bot) => {
   bot.on(
@@ -8,13 +8,16 @@ export default (bot: Bot) => {
     messageRouter([
       {
         regexp: /\b(hello|hi|hey)\b/,
-        stop: false,
+        // stop: false,
         handler: (ctx) => {
-          ctx.respond(`Hello`);
+          ctx.reply('Hello');
         },
       },
+      {
+        where: ['dm'],
+        handler: (ctx) => ctx.reply('Sorry, I didn\'t understood you'),
+      },
     ]),
-    (ctx) => ctx.respond('Sorry, I didn\'t understood you'),
   );
 }
 ;

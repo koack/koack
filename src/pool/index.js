@@ -1,7 +1,5 @@
 import Logger from 'nightingale/src';
 import startBot from './startBot';
-import { processes, teamsToProcess } from './Process';
-import type { TeamType } from '../types';
 
 const logger = new Logger('koack:pool');
 
@@ -24,6 +22,7 @@ export default class Pool {
   async start(iterator) {
     logger.info('bot server is starting');
 
+    // eslint-disable-next-line no-restricted-syntax
     for (const item of iterator) {
       const team = await item;
       await startBot(team);
@@ -31,12 +30,12 @@ export default class Pool {
   }
 
   sendBotMessage(teamId: number, data: Object) {
-    if (!teamsToProcess.has(teamId)) {
+    if (!this.teamsToProcess.has(teamId)) {
       logger.warn('No team', { teamId });
       return;
     }
 
-    teamsToProcess.get(teamId).sendMessage(teamId, data);
+    this.teamsToProcess.get(teamId).sendMessage(teamId, data);
   }
 
   close() {

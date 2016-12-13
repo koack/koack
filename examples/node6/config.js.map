@@ -1,0 +1,1 @@
+{"version":3,"sources":["../src/config.js"],"names":["token"],"mappings":";;;;;kBAAe;AACbA,SAAO;AADM,C","file":"config.js","sourcesContent":["export default {\n  token: 'xoxb-50853601666-KAw5W62mRAkgK98qmK9ejV5r',\n};\n"]}

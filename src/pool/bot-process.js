@@ -1,8 +1,15 @@
+import Logger from 'nightingale-logger/src';
 import { createBot } from '../bot';
 import type Bot from '../bot/Bot';
+import type { TeamType } from '../types';
+
+const logger = new Logger('koack:pool');
 
 const id: number = Number(process.argv[2]);
+// eslint-disable-next-line import/no-dynamic-require
 const initBot: Function = require(process.argv[3]);
+
+const teams: Map<any, Bot> = new Map();
 
 process.on('message', message => {
   if (typeof message !== 'object') {
@@ -12,9 +19,10 @@ process.on('message', message => {
   switch (message.type) {
     case 'start': {
       const { team }: { team: TeamType } = message;
+      if (!team.id) throw new Error('Invalid team.id');
 
       const bot = createBot(team);
-      teams.set(teamId, bot);
+      teams.set(team.id, bot);
       initBot(bot);
 
       break;
@@ -29,6 +37,7 @@ process.on('message', message => {
 
       const bot: Bot = teams.get(teamId);
       bot.close();
+      break;
     }
 
     default: {

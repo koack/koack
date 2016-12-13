@@ -4,18 +4,19 @@ import type { TeamType } from '../types';
 
 const logger = new Logger('koack:pool');
 
-export function startBot(pool, team: TeamType) {
+export default function startBot(pool, team: TeamType) {
   logger.info('starting bot', team);
 
-  if (teamsToProcess.has(team.id)) {
+  if (pool.teamsToProcess.has(team.id)) {
     logger.warn('bot already started', team);
-    pool.teamsToProcess.get(team.id).replaceTeam(team, status);
+    pool.teamsToProcess.get(team.id).replaceTeam(team);
     return;
   }
 
+  // eslint-disable-next-line no-restricted-syntax
   for (let process of pool.processes) {
     if (process.canAddTeam()) {
-      process.startTeam(team, status);
+      process.startTeam(team);
       return;
     }
   }
@@ -24,5 +25,5 @@ export function startBot(pool, team: TeamType) {
   pool.processes.add(newProcess);
   logger.info('adding new process', { newProcessListSize: pool.processes.size });
   newProcess.start();
-  newProcess.startTeam(team, status);
+  newProcess.startTeam(team);
 }

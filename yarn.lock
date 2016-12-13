@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@slack/client@^3.6.1":
-  version "3.6.1"
-  resolved "https://registry.yarnpkg.com/@slack/client/-/client-3.6.1.tgz#4af22459b8019b8a8d7620dd20a9d4c152003f0b"
+"@slack/client@^3.7.0":
+  version "3.7.0"
+  resolved "https://registry.yarnpkg.com/@slack/client/-/client-3.7.0.tgz#eb68eabdc729771c40669d310288aa2ad3e05de4"
   dependencies:
     async "^1.5.0"
     bluebird "^3.3.3"
@@ -216,7 +216,7 @@ babel-core@^6.18.0, babel-core@^6.18.2:
     slash "^1.0.0"
     source-map "^0.5.0"
 
-babel-eslint@^7.1.0:
+babel-eslint@^7.1.1:
   version "7.1.1"
   resolved "https://registry.yarnpkg.com/babel-eslint/-/babel-eslint-7.1.1.tgz#8a6a884f085aa7060af69cfc77341c2f99370fb2"
   dependencies:
@@ -1083,13 +1083,13 @@ escope@^3.6.0:
     esrecurse "^4.1.0"
     estraverse "^4.1.1"
 
-eslint-config-airbnb-base@^10.0.1:
-  version "10.0.1"
-  resolved "https://registry.yarnpkg.com/eslint-config-airbnb-base/-/eslint-config-airbnb-base-10.0.1.tgz#f17d4e52992c1d45d1b7713efbcd5ecd0e7e0506"
+eslint-config-airbnb-base@^11.0.0:
+  version "11.0.0"
+  resolved "https://registry.yarnpkg.com/eslint-config-airbnb-base/-/eslint-config-airbnb-base-11.0.0.tgz#a3eddc1e49fd6492509d582340fd6f58785623bd"
 
-eslint-config-pob@^9.0.1:
-  version "9.0.1"
-  resolved "https://registry.yarnpkg.com/eslint-config-pob/-/eslint-config-pob-9.0.1.tgz#a1e600091f02fa122c2add72374e584bcb5ad3b1"
+eslint-config-pob@^10.0.1:
+  version "10.0.1"
+  resolved "https://registry.yarnpkg.com/eslint-config-pob/-/eslint-config-pob-10.0.1.tgz#e878486c58beee051d94dee7c3d7f404e22f9381"
 
 eslint-import-resolver-node@^0.2.0:
   version "0.2.3"
@@ -1106,9 +1106,9 @@ eslint-module-utils@^2.0.0:
     debug "2.2.0"
     pkg-dir "^1.0.0"
 
-eslint-plugin-babel@^3.3.0:
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-babel/-/eslint-plugin-babel-3.3.0.tgz#2f494aedcf6f4aa4e75b9155980837bc1fbde193"
+eslint-plugin-babel@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-babel/-/eslint-plugin-babel-4.0.0.tgz#a92114e2c493ac3034b030d7ecf96e174a76ef3f"
 
 eslint-plugin-import@^2.2.0:
   version "2.2.0"
@@ -1125,9 +1125,9 @@ eslint-plugin-import@^2.2.0:
     minimatch "^3.0.3"
     pkg-up "^1.0.0"
 
-eslint@^3.10.2:
-  version "3.10.2"
-  resolved "https://registry.yarnpkg.com/eslint/-/eslint-3.10.2.tgz#c9a10e8bf6e9d65651204778c503341f1eac3ce7"
+eslint@^3.12.0:
+  version "3.12.0"
+  resolved "https://registry.yarnpkg.com/eslint/-/eslint-3.12.0.tgz#1dfa4ef0082e35feed90a0fb1f7996d1d426b249"
   dependencies:
     babel-code-frame "^6.16.0"
     chalk "^1.1.3"
@@ -1140,7 +1140,7 @@ eslint@^3.10.2:
     esutils "^2.0.2"
     file-entry-cache "^2.0.0"
     glob "^7.0.3"
-    globals "^9.2.0"
+    globals "^9.14.0"
     ignore "^3.2.0"
     imurmurhash "^0.1.4"
     inquirer "^0.12.0"
@@ -1494,7 +1494,7 @@ global-prefix@^0.1.4:
     osenv "^0.1.3"
     which "^1.2.10"
 
-globals@^9.0.0, globals@^9.2.0:
+globals@^9.0.0, globals@^9.14.0:
   version "9.14.0"
   resolved "https://registry.yarnpkg.com/globals/-/globals-9.14.0.tgz#8859936af0038741263053b39d0e76ca241e4034"
 
@@ -2220,9 +2220,9 @@ mkdirp@0.5.1, mkdirp@0.5.x, "mkdirp@>=0.5 0", mkdirp@^0.5.0, mkdirp@^0.5.1, mkdi
   dependencies:
     minimist "0.0.8"
 
-mocha@^3.1.2:
-  version "3.1.2"
-  resolved "https://registry.yarnpkg.com/mocha/-/mocha-3.1.2.tgz#51f93b432bf7e1b175ffc22883ccd0be32dba6b5"
+mocha@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/mocha/-/mocha-3.2.0.tgz#7dc4f45e5088075171a68896814e6ae9eb7a85e3"
   dependencies:
     browser-stdout "1.3.0"
     commander "2.9.0"
@@ -2297,18 +2297,18 @@ nightingale-levels@^1.0.0, nightingale-levels@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/nightingale-levels/-/nightingale-levels-1.1.0.tgz#d20cd00d050f557e1c29026fd75ec5b9a9752af3"
 
-nightingale-logger@^3.0.0:
+nightingale-logger@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/nightingale-logger/-/nightingale-logger-3.1.0.tgz#9593c4c35d37608823a98ee8a79ec443c0ae3025"
   dependencies:
     nightingale-levels "^1.1.0"
 
-nightingale@^6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/nightingale/-/nightingale-6.0.0.tgz#ac1d4f22ad09278843c58a1ba82f6586eed889d4"
+nightingale@^6.0.0, nightingale@^6.0.1:
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/nightingale/-/nightingale-6.0.1.tgz#13c854e9bb006aef34f5d109246162903ad51f0e"
   dependencies:
-    nightingale-levels "^1.0.0"
-    nightingale-logger "^3.0.0"
+    nightingale-levels "^1.1.0"
+    nightingale-logger "^3.1.0"
 
 node-pre-gyp@^0.6.29:
   version "0.6.31"
@@ -2522,7 +2522,7 @@ pluralize@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/pluralize/-/pluralize-1.2.1.tgz#d1a21483fd22bb41e58a12fa3421823140897c45"
 
-pob-babel@^12.7.1:
+pob-babel@^12.8.1:
   version "12.8.1"
   resolved "https://registry.yarnpkg.com/pob-babel/-/pob-babel-12.8.1.tgz#b22cb3b454678ecec83909b3d94fe3f67a4219a7"
   dependencies:

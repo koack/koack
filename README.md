@@ -27,9 +27,15 @@ import { RTM_EVENTS } from 'koack/bot';
 import messageRouter from 'koack/message-router';
 import type { Bot } from 'koack/types';
 
-const loggerMiddleware = () => ...;
+const loggerMiddleware = ({ event }) => console.log(event);
 
-export default (bot: Bot) {
+export default [
+  {
+    events: [RTM_EVENTS.CHANNEL_JOINED],
+  }
+];
+
+export default (bot: Bot) => {
   bot.on(
     RTM_EVENTS.CHANNEL_JOINED,
     loggerMiddleware,
@@ -42,6 +48,8 @@ export default (bot: Bot) {
     messageRouter([
       {
         commands: ['like'], // @mybot like: something
+        where: ['dm', 'channel', 'group'], // default to everywhere
+        mention: ['channel', 'group'], // default to everywhere except dm
         handler: (ctx) => {}
       },
       {
@@ -62,8 +70,10 @@ export default (bot: Bot) {
           });
         }
       },
+      {
+        handler: (ctx) => ctx.reply('Sorry, I didn\'t understood you'),
+      }
     ]),
-    (ctx) => ctx.respond('Sorry, I didn't understood you'),
   );
 }
 ```
@@ -103,11 +113,58 @@ process.on('SIGINT', () => bot.close());
 process.on('SIGTERM', () => bot.close());
 ```
 
-# Extends the context
+## Extends the context
 
 ```js
 bot.context.myOwnContextMethod = () => console.log('Hello !');
+```
 
+## Use message-events
+
+```js
+import { RTM_EVENTS, RTM_MESSAGE_SUBTYPES } from '@slack/client';
+
+bot.on(
+  RTM_EVENTS.MESSAGE,
+
+  messageEvents((eventEmitter) => {
+    eventEmitter.on([RTM_MESSAGE_SUBTYPES.CHANNEL_JOIN, RTM_MESSAGE_SUBTYPES.GROUP_JOIN], ctx => {
+
+    })
+  }),
+
+  messageEventsRouter({
+    events: [RTM_MESSAGE_SUBTYPES.CHANNEL_JOIN, RTM_MESSAGE_SUBTYPES.GROUP_JOIN],
+    handler: ctx => {
+
+    },
+  }),
+
+  messageRouter([
+    ...
+  ]),
+);
+```
+
+## With a server
+
+A server allows:
+
+- to register new apps with slack button
+- to handle slash commands
+- to handle interactive buttons
+
+```js
+import { Pool, Server } from 'koack';
+
+const pool = new Pool({ size: 100, path: require.resolve('./bot') });
+
+const server = new Server({
+  pool: pool,
+  scopes: ['bot'],
+});
+
+server.listen(process.env.PORT || 3000);
 ```
 
 [npm-image]: https://img.shields.io/npm/v/koack.svg?style=flat-square

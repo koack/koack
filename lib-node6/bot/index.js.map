@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../src/bot/index.js"],"names":["RTM_EVENTS","createBot"],"mappings":";;;;;;;;;;;;mBAASA,U;;;;;;;;;;QACFC,S","file":"index.js","sourcesContent":["export { RTM_EVENTS } from '@slack/client';\nexport createBot from './create';\n"]}
