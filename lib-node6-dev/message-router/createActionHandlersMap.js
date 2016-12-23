@@ -17,7 +17,7 @@ var _nightingaleLogger = require('nightingale-logger');
 
 var _nightingaleLogger2 = _interopRequireDefault(_nightingaleLogger);
 
-var _types = require('../types');
+var _types = require('./types');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -49,6 +49,8 @@ exports.default = function createActionHandlersMap(actions) {
 
       if (!action.where) action.where = ['dm', 'channel', 'group'];
       if (!action.mention) action.mention = action.where.filter(v => v !== 'dm');
+      if (!action.handler) action.handler = (0, _koaCompose2.default)(action.middlewares);
+      if (action.stop !== false) action.stop = true;
 
       action.where.forEach(where => {
         const commands = map[where].commands;
@@ -70,12 +72,6 @@ exports.default = function createActionHandlersMap(actions) {
           regexps.push(action);
         }
       });
-
-      if (!action.handler) action.handler = (0, _koaCompose2.default)(action.middlewares);
-
-      if (action.stop !== false) {
-        action.stop = true;
-      }
     });
 
     return map;

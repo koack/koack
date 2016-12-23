@@ -1,1 +1,1 @@
-{"version":3,"sources":["../../src/bot/index.js"],"names":["RTM_EVENTS","createBot"],"mappings":";;;;;;;;;;;;mBAASA,U;;;;;;;;;;QACFC,S","file":"index.js","sourcesContent":["export { RTM_EVENTS } from '@slack/client';\nexport createBot from './create';\n"]}
+{"version":3,"sources":["../../src/bot/index.js"],"names":["RTM_EVENTS","RTM_MESSAGE_SUBTYPES","createBot"],"mappings":";;;;;;;;;;;;mBAASA,U;;;;;;mBAAYC,oB;;;;;;;;;;QACdC,S","file":"index.js","sourcesContent":["export { RTM_EVENTS, RTM_MESSAGE_SUBTYPES } from '@slack/client';\nexport createBot from './create';\n"]}

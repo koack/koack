@@ -51,6 +51,16 @@ exports.default = {
 
   replyInDM(string) {
     this.rtm.sendMessage(string, this.userDM);
+  },
+
+  mention(userId) {
+    if (userId === undefined) userId = this.userId;
+    if (userId[0] !== 'U') throw new Error(`Not a userId: "${ userId }"`);
+    return `<@${ userId }>`;
+  },
+
+  get fromMe() {
+    return this.userId === this.rtm.activeUserId;
   }
 };
 //# sourceMappingURL=contextPrototype.js.map

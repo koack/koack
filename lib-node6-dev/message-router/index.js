@@ -14,7 +14,7 @@ var _nightingaleLogger = require('nightingale-logger');
 
 var _nightingaleLogger2 = _interopRequireDefault(_nightingaleLogger);
 
-var _types = require('../types');
+var _types = require('./types');
 
 var _createActionHandlersMap = require('./createActionHandlersMap');
 
@@ -63,7 +63,8 @@ exports.default = function messageRouter(actions) {
   const map = (0, _createActionHandlersMap2.default)(actions);
 
   return (ctx, next) => {
-    if (!ctx.event.text) return;
+    console.log(ctx.event);
+    if (!ctx.event.text || ctx.userId === ctx.rtm.activeUserId) return;
 
     const botMention = `<@${ ctx.rtm.activeUserId }>`;
 
@@ -78,7 +79,8 @@ exports.default = function messageRouter(actions) {
       return next();
     }
 
-    const hasMention = text.startsWith(botMention);
+    const startsWithMention = text.startsWith(botMention);
+    const hasMention = startsWithMention || text.includes(botMention);
 
     if (mentionOnly && !hasMention) {
       return next();
@@ -88,7 +90,7 @@ exports.default = function messageRouter(actions) {
 
     // Clean text
     // Remove mention
-    if (hasMention) {
+    if (startsWithMention) {
       text = text.substr(botMention.length);
     }
 

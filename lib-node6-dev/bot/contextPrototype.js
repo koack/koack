@@ -3,6 +3,13 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _tcombForked = require('tcomb-forked');
+
+var _tcombForked2 = _interopRequireDefault(_tcombForked);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 exports.default = {
   getChannelType() {
     switch (this.channelId[0]) {
@@ -51,6 +58,36 @@ exports.default = {
 
   replyInDM(string) {
     this.rtm.sendMessage(string, this.userDM);
+  },
+
+  mention(userId) {
+    _assert(userId, _tcombForked2.default.maybe(_tcombForked2.default.String), 'userId');
+
+    if (userId === undefined) userId = this.userId;
+    if (userId[0] !== 'U') throw new Error(`Not a userId: "${ userId }"`);
+    return `<@${ userId }>`;
+  },
+
+  get fromMe() {
+    return this.userId === this.rtm.activeUserId;
   }
 };
+
+function _assert(x, type, name) {
+  function message() {
+    return 'Invalid value ' + _tcombForked2.default.stringify(x) + ' supplied to ' + name + ' (expected a ' + _tcombForked2.default.getTypeName(type) + ')';
+  }
+
+  if (_tcombForked2.default.isType(type)) {
+    if (!type.is(x)) {
+      type(x, [name + ': ' + _tcombForked2.default.getTypeName(type)]);
+
+      _tcombForked2.default.fail(message());
+    }
+  } else if (!(x instanceof type)) {
+    _tcombForked2.default.fail(message());
+  }
+
+  return x;
+}
 //# sourceMappingURL=contextPrototype.js.map

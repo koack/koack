@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.createBot = exports.RTM_EVENTS = undefined;
+exports.createBot = exports.RTM_MESSAGE_SUBTYPES = exports.RTM_EVENTS = undefined;
 
 var _client = require('@slack/client');
 
@@ -11,6 +11,12 @@ Object.defineProperty(exports, 'RTM_EVENTS', {
   enumerable: true,
   get: function () {
     return _client.RTM_EVENTS;
+  }
+});
+Object.defineProperty(exports, 'RTM_MESSAGE_SUBTYPES', {
+  enumerable: true,
+  get: function () {
+    return _client.RTM_MESSAGE_SUBTYPES;
   }
 });
 

@@ -119,19 +119,14 @@ process.on('SIGTERM', () => bot.close());
 bot.context.myOwnContextMethod = () => console.log('Hello !');
 ```
 
-## Use message-events
+## Use message-events-router
 
 ```js
-import { RTM_EVENTS, RTM_MESSAGE_SUBTYPES } from '@slack/client';
+import { RTM_EVENTS, RTM_MESSAGE_SUBTYPES } from 'koack/bot';
+import messageEventsRouter from 'koack/message-events-router';
 
 bot.on(
   RTM_EVENTS.MESSAGE,
-
-  messageEvents((eventEmitter) => {
-    eventEmitter.on([RTM_MESSAGE_SUBTYPES.CHANNEL_JOIN, RTM_MESSAGE_SUBTYPES.GROUP_JOIN], ctx => {
-
-    })
-  }),
 
   messageEventsRouter({
     events: [RTM_MESSAGE_SUBTYPES.CHANNEL_JOIN, RTM_MESSAGE_SUBTYPES.GROUP_JOIN],
@@ -139,10 +134,6 @@ bot.on(
 
     },
   }),
-
-  messageRouter([
-    ...
-  ]),
 );
 ```
 

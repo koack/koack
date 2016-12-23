@@ -1,5 +1,5 @@
 import Logger from 'nightingale-logger/src';
-import type { ActionType, MessageType } from '../types';
+import type { ActionType, MessageType } from './types';
 import createActionHandlersMap from './createActionHandlersMap';
 
 const logger = new Logger('koack:message-router');
@@ -36,7 +36,8 @@ export default (actions: Array<ActionType>) => {
   const map = createActionHandlersMap(actions);
 
   return (ctx, next) => {
-    if (!ctx.event.text) return;
+    console.log(ctx.event);
+    if (!ctx.event.text || ctx.userId === ctx.rtm.activeUserId) return;
 
     const botMention = `<@${ctx.rtm.activeUserId}>`;
 
@@ -51,7 +52,8 @@ export default (actions: Array<ActionType>) => {
       return next();
     }
 
-    const hasMention = text.startsWith(botMention);
+    const startsWithMention = text.startsWith(botMention);
+    const hasMention = startsWithMention || text.includes(botMention);
 
     if (mentionOnly && !hasMention) {
       return next();
@@ -61,7 +63,7 @@ export default (actions: Array<ActionType>) => {
 
     // Clean text
     // Remove mention
-    if (hasMention) {
+    if (startsWithMention) {
       text = text.substr(botMention.length);
     }
 

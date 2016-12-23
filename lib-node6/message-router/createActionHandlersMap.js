@@ -26,6 +26,8 @@ exports.default = function createActionHandlersMap(actions) {
   actions.forEach(action => {
     if (!action.where) action.where = ['dm', 'channel', 'group'];
     if (!action.mention) action.mention = action.where.filter(v => v !== 'dm');
+    if (!action.handler) action.handler = (0, _koaCompose2.default)(action.middlewares);
+    if (action.stop !== false) action.stop = true;
 
     action.where.forEach(where => {
       const commands = map[where].commands;
@@ -45,12 +47,6 @@ exports.default = function createActionHandlersMap(actions) {
         regexps.push(action);
       }
     });
-
-    if (!action.handler) action.handler = (0, _koaCompose2.default)(action.middlewares);
-
-    if (action.stop !== false) {
-      action.stop = true;
-    }
   });
 
   return map;
