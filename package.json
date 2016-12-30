@@ -5,6 +5,7 @@
   "keywords": [],
   "author": "Christophe Hurpeau <christophe@hurpeau.com> (https://christophe.hurpeau.com)",
   "license": "ISC",
+  "engines" : { "node" : ">=6.9.12" },
   "repository": "git@github.com:koack/koack.git",
   "homepage": "https://github.com/koack/koack",
   "main": "./index.js",
