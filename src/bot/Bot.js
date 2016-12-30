@@ -6,7 +6,7 @@ import type { MiddlewareType, ContextType } from './types';
 import type { TeamType } from '../types';
 
 type BotConstructorArguments = {|
-  team: TeamType,
+  team: ?TeamType,
   rtm: RtmClient,
   webClient: WebClient,
   installerUsersWebClients: null | Map<string, WebClient>,
@@ -15,7 +15,7 @@ type BotConstructorArguments = {|
 const logger = new Logger('koack:bot');
 
 export default class Bot {
-  team: TeamType;
+  team: ?TeamType;
   rtm: RtmClient;
   webClient: WebClient;
   installerUsersWebClients: null | Map<string, WebClient>;

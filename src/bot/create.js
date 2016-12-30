@@ -2,18 +2,23 @@ import { RtmClient, WebClient, MemoryDataStore } from '@slack/client';
 import Bot from './Bot';
 import type { TeamType } from '../types/';
 
-export default function createBot(team: TeamType) {
-  const rtm = new RtmClient(team.bot.accessToken, {
+type TeamOrTokenType = TeamType | string;
+
+export default function createBot(teamOrAccessToken: TeamOrTokenType) {
+  const team = typeof teamOrAccessToken === 'string' ? null : teamOrAccessToken;
+  const accessToken = team ? team.bot.accessToken : teamOrAccessToken;
+
+  const rtm = new RtmClient(accessToken, {
     logLevel: PRODUCTION ? 'error' : 'info',
     autoReconnect: true,
     autoMark: true,
     dataStore: new MemoryDataStore(),
   });
 
-  const webClient = new WebClient(team.bot.accessToken);
+  const webClient = new WebClient(accessToken);
 
   const installerUsersWebClients = new Map();
-  if (team.installations) {
+  if (team && team.installations) {
     team.installations.forEach(installation => (
       installerUsersWebClients.set(installation.user.id, installation.user.accessToken)
     ));

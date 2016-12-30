@@ -29,7 +29,7 @@ var _types2 = require('../types');
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const BotConstructorArguments = _tcombForked2.default.interface({
-  team: _types2.TeamType,
+  team: _tcombForked2.default.maybe(_types2.TeamType),
   rtm: _client.RtmClient,
   webClient: _client.WebClient,
   installerUsersWebClients: _tcombForked2.default.union([_tcombForked2.default.Nil, Map])

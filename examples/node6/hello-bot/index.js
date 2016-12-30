@@ -14,6 +14,6 @@ var _bot3 = _interopRequireDefault(_bot2);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const bot = (0, _bot.createBot)({ token: _config2.default.token });
+const bot = (0, _bot.createBot)(_config2.default.token);
 (0, _bot3.default)(bot);
 //# sourceMappingURL=index.js.map
