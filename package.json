@@ -1,9 +1,12 @@
 {
   "name": "koack",
   "version": "0.0.0",
-  "description": "",
-  "keywords": [],
+  "description": "Core brick to build Slack bots",
+  "keywords": ["bots", "chatbots", "slack"],
   "author": "Christophe Hurpeau <christophe@hurpeau.com> (https://christophe.hurpeau.com)",
+  "contributors": [
+    "Julien Tilap LA VINH <jlaving@gmail.com>"
+  ],
   "license": "ISC",
   "engines": {
     "node": ">=6.9.12"
