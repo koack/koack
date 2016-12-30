@@ -30,7 +30,7 @@ cp examples/src/config.example.js examples/src/config.js
 
 Update the required fields.
 
-- `token`: You can create a Slack token for test on [this page](https://api.slack.com/docs/oauth-test-tokens).
+- `token`: You can create a Slack app token for testing by clicking *Bots* menu entry on [this page](https://birdybot.slack.com/apps/manage/custom-integrations).
 - `slackClient`: You can get key and secret for Slack app on [your Slack apps page](https://api.slack.com/apps)).
 
 ## Run
