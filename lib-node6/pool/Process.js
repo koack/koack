@@ -21,7 +21,8 @@ class Process {
       throw new Error('Already started');
     }
 
-    this.childProcess = (0, _child_process.fork)(require.resolve('./bot-process'), [this.pool.path, this.id], {
+    const path = this.pool.path;
+    this.childProcess = (0, _child_process.fork)(require.resolve('./bot-process'), [this.id, path], {
       env: _extends({}, process.env, {
         CHILD_ID: this.id
       })

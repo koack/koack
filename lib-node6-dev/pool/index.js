@@ -39,19 +39,25 @@ class Pool {
     this.processes = new Set();
     this.teamsToProcess = new Map();
 
-    Object.assign(options);
+    Object.assign(this, options);
   }
 
   start(iterator) {
+    var _this = this;
+
     return _asyncToGenerator(function* () {
       logger.info('bot server is starting');
 
       // eslint-disable-next-line no-restricted-syntax
       for (const item of iterator) {
-        const team = yield item;
-        yield (0, _startBot2.default)(team);
+        const installInfo = yield item;
+        yield (0, _startBot2.default)(_this, installInfo);
       }
     })();
+  }
+
+  addTeam(team) {
+    (0, _startBot2.default)(this, team);
   }
 
   sendBotMessage(teamId, data) {

@@ -27,9 +27,13 @@
   },
   "dependencies": {
     "@slack/client": "^3.7.0",
-    "koa-compose": "next",
+    "koa": "next",
+    "koa-compose": "^2.5.1",
+    "koa-route": "next",
     "nightingale": "^6.0.1",
-    "nightingale-logger": "^3.1.0"
+    "nightingale-app-console": "^0.2.0",
+    "nightingale-logger": "^3.1.0",
+    "simple-oauth2": "^1.0.2"
   },
   "devDependencies": {
     "babel-eslint": "^7.1.1",
@@ -47,7 +51,6 @@
     "komet-karma": "^0.2.3",
     "minami": "^1.1.1",
     "mocha": "^3.2.0",
-    "nightingale-app-console": "^0.2.0",
     "pob-babel": "^12.8.1",
     "pob-release": "^2.3.0",
     "tcomb-forked": "^3.4.0",

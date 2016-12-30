@@ -22,16 +22,21 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function createBot(team) {
   _assert(team, _types.TeamType, 'team');
 
-  const rtm = new _client.RtmClient(team.token, {
+  const rtm = new _client.RtmClient(team.bot.accessToken, {
     logLevel: 'info',
     autoReconnect: true,
     autoMark: true,
     dataStore: new _client.MemoryDataStore()
   });
 
-  const webClient = new _client.WebClient(team.token);
+  const webClient = new _client.WebClient(team.bot.accessToken);
 
-  const installerUsersWebClients = !team.installerUsers ? null : new Map(team.installerUsers.map(user => [user.slackId, new _client.WebClient(user.token)]));
+  const installerUsersWebClients = new Map();
+  if (team.installations) {
+    team.installations.forEach(installation => installerUsersWebClients.set(installation.user.id, installation.user.accessToken));
+
+    installerUsersWebClients.forEach((accessToken, id) => installerUsersWebClients.set(id, new _client.WebClient(accessToken)));
+  }
 
   rtm.start();
 

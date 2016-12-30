@@ -16,7 +16,7 @@ export default class Pool {
   teamsToProcess = new Map();
 
   constructor(options: PoolOptionsType) {
-    Object.assign(options);
+    Object.assign(this, options);
   }
 
   async start(iterator) {
@@ -24,9 +24,13 @@ export default class Pool {
 
     // eslint-disable-next-line no-restricted-syntax
     for (const item of iterator) {
-      const team = await item;
-      await startBot(team);
+      const installInfo = await item;
+      await startBot(this, installInfo);
     }
+  }
+
+  addTeam(team) {
+    startBot(this, team);
   }
 
   sendBotMessage(teamId: number, data: Object) {

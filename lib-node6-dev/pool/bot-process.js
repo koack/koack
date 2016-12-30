@@ -4,6 +4,8 @@ var _tcombForked = require('tcomb-forked');
 
 var _tcombForked2 = _interopRequireDefault(_tcombForked);
 
+require('nightingale-app-console');
+
 var _nightingaleLogger = require('nightingale-logger');
 
 var _nightingaleLogger2 = _interopRequireDefault(_nightingaleLogger);
@@ -20,9 +22,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 const logger = new _nightingaleLogger2.default('koack:pool');
 
+console.log(process.argv);
 const id = _assert(Number(process.argv[2]), _tcombForked2.default.Number, 'id');
 // eslint-disable-next-line import/no-dynamic-require
-const initBot = _assert(require(process.argv[3]), _tcombForked2.default.Function, 'initBot');
+const initBot = _assert(require(process.argv[3]).default, _tcombForked2.default.Function, 'initBot');
+
+logger.setContext({ id });
 
 const teams = _assert(new Map(), Map, 'teams');
 

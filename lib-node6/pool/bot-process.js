@@ -1,5 +1,7 @@
 'use strict';
 
+require('nightingale-app-console');
+
 var _nightingaleLogger = require('nightingale-logger');
 
 var _nightingaleLogger2 = _interopRequireDefault(_nightingaleLogger);
@@ -10,9 +12,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 const logger = new _nightingaleLogger2.default('koack:pool');
 
+console.log(process.argv);
 const id = Number(process.argv[2]);
 // eslint-disable-next-line import/no-dynamic-require
-const initBot = require(process.argv[3]);
+const initBot = require(process.argv[3]).default;
+
+logger.setContext({ id });
 
 const teams = new Map();
 

@@ -30,6 +30,7 @@ exports.default = function bot(bot) {
     regexp: /\b(hello|hi|hey)\b/,
     // stop: false,
     handler: ctx => {
+      console.log(ctx);
       ctx.reply(`Hello ${ ctx.mention() }`);
     }
   }, {

@@ -23,6 +23,7 @@ export default (bot: Bot) => {
         regexp: /\b(hello|hi|hey)\b/,
         // stop: false,
         handler: (ctx) => {
+          console.log(ctx);
           ctx.reply(`Hello ${ctx.mention()}`);
         },
       },
@@ -32,5 +33,4 @@ export default (bot: Bot) => {
       },
     ]),
   );
-}
-;
+};

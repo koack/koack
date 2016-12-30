@@ -18,7 +18,8 @@ export default class Process {
       throw new Error('Already started');
     }
 
-    this.childProcess = fork(require.resolve('./bot-process'), [this.pool.path, this.id], {
+    const path: string = this.pool.path;
+    this.childProcess = fork(require.resolve('./bot-process'), [this.id, path], {
       env: {
         ...process.env,
         CHILD_ID: this.id,
