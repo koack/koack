@@ -63,8 +63,9 @@ class Bot {
 
     _assert(middlewares, _tcombForked2.default.list(_types.MiddlewareType), 'middlewares');
 
-    logger.debug('register middlewares on event', { name });
-    const callback = (0, _koaCompose2.default)([...this.middlewares, ...middlewares]);
+    const allMiddlewares = [...this.middlewares, ...middlewares];
+    logger.debug('register middlewares on event', { name, middlewareLength: allMiddlewares.length });
+    const callback = (0, _koaCompose2.default)(allMiddlewares);
     this.rtm.on(name, event => callback(this.createContext(event)));
   }
 

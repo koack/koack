@@ -16,6 +16,14 @@ var _koaRoute = require('koa-route');
 
 var _koaRoute2 = _interopRequireDefault(_koaRoute);
 
+var _alpListen = require('alp-listen');
+
+var _alpListen2 = _interopRequireDefault(_alpListen);
+
+var _object2map = require('object2map');
+
+var _object2map2 = _interopRequireDefault(_object2map);
+
 var _slack = require('./slack');
 
 var _slack2 = _interopRequireDefault(_slack);
@@ -50,6 +58,11 @@ class SlackServer extends _koa2.default {
   }
 
   installSuccess() {}
+
+  listen(config, certificatesDirname) {
+    this.config = (0, _object2map2.default)(config);
+    (0, _alpListen2.default)(certificatesDirname)(this);
+  }
 }
 exports.default = SlackServer;
 //# sourceMappingURL=index.js.map

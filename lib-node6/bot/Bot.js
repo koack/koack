@@ -35,8 +35,9 @@ class Bot {
   }
 
   on(name, ...middlewares) {
-    logger.debug('register middlewares on event', { name });
-    const callback = (0, _koaCompose2.default)([...this.middlewares, ...middlewares]);
+    const allMiddlewares = [...this.middlewares, ...middlewares];
+    logger.debug('register middlewares on event', { name, middlewareLength: allMiddlewares.length });
+    const callback = (0, _koaCompose2.default)(allMiddlewares);
     this.rtm.on(name, event => callback(this.createContext(event)));
   }
 

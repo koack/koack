@@ -1,5 +1,7 @@
 import Koa from 'koa';
 import _ from 'koa-route';
+import alplisten from 'alp-listen';
+import object2map from 'object2map';
 import Pool from '../../src/pool';
 // import bodyParser from 'koa-bodyparser';
 import createSlackActions from './slack';
@@ -14,6 +16,13 @@ type SlackServerConfigType = {|
   slackClient: SlackClientConfigType,
   pool: Pool,
   scopes: Array<string>,
+|};
+
+type ListenConfigType = {|
+  tls: ?boolean,
+  socketPath: ?string,
+  port: ?number,
+  hostname: ?string,
 |};
 
 const createTeam = (installInfo: InstallInfoType): TeamType => ({
@@ -47,5 +56,10 @@ export default class SlackServer extends Koa {
   }
 
   installSuccess() {
+  }
+
+  listen(config: ListenConfigType, certificatesDirname: ?string) {
+    this.config = object2map(config);
+    alplisten(certificatesDirname)(this);
   }
 }

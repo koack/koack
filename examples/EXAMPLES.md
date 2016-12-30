@@ -36,7 +36,7 @@ Update the required fields.
   - Copy the ID and secret (in "Basic informations")
   - Set a redirect url to `http://localhost:3000/callback` (in "Oauth and permissions")
   - Add a bot user (in "Bot Users")
-
+  
 ## Run
 
 Compile the sources, then start the example of your choice:

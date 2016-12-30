@@ -27,5 +27,5 @@ const server = new _server2.default({
   slackClient: _config2.default.slackClient
 });
 
-server.listen(process.env.PORT || 3000);
+server.listen({ port: process.env.PORT || 3000 });
 //# sourceMappingURL=index.js.map

@@ -49,7 +49,6 @@ exports.default = function messageRouter(actions) {
   const map = (0, _createActionHandlersMap2.default)(actions);
 
   return (ctx, next) => {
-    console.log(ctx.event);
     if (!ctx.event.text || ctx.userId === ctx.rtm.activeUserId) return;
 
     const botMention = `<@${ ctx.rtm.activeUserId }>`;
