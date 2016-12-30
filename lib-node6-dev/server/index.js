@@ -20,6 +20,14 @@ var _koaRoute = require('koa-route');
 
 var _koaRoute2 = _interopRequireDefault(_koaRoute);
 
+var _alpListen = require('alp-listen');
+
+var _alpListen2 = _interopRequireDefault(_alpListen);
+
+var _object2map = require('object2map');
+
+var _object2map2 = _interopRequireDefault(_object2map);
+
 var _pool = require('../../pool');
 
 var _pool2 = _interopRequireDefault(_pool);
@@ -46,6 +54,16 @@ const SlackServerConfigType = _tcombForked2.default.interface({
   scopes: _tcombForked2.default.list(_tcombForked2.default.String)
 }, {
   name: 'SlackServerConfigType',
+  strict: true
+});
+
+const ListenConfigType = _tcombForked2.default.interface({
+  tls: _tcombForked2.default.maybe(_tcombForked2.default.Boolean),
+  socketPath: _tcombForked2.default.maybe(_tcombForked2.default.String),
+  port: _tcombForked2.default.maybe(_tcombForked2.default.Number),
+  hostname: _tcombForked2.default.maybe(_tcombForked2.default.String)
+}, {
+  name: 'ListenConfigType',
   strict: true
 });
 
@@ -85,6 +103,15 @@ class SlackServer extends _koa2.default {
   }
 
   installSuccess() {}
+
+  listen(config, certificatesDirname) {
+    _assert(config, ListenConfigType, 'config');
+
+    _assert(certificatesDirname, _tcombForked2.default.maybe(_tcombForked2.default.String), 'certificatesDirname');
+
+    this.config = (0, _object2map2.default)(config);
+    (0, _alpListen2.default)(certificatesDirname)(this);
+  }
 }
 exports.default = SlackServer;
 
