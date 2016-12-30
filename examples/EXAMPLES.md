@@ -28,12 +28,27 @@ Copy the config file to make the example works
 cp examples/src/config.example.js examples/src/config.js
 ```
 
-And update the required fields. You can create a Slack token on [your Slack apps page](https://api.slack.com/apps)).
+Update the required fields.
+
+- `token`: You can create a Slack token for test on [this page](https://api.slack.com/docs/oauth-test-tokens).
+- `slackClient`: You can get key and secret for Slack app on [your Slack apps page](https://api.slack.com/apps)).
 
 ## Run
 
-Start watching the source and enjoy the examples
+Compile the sources, then start the example of your choice:
 
 ```
-npm run watch
+npm run build
+```
+
+then
+
+```
+node examples/node6/hello-bot/index.js
+```
+
+or
+
+```
+node examples/node6/hello-pool/index.js
 ```
