@@ -32,8 +32,9 @@ export default class Bot {
   }
 
   on(name: string, ...middlewares: Array<MiddlewareType>) {
-    logger.debug('register middlewares on event', { name });
-    const callback = compose([...this.middlewares, ...middlewares]);
+    const allMiddlewares = [...this.middlewares, ...middlewares];
+    logger.debug('register middlewares on event', { name, middlewareLength: allMiddlewares.length });
+    const callback = compose(allMiddlewares);
     this.rtm.on(name, event => callback(this.createContext(event)));
   }
 

@@ -36,7 +36,6 @@ export default (actions: Array<ActionType>) => {
   const map = createActionHandlersMap(actions);
 
   return (ctx, next) => {
-    console.log(ctx.event);
     if (!ctx.event.text || ctx.userId === ctx.rtm.activeUserId) return;
 
     const botMention = `<@${ctx.rtm.activeUserId}>`;
