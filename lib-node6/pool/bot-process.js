@@ -12,7 +12,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 const logger = new _nightingaleLogger2.default('koack:pool');
 
-console.log(process.argv);
+
 const id = Number(process.argv[2]);
 // eslint-disable-next-line import/no-dynamic-require
 const initBot = require(process.argv[3]).default;

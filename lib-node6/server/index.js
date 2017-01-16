@@ -4,10 +4,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-// import bodyParser from 'koa-bodyparser';
-
-
 var _koa = require('koa');
 
 var _koa2 = _interopRequireDefault(_koa);
@@ -30,14 +26,16 @@ var _slack2 = _interopRequireDefault(_slack);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const createTeam = installInfo => _extends({}, installInfo.team, {
-  bot: installInfo.bot,
-  installations: [{ user: installInfo.user, date: installInfo.date, scopes: installInfo.scopes }]
-});
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+// import bodyParser from 'koa-bodyparser';
+
 
 class SlackServer extends _koa2.default {
+
   constructor(config) {
-    super();
+    var _this;
+
+    _this = super();
     Object.assign(this, config);
     // this.use(bodyParser());
 
@@ -46,10 +44,17 @@ class SlackServer extends _koa2.default {
       scopes: config.scopes,
       callbackUrl: '/callback',
       successUrl: '/success',
-      callback: installInfo => {
-        this.pool.addTeam(createTeam(installInfo));
-        this.installSuccess(installInfo);
-      }
+      callback: (() => {
+        var _ref = _asyncToGenerator(function* (installInfo) {
+          const team = yield _this.storage.installedTeam(installInfo);
+          _this.pool.addTeam(team);
+          _this.emit('installed', installInfo);
+        });
+
+        return function callback(_x) {
+          return _ref.apply(this, arguments);
+        };
+      })()
     });
 
     this.use(_koaRoute2.default.get('/', slackActions.authorize));
@@ -57,11 +62,10 @@ class SlackServer extends _koa2.default {
     this.use(_koaRoute2.default.get('/success', ctx => ctx.body = 'Youhou !!!'));
   }
 
-  installSuccess() {}
-
   listen(config, certificatesDirname) {
     this.config = (0, _object2map2.default)(config);
     (0, _alpListen2.default)(certificatesDirname)(this);
+    this.storage.forEach(team => this.pool.addTeam(team));
   }
 }
 exports.default = SlackServer;

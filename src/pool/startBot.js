@@ -1,10 +1,12 @@
+/* @flow */
 import Logger from 'nightingale/src';
 import Process from './Process';
+import Pool from './index';
 import type { TeamType } from '../types';
 
 const logger = new Logger('koack:pool');
 
-export default function startBot(pool, team: TeamType) {
+export default function startBot(pool: Pool, team: TeamType): void {
   logger.info('starting bot', team);
 
   if (pool.teamsToProcess.has(team.id)) {

@@ -17,6 +17,10 @@ var _Process = require('./Process');
 
 var _Process2 = _interopRequireDefault(_Process);
 
+var _index = require('./index');
+
+var _index2 = _interopRequireDefault(_index);
+
 var _types = require('../types');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -24,29 +28,33 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 const logger = new _nightingale2.default('koack:pool');
 
 function startBot(pool, team) {
+  _assert(pool, _index2.default, 'pool');
+
   _assert(team, _types.TeamType, 'team');
 
-  logger.info('starting bot', team);
+  return _assert(function () {
+    logger.info('starting bot', team);
 
-  if (pool.teamsToProcess.has(team.id)) {
-    logger.warn('bot already started', team);
-    pool.teamsToProcess.get(team.id).replaceTeam(team);
-    return;
-  }
-
-  // eslint-disable-next-line no-restricted-syntax
-  for (let process of pool.processes) {
-    if (process.canAddTeam()) {
-      process.startTeam(team);
+    if (pool.teamsToProcess.has(team.id)) {
+      logger.warn('bot already started', team);
+      pool.teamsToProcess.get(team.id).replaceTeam(team);
       return;
     }
-  }
 
-  const newProcess = new _Process2.default(pool);
-  pool.processes.add(newProcess);
-  logger.info('adding new process', { newProcessListSize: pool.processes.size });
-  newProcess.start();
-  newProcess.startTeam(team);
+    // eslint-disable-next-line no-restricted-syntax
+    for (let process of pool.processes) {
+      if (process.canAddTeam()) {
+        process.startTeam(team);
+        return;
+      }
+    }
+
+    const newProcess = new _Process2.default(pool);
+    pool.processes.add(newProcess);
+    logger.info('adding new process', { newProcessListSize: pool.processes.size });
+    newProcess.start();
+    newProcess.startTeam(team);
+  }.apply(this, arguments), _tcombForked2.default.Nil, 'return value');
 }
 
 function _assert(x, type, name) {

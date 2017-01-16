@@ -1,3 +1,4 @@
+/* @flow */
 import { RtmClient, WebClient, MemoryDataStore } from '@slack/client';
 import Bot from './Bot';
 import type { TeamType } from '../types/';

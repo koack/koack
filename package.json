@@ -37,6 +37,7 @@
     "koa": "next",
     "koa-compose": "next",
     "koa-route": "next",
+    "mongodb": "^2.2.16",
     "nightingale": "^6.0.1",
     "nightingale-app-console": "^0.2.0",
     "nightingale-logger": "^3.1.1",

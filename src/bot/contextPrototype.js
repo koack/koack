@@ -1,3 +1,5 @@
+/* @flow */
+
 export default {
   getChannelType() {
     switch (this.channelId[0]) {

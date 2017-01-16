@@ -1,3 +1,4 @@
+/* @flow */
 import type { WhereType } from '../types';
 
 export type ActionType = {|

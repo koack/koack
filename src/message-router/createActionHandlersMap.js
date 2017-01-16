@@ -1,3 +1,4 @@
+/* @flow */
 import compose from 'koa-compose';
 import Logger from 'nightingale-logger/src';
 import type { ActionType } from './types';

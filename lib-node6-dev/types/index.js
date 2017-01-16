@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.WhereType = exports.InstallInfoType = exports.TeamType = exports.InstallationInfoType = exports.UserType = undefined;
+exports.StorageType = exports.WhereType = exports.InstallInfoType = exports.TeamType = exports.InstallationInfoType = exports.UserType = undefined;
 
 var _tcombForked = require('tcomb-forked');
 
@@ -39,4 +39,11 @@ const InstallInfoType = exports.InstallInfoType = _tcombForked2.default.intersec
 })], 'InstallInfoType');
 
 const WhereType = exports.WhereType = _tcombForked2.default.enums.of(['dm', 'channel', 'group'], 'WhereType');
+
+const CallbackTeamType = _tcombForked2.default.Function;
+
+const StorageType = exports.StorageType = _tcombForked2.default.interface({
+  forEach: _tcombForked2.default.Function,
+  installedTeam: _tcombForked2.default.Function
+}, 'StorageType');
 //# sourceMappingURL=index.js.map

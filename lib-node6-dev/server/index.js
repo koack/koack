@@ -4,10 +4,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-// import bodyParser from 'koa-bodyparser';
-
-
 var _tcombForked = require('tcomb-forked');
 
 var _tcombForked2 = _interopRequireDefault(_tcombForked);
@@ -40,6 +36,10 @@ var _index = require('../types/index');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+// import bodyParser from 'koa-bodyparser';
+
+
 const SlackClientConfigType = _tcombForked2.default.interface({
   clientID: _tcombForked2.default.String,
   clientSecret: _tcombForked2.default.String
@@ -51,6 +51,7 @@ const SlackClientConfigType = _tcombForked2.default.interface({
 const SlackServerConfigType = _tcombForked2.default.interface({
   slackClient: SlackClientConfigType,
   pool: _pool2.default,
+  storage: _index.StorageType,
   scopes: _tcombForked2.default.list(_tcombForked2.default.String)
 }, {
   name: 'SlackServerConfigType',
@@ -67,22 +68,14 @@ const ListenConfigType = _tcombForked2.default.interface({
   strict: true
 });
 
-const createTeam = installInfo => {
-  _assert(installInfo, _index.InstallInfoType, 'installInfo');
-
-  return _assert((() => {
-    return _extends({}, installInfo.team, {
-      bot: installInfo.bot,
-      installations: [{ user: installInfo.user, date: installInfo.date, scopes: installInfo.scopes }]
-    });
-  })(), _index.TeamType, 'return value');
-};
-
 class SlackServer extends _koa2.default {
+
   constructor(config) {
+    var _this;
+
     _assert(config, SlackServerConfigType, 'config');
 
-    super();
+    _this = super();
     Object.assign(this, config);
     // this.use(bodyParser());
 
@@ -91,18 +84,23 @@ class SlackServer extends _koa2.default {
       scopes: config.scopes,
       callbackUrl: '/callback',
       successUrl: '/success',
-      callback: installInfo => {
-        this.pool.addTeam(createTeam(installInfo));
-        this.installSuccess(installInfo);
-      }
+      callback: (() => {
+        var _ref = _asyncToGenerator(function* (installInfo) {
+          const team = _assert((yield _this.storage.installedTeam(installInfo)), _index.TeamType, 'team');
+          _this.pool.addTeam(team);
+          _this.emit('installed', installInfo);
+        });
+
+        return function callback(_x) {
+          return _ref.apply(this, arguments);
+        };
+      })()
     });
 
     this.use(_koaRoute2.default.get('/', slackActions.authorize));
     this.use(_koaRoute2.default.get('/callback', slackActions.callback));
     this.use(_koaRoute2.default.get('/success', ctx => ctx.body = 'Youhou !!!'));
   }
-
-  installSuccess() {}
 
   listen(config, certificatesDirname) {
     _assert(config, ListenConfigType, 'config');
@@ -111,6 +109,11 @@ class SlackServer extends _koa2.default {
 
     this.config = (0, _object2map2.default)(config);
     (0, _alpListen2.default)(certificatesDirname)(this);
+    this.storage.forEach(team => {
+      _assert(team, _index.TeamType, 'team');
+
+      return this.pool.addTeam(team);
+    });
   }
 }
 exports.default = SlackServer;

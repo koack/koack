@@ -1,3 +1,4 @@
+/* @flow */
 import 'nightingale-app-console';
 import Logger from 'nightingale-logger/src';
 import { createBot } from '../bot';
@@ -6,7 +7,6 @@ import type { TeamType } from '../types';
 
 const logger = new Logger('koack:pool');
 
-console.log(process.argv);
 const id: number = Number(process.argv[2]);
 // eslint-disable-next-line import/no-dynamic-require
 const initBot: Function = require(process.argv[3]).default;

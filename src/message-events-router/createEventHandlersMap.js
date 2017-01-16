@@ -1,3 +1,4 @@
+/* @flow */
 import compose from 'koa-compose';
 import type { EventHandlerType } from './types';
 

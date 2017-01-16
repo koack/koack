@@ -1,3 +1,4 @@
+/* @flow */
 import Logger from 'nightingale-logger/src';
 import type { EventHandlerType, MessageEventType } from './types';
 import createEventHandlersMap from './createEventHandlersMap';

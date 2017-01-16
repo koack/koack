@@ -1,3 +1,4 @@
+/* @flow */
 import Logger from 'nightingale-logger/src';
 import type { ActionType, MessageType } from './types';
 import createActionHandlersMap from './createActionHandlersMap';

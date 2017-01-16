@@ -16,6 +16,8 @@ var _startBot = require('./startBot');
 
 var _startBot2 = _interopRequireDefault(_startBot);
 
+var _types = require('../types/');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
@@ -57,6 +59,8 @@ class Pool {
   }
 
   addTeam(team) {
+    _assert(team, _types.TeamType, 'team');
+
     (0, _startBot2.default)(this, team);
   }
 
@@ -65,12 +69,12 @@ class Pool {
 
     _assert(data, _tcombForked2.default.Object, 'data');
 
-    if (!this.teamsToProcess.has(teamId)) {
+    const process = this.teamsToProcess.get(teamId);
+    if (!process) {
       logger.warn('No team', { teamId });
       return;
     }
-
-    this.teamsToProcess.get(teamId).sendMessage(teamId, data);
+    process.sendMessage(teamId, data);
   }
 
   close() {

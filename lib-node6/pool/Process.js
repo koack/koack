@@ -30,6 +30,7 @@ class Process {
   }
 
   kill() {
+    if (!this.childProcess) return;
     this.childProcess.kill();
     delete this.childProcess;
   }
@@ -39,6 +40,10 @@ class Process {
   }
 
   startTeam(team) {
+    if (!this.childProcess) {
+      throw new Error('Cannot start a new team in a killed process');
+    }
+
     this.teams.set(team.id, team);
     this.pool.teamsToProcess.set(team.id, this);
 
@@ -46,6 +51,10 @@ class Process {
   }
 
   killTeam(team, killProcessIfEmpty = true) {
+    if (!this.childProcess) {
+      throw new Error('Cannot kill a team in a killed process');
+    }
+
     this.childProcess.send({ type: 'remove', teamId: team.id });
     this.teams.delete(team.id);
     this.pool.teamsToProcess.delete(team.id);
@@ -62,6 +71,10 @@ class Process {
   }
 
   sendMessage(teamId, data) {
+    if (!this.childProcess) {
+      throw new Error('Cannot send a message in a killed process');
+    }
+
     this.childProcess.send(_extends({ type: 'message', teamId }, data));
   }
 }

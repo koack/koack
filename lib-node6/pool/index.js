@@ -47,12 +47,12 @@ class Pool {
   }
 
   sendBotMessage(teamId, data) {
-    if (!this.teamsToProcess.has(teamId)) {
+    const process = this.teamsToProcess.get(teamId);
+    if (!process) {
       logger.warn('No team', { teamId });
       return;
     }
-
-    this.teamsToProcess.get(teamId).sendMessage(teamId, data);
+    process.sendMessage(teamId, data);
   }
 
   close() {

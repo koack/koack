@@ -1,1 +1,1 @@
-{"version":3,"sources":["../src/index.js"],"names":["Bot","Pool","Server"],"mappings":";;;;;;;;;;;;;;;;;;;;;QAAOA,G;QACAC,I;QACAC,M","file":"index.js","sourcesContent":["export Bot from './bot';\nexport Pool from './pool';\nexport Server from './server';\n"]}
+{"version":3,"sources":["../src/index.js"],"names":["Bot","Pool","Server"],"mappings":";;;;;;;;;;;;;;;;;;;;;QACOA,G;QACAC,I;QACAC,M","file":"index.js","sourcesContent":["/* @flow */\nexport Bot from './bot';\nexport Pool from './pool';\nexport Server from './server';\n"]}

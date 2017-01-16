@@ -1,3 +1,4 @@
+/* @flow */
 import { RtmClient, WebClient } from '@slack/client';
 import Logger from 'nightingale-logger/src';
 // import Bot from './Bot';

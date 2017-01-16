@@ -1,3 +1,4 @@
+/* @flow */
 import Koa from 'koa';
 import _ from 'koa-route';
 import alplisten from 'alp-listen';
@@ -5,7 +6,7 @@ import object2map from 'object2map';
 import Pool from '../../src/pool';
 // import bodyParser from 'koa-bodyparser';
 import createSlackActions from './slack';
-import type { InstallInfoType, TeamType } from '../types/index';
+import type { StorageType, TeamType } from '../types/index';
 
 type SlackClientConfigType = {|
   clientID: string,
@@ -15,6 +16,7 @@ type SlackClientConfigType = {|
 type SlackServerConfigType = {|
   slackClient: SlackClientConfigType,
   pool: Pool,
+  storage: StorageType,
   scopes: Array<string>,
 |};
 
@@ -25,15 +27,12 @@ type ListenConfigType = {|
   hostname: ?string,
 |};
 
-const createTeam = (installInfo: InstallInfoType): TeamType => ({
-  ...installInfo.team,
-  bot: installInfo.bot,
-  installations: [
-    { user: installInfo.user, date: installInfo.date, scopes: installInfo.scopes },
-  ],
-});
-
 export default class SlackServer extends Koa {
+  slackClient: SlackClientConfigType;
+  pool: Pool;
+  storage: StorageType;
+  scopes: Array<string>;
+
   constructor(config: SlackServerConfigType) {
     super();
     Object.assign(this, config);
@@ -44,9 +43,10 @@ export default class SlackServer extends Koa {
       scopes: config.scopes,
       callbackUrl: '/callback',
       successUrl: '/success',
-      callback: (installInfo) => {
-        this.pool.addTeam(createTeam(installInfo));
-        this.installSuccess(installInfo);
+      callback: async (installInfo) => {
+        const team: TeamType = await this.storage.installedTeam(installInfo);
+        this.pool.addTeam(team);
+        this.emit('installed', installInfo);
       },
     });
 
@@ -55,11 +55,9 @@ export default class SlackServer extends Koa {
     this.use(_.get('/success', ctx => ctx.body = 'Youhou !!!'));
   }
 
-  installSuccess() {
-  }
-
   listen(config: ListenConfigType, certificatesDirname: ?string) {
     this.config = object2map(config);
     alplisten(certificatesDirname)(this);
+    this.storage.forEach((team: TeamType) => this.pool.addTeam(team));
   }
 }

@@ -1,4 +1,6 @@
+/* @flow */
 import { fork } from 'child_process';
+import type { ChildProcess } from 'child_process';
 import Pool from './index';
 import type { TeamType } from '../../src/types';
 
@@ -6,6 +8,7 @@ export default class Process {
   pool: Pool;
   id: number;
   teams: Map<any, TeamType>;
+  childProcess: ?ChildProcess;
 
   constructor(pool: Pool) {
     this.pool = pool;
@@ -28,6 +31,7 @@ export default class Process {
   }
 
   kill() {
+    if (!this.childProcess) return;
     this.childProcess.kill();
     delete this.childProcess;
   }
@@ -37,13 +41,21 @@ export default class Process {
   }
 
   startTeam(team: TeamType) {
+    if (!this.childProcess) {
+      throw new Error('Cannot start a new team in a killed process');
+    }
+
     this.teams.set(team.id, team);
     this.pool.teamsToProcess.set(team.id, this);
 
     this.childProcess.send({ type: 'start', team });
   }
 
-  killTeam(team: TeamType, killProcessIfEmpty = true) {
+  killTeam(team: TeamType, killProcessIfEmpty: boolean = true) {
+    if (!this.childProcess) {
+      throw new Error('Cannot kill a team in a killed process');
+    }
+
     this.childProcess.send({ type: 'remove', teamId: team.id });
     this.teams.delete(team.id);
     this.pool.teamsToProcess.delete(team.id);
@@ -60,6 +72,10 @@ export default class Process {
   }
 
   sendMessage(teamId: number, data: Object) {
+    if (!this.childProcess) {
+      throw new Error('Cannot send a message in a killed process');
+    }
+
     this.childProcess.send({ type: 'message', teamId, ...data });
   }
 }

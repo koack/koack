@@ -1,3 +1,4 @@
+/* @flow */
 export type UserType = {
   id: string,
   name: ?string,
@@ -23,3 +24,10 @@ export type InstallInfoType = InstallationInfoType & {
 }
 
 export type WhereType = 'dm' | 'channel' | 'group';
+
+type CallbackTeamType = (team: TeamType) => void;
+
+export type StorageType = {
+  forEach: (callback: CallbackTeamType) => void,
+  installedTeam: (installInfo: InstallInfoType) => Promise<TeamType>|TeamType,
+};

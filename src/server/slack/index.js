@@ -1,5 +1,14 @@
+/* @flow */
 import { create } from 'simple-oauth2';
 import type { InstallInfoType } from '../../types/index';
+
+type ArgsType = {|
+  client: {| clientID: string, clientSecret: string |},
+  scopes: Array<string>,
+  callbackUrl: string,
+  redirectUrl: string,
+  callback: (InstallInfoType) => void|Promise<void>,
+|};
 
 export default ({
   client,
@@ -7,7 +16,7 @@ export default ({
   callbackUrl = '/callback',
   redirectUrl = '/success',
   callback,
-}) => {
+}: ArgsType) => {
   const oauth2 = create({
     client: {
       id: client.clientID,
@@ -42,6 +51,7 @@ export default ({
         ctx.body = 'Error';
       }
 
+      console.log(result);
       const {
         team_id: teamId,
         team_name: teamName,

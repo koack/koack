@@ -49,6 +49,7 @@ exports.default = function slack({
           ctx.body = 'Error';
         }
 
+        console.log(result);
         const {
           team_id: teamId,
           team_name: teamName,
