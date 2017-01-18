@@ -155,7 +155,7 @@ const server = new Server({
   storage: memoryStorage(),
 });
 
-server.listen(process.env.PORT || 3000);
+server.listen({ port: Number(process.env.PORT) || 3000 });
 ```
 
 [npm-image]: https://img.shields.io/npm/v/koack.svg?style=flat-square
