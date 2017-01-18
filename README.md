@@ -44,12 +44,12 @@ export default (bot: Bot) => {
         commands: ['like'], // @mybot like: something
         where: ['dm', 'channel', 'group'], // default to everywhere
         mention: ['channel', 'group'], // default to everywhere except dm
-        handler: (ctx) => {}
+        handler: (ctx) => {},
       },
       {
         commands: ['like'], // @mybot like: something
         middlewares: [
-          (ctx) => {}
+          (ctx) => {},
         ],
       },
       {

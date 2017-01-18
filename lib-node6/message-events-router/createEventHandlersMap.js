@@ -10,7 +10,7 @@ var _koaCompose2 = _interopRequireDefault(_koaCompose);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = function createEventHandlersMap(actions) {
+exports.default = actions => {
   const map = {
     dm: new Map(),
     channel: new Map(),

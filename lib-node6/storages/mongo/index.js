@@ -48,10 +48,8 @@ exports.default = (() => {
     };
   });
 
-  function mongo(_x) {
+  return function (_x) {
     return _ref.apply(this, arguments);
-  }
-
-  return mongo;
+  };
 })();
 //# sourceMappingURL=index.js.map

@@ -16,7 +16,7 @@ var _messageRouter2 = _interopRequireDefault(_messageRouter);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = function bot(bot) {
+exports.default = bot => {
   bot.on(_bot.RTM_EVENTS.MESSAGE, (0, _messageEventsRouter2.default)([{
     events: [_bot.RTM_MESSAGE_SUBTYPES.CHANNEL_JOIN, _bot.RTM_MESSAGE_SUBTYPES.GROUP_JOIN],
     handler: ctx => {

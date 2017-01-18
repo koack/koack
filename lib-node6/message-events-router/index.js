@@ -31,7 +31,7 @@ const handle = (ctx, messageEvent, eventHandler) => {
   eventHandler.handler(messageCtx);
 };
 
-exports.default = function messageEventsRouter(actions) {
+exports.default = actions => {
   const map = (0, _createEventHandlersMap2.default)(actions);
 
   return (ctx, next) => {

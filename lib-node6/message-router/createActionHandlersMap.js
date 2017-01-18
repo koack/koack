@@ -16,7 +16,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 const logger = new _nightingaleLogger2.default('koack:message-router:actions');
 
-exports.default = function createActionHandlersMap(actions) {
+exports.default = actions => {
   const map = {
     dm: { commands: new Map(), regexps: [] },
     channel: { commands: new Map(), regexps: [] },

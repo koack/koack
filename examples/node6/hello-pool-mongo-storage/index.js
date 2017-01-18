@@ -10,9 +10,9 @@ var _server = require('koack/server');
 
 var _server2 = _interopRequireDefault(_server);
 
-var _mongoStorage = require('koack/mongo-storage');
+var _mongo = require('koack/storages/mongo');
 
-var _mongoStorage2 = _interopRequireDefault(_mongoStorage);
+var _mongo2 = _interopRequireDefault(_mongo);
 
 var _config = require('../config');
 
@@ -31,7 +31,7 @@ const server = new _server2.default({
   slackClient: _config2.default.slackClient
 });
 
-(0, _mongoStorage2.default)(server, process.env.MONGO || 'mongodb://localhost:27017/hello-pool');
+(0, _mongo2.default)(server, process.env.MONGO || 'mongodb://localhost:27017/hello-pool');
 
 server.listen({ port: process.env.PORT || 3000 });
 //# sourceMappingURL=index.js.map

@@ -44,7 +44,7 @@ const canCommandHandleWithMention = (hasMention, command, destinationType) => {
   return true;
 };
 
-exports.default = function messageRouter(actions) {
+exports.default = actions => {
   const mentionOnly = actions.every(action => action.mention === true);
   const map = (0, _createActionHandlersMap2.default)(actions);
 
