@@ -29,12 +29,6 @@ import type { Bot } from 'koack/types';
 
 const loggerMiddleware = ({ event }) => console.log(event);
 
-export default [
-  {
-    events: [RTM_EVENTS.CHANNEL_JOINED],
-  }
-];
-
 export default (bot: Bot) => {
   bot.on(
     RTM_EVENTS.CHANNEL_JOINED,
@@ -95,7 +89,6 @@ pool.start(teamsIterator)
 
 process.on('SIGINT', () => pool.close());
 process.on('SIGTERM', () => pool.close());
-
 ```
 
 ## Only one bot
@@ -147,12 +140,15 @@ A server allows:
 
 ```js
 import { Pool, Server } from 'koack';
+import memoryStorage from 'koack/storages/memory';
 
 const pool = new Pool({ size: 100, path: require.resolve('./bot') });
 
 const server = new Server({
   pool: pool,
   scopes: ['bot'],
+  slackClient: { clientId: ..., clientSecret: ... },
+  storage: memoryStorage(),
 });
 
 server.listen(process.env.PORT || 3000);

@@ -1,7 +1,7 @@
 import 'nightingale-app-console';
 import Pool from 'koack/src/pool';
 import Server from 'koack/src/server';
-import mongoStorage from 'koack/src/mongo-storage';
+import mongoStorage from 'koack/src/storages/mongo';
 import config from '../config';
 
 const pool = new Pool({
