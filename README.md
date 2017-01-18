@@ -151,7 +151,7 @@ const pool = new Pool({ size: 100, path: require.resolve('./bot') });
 const server = new Server({
   pool: pool,
   scopes: ['bot'],
-  slackClient: { clientId: ..., clientSecret: ... },
+  slackClient: { clientID: ..., clientSecret: ... },
   storage: memoryStorage(),
 });
 
