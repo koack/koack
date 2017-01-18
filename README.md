@@ -57,7 +57,7 @@ export default (bot: Bot) => {
         handler: (ctx) => {
           ctx.startConversation(async (say, waitResponse) => {
             say('What is your first name ?');
-            const fistName = await waitResponse();
+            const firstName = await waitResponse();
             say('And your last name ?');
             const lastName = await waitResponse();
             say(`Hello ${firstName} ${lastName}`);
