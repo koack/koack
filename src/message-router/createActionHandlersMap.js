@@ -6,7 +6,7 @@ import type { ActionType } from './types';
 const logger = new Logger('koack:message-router:actions');
 
 type ActionHandlersType = {
-  commands: Map<ActionType>,
+  commands: Map<string, ActionType>,
   regexps: Array<ActionType>,
 };
 
@@ -17,7 +17,7 @@ type ActionsMapType = {
 }
 
 export default (actions: Array<ActionType>): ActionsMapType => {
-  const map = {
+  const map: ActionsMapType = {
     dm: { commands: new Map(), regexps: [] },
     channel: { commands: new Map(), regexps: [] },
     group: { commands: new Map(), regexps: [] },

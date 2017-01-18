@@ -38,11 +38,11 @@ exports.default = function createActionHandlersMap(actions) {
   _assert(actions, _tcombForked2.default.list(_types.ActionType), 'actions');
 
   return _assert(function () {
-    const map = {
+    const map = _assert({
       dm: { commands: new Map(), regexps: [] },
       channel: { commands: new Map(), regexps: [] },
       group: { commands: new Map(), regexps: [] }
-    };
+    }, ActionsMapType, 'map');
 
     actions.forEach(action => {
       _assert(action, _types.ActionType, 'action');
