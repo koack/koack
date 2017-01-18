@@ -78,18 +78,22 @@ export default (bot: Bot) => {
 
 ```js
 import { Pool } from 'koack';
+import memoryStorage from 'koack/storages/memory';
 
 const pool = new Pool({
   size: 100,
   path: require.resolve('./bot.js'),
 });
 
-pool.start(teamsIterator)
-  .then(() => console.log('All teams launched !'));
+const storage = memoryStorage();
+
+storage.forEach(team => pool.addTeam(team));
 
 process.on('SIGINT', () => pool.close());
 process.on('SIGTERM', () => pool.close());
 ```
+
+Note: [with a server](#with-a-server), `teamsIterator` is handled by the storage.
 
 ## Only one bot
 

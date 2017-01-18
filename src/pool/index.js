@@ -21,16 +21,6 @@ export default class Pool {
     Object.assign(this, options);
   }
 
-  async start(iterator) {
-    logger.info('bot server is starting');
-
-    // eslint-disable-next-line no-restricted-syntax
-    for (const item of iterator) {
-      const installInfo = await item;
-      await startBot(this, installInfo);
-    }
-  }
-
   addTeam(team: TeamType) {
     startBot(this, team);
   }
