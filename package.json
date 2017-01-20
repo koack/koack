@@ -13,7 +13,7 @@
   ],
   "license": "ISC",
   "engines": {
-    "node": ">=6.9.12"
+    "node": ">=6.9.1"
   },
   "repository": "git@github.com:koack/koack.git",
   "homepage": "https://github.com/koack/koack",
