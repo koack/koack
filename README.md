@@ -25,7 +25,7 @@ npm install --save koack
 ```js
 import { RTM_EVENTS } from 'koack/bot';
 import messageRouter from 'koack/message-router';
-import type { Bot } from 'koack/types';
+import type { Bot } from 'koack/bot';
 
 const loggerMiddleware = ({ event }) => console.log(event);
 

@@ -1,7 +1,7 @@
 import { RTM_EVENTS, RTM_MESSAGE_SUBTYPES } from 'koack/src/bot';
 import messageEventsRouter from 'koack/src/message-events-router';
 import messageRouter from 'koack/src/message-router';
-import type { Bot } from 'koack/src/types';
+import type { Bot } from 'koack/src/bot';
 
 export default (bot: Bot) => {
   bot.on(
