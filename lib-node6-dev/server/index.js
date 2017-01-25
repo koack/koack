@@ -115,6 +115,10 @@ class SlackServer extends _koa2.default {
       return this.pool.addTeam(team);
     });
   }
+
+  stop() {
+    return this.pool.close();
+  }
 }
 exports.default = SlackServer;
 

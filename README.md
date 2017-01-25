@@ -89,8 +89,13 @@ const storage = memoryStorage();
 
 storage.forEach(team => pool.addTeam(team));
 
-process.on('SIGINT', () => pool.close());
-process.on('SIGTERM', () => pool.close());
+const close = async () => {
+  await pool.close();
+  process.exit(0);
+};
+process.on('SIGINT', close);
+process.on('SIGTERM', close);
+
 ```
 
 Note: [with a server](#with-a-server), `teamsIterator` is handled by the storage.
@@ -106,8 +111,13 @@ import initBot from './bot';
 const bot = createBot({ token });
 initBot(bot);
 
-process.on('SIGINT', () => bot.close());
-process.on('SIGTERM', () => bot.close());
+const close = async () => {
+  await bot.close();
+  process.exit(0);
+};
+process.on('SIGINT', close);
+process.on('SIGTERM', close);
+
 ```
 
 ## Extends the context
@@ -156,6 +166,9 @@ const server = new Server({
 });
 
 server.listen({ port: Number(process.env.PORT) || 3000 });
+
+process.on('SIGINT', () => server.stop());
+process.on('SIGTERM', () => server.stop());
 ```
 
 [npm-image]: https://img.shields.io/npm/v/koack.svg?style=flat-square

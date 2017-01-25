@@ -67,6 +67,10 @@ class SlackServer extends _koa2.default {
     (0, _alpListen2.default)(certificatesDirname)(this);
     this.storage.forEach(team => this.pool.addTeam(team));
   }
+
+  stop() {
+    return this.pool.close();
+  }
 }
 exports.default = SlackServer;
 //# sourceMappingURL=index.js.map

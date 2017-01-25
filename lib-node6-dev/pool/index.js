@@ -62,7 +62,18 @@ class Pool {
   }
 
   close() {
-    this.processes.forEach(process => process.kill());
+    return this.clear();
+  }
+
+  clear() {
+    const promises = Array.from(this.processes).map(process => new Promise(resolve => {
+      process.kill();
+      process.once('exit', () => resolve());
+    }));
+    this.processes.clear();
+    this.teamsToProcess.clear();
+    this.processNextId = 1;
+    return Promise.all(promises);
   }
 }
 exports.default = Pool;

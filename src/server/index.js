@@ -60,4 +60,8 @@ export default class SlackServer extends Koa {
     alplisten(certificatesDirname)(this);
     this.storage.forEach((team: TeamType) => this.pool.addTeam(team));
   }
+
+  stop() {
+    return this.pool.close();
+  }
 }
