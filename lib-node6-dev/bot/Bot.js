@@ -71,6 +71,7 @@ class Bot {
 
   createContext(event) {
     return _assert(function () {
+      console.log(event);
       const ctx = Object.create(_contextPrototype2.default);
 
       Object.assign(ctx, {

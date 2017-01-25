@@ -40,6 +40,7 @@ export default class Bot {
   }
 
   createContext(event): ContextType {
+    console.log(event);
     const ctx = Object.create(contextPrototype);
 
     Object.assign(ctx, {

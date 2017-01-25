@@ -31,8 +31,11 @@ class Process {
 
   kill() {
     if (!this.childProcess) return;
-    this.childProcess.kill();
-    delete this.childProcess;
+    return new Promise(resolve => {
+      this.childProcess.once('exit', () => resolve());
+      this.childProcess.kill();
+      delete this.childProcess;
+    });
   }
 
   canAddTeam() {

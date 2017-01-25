@@ -44,10 +44,7 @@ class Pool {
   }
 
   clear() {
-    const promises = Array.from(this.processes).map(process => new Promise(resolve => {
-      process.kill();
-      process.once('exit', () => resolve());
-    }));
+    const promises = Array.from(this.processes).map(process => process.kill());
     this.processes.clear();
     this.teamsToProcess.clear();
     this.processNextId = 1;

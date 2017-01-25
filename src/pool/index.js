@@ -2,6 +2,7 @@
 import Logger from 'nightingale/src';
 import startBot from './startBot';
 import type { TeamType } from '../types/';
+import Process from './Process';
 
 const logger = new Logger('koack:pool');
 
@@ -14,7 +15,7 @@ export default class Pool {
   size: number;
   path: string;
   processNextId = 1;
-  processes = new Set();
+  processes: Set<Process> = new Set();
   teamsToProcess = new Map();
 
   constructor(options: PoolOptionsType) {
@@ -39,12 +40,7 @@ export default class Pool {
   }
 
   clear() {
-    const promises = Array.from(this.processes).map(process => (
-      new Promise(resolve => {
-        process.kill();
-        process.once('exit', () => resolve());
-      })
-    ));
+    const promises = Array.from(this.processes).map(process => process.kill());
     this.processes.clear();
     this.teamsToProcess.clear();
     this.processNextId = 1;
