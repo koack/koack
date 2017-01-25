@@ -5,6 +5,12 @@ import type { Bot } from 'koack/src/bot';
 
 export default (bot: Bot) => {
   bot.on(
+    RTM_EVENTS.CHANNEL_JOINED,
+    (ctx) => console.log(ctx),
+    async (ctx) => Promise.resolve(console.log(ctx)),
+  );
+
+  bot.on(
     RTM_EVENTS.MESSAGE,
     messageEventsRouter([
       {

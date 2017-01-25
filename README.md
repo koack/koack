@@ -27,7 +27,10 @@ import { RTM_EVENTS } from 'koack/bot';
 import messageRouter from 'koack/message-router';
 import type { Bot } from 'koack/bot';
 
-const loggerMiddleware = ({ event }) => console.log(event);
+const loggerMiddleware = ({ event }, next) => {
+  console.log(event);
+  next();
+};
 
 export default (bot: Bot) => {
   bot.on(
