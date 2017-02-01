@@ -8,6 +8,10 @@ var _tcombForked = require('tcomb-forked');
 
 var _tcombForked2 = _interopRequireDefault(_tcombForked);
 
+var _sendMessage = require('./prototype/sendMessage');
+
+var _sendMessage2 = _interopRequireDefault(_sendMessage);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
@@ -52,12 +56,54 @@ exports.default = {
     return dm;
   },
 
-  reply(string) {
-    this.rtm.sendMessage(string, this.channelId);
+  /**
+   * Send a message in a channel
+   *
+   * If options is provided, use the webClient instead
+   */
+  sendMessage(channelId, message, options) {
+    _assert(channelId, _tcombForked2.default.String, 'channelId');
+
+    _assert(message, _tcombForked2.default.String, 'message');
+
+    _assert(options, _tcombForked2.default.maybe(_sendMessage.SendMessageOptionsType), 'options');
+
+    return _assert(function () {
+      return (0, _sendMessage2.default)(this, channelId, message, options);
+    }.apply(this, arguments), _tcombForked2.default.Promise, 'return value');
   },
 
-  replyInDM(string) {
-    this.rtm.sendMessage(string, this.userDM);
+  /**
+   * Reply in the same channel as the event
+   */
+  reply(message, options) {
+    _assert(message, _tcombForked2.default.String, 'message');
+
+    _assert(options, _tcombForked2.default.maybe(_sendMessage.SendMessageOptionsType), 'options');
+
+    return _assert(function () {
+      return this.sendMessage(this.channelId, message, options);
+    }.apply(this, arguments), _tcombForked2.default.Promise, 'return value');
+  },
+
+  /**
+   * Reply in the DM of the event's user
+   */
+  replyInDM(message, options) {
+    _assert(message, _tcombForked2.default.String, 'message');
+
+    _assert(options, _tcombForked2.default.maybe(_sendMessage.SendMessageOptionsType), 'options');
+
+    return _assert(function () {
+      if (this.channelId[0] === 'D') throw new Error('You are already in DM, use reply() instead');
+      const userDM = this.userDM;
+      if (userDM) {
+        return this.sendMessage(userDM.id, message, options);
+      }
+
+      const user = this.user;
+      this.webClient.im.open(user.id).then(res => (0, _sendMessage2.default)(res.channel.id, message, options));
+    }.apply(this, arguments), _tcombForked2.default.Promise, 'return value');
   },
 
   mention(userId) {

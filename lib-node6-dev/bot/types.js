@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.MiddlewareType = exports.NextCallbackType = exports.ContextType = undefined;
+exports.MiddlewareType = exports.NextCallbackType = exports.EventContextType = exports.ContextType = undefined;
 
 var _tcombForked = require('tcomb-forked');
 
@@ -24,11 +24,14 @@ const ContextType = exports.ContextType = _tcombForked2.default.interface({
   rtm: _client.RtmClient,
   webClient: _client.WebClient,
   logger: _nightingaleLogger2.default,
-  event: _tcombForked2.default.Object,
   teamId: _tcombForked2.default.maybe(_tcombForked2.default.Any),
   userId: _tcombForked2.default.maybe(_tcombForked2.default.Any),
   channelId: _tcombForked2.default.maybe(_tcombForked2.default.Any)
 }, 'ContextType');
+
+const EventContextType = exports.EventContextType = _tcombForked2.default.interface({
+  event: _tcombForked2.default.Object
+}, 'EventContextType');
 
 const NextCallbackType = exports.NextCallbackType = _tcombForked2.default.Function;
 const MiddlewareType = exports.MiddlewareType = _tcombForked2.default.Function;

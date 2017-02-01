@@ -2,7 +2,7 @@
 import { RtmClient, WebClient, CLIENT_EVENTS } from '@slack/client';
 import Logger from 'nightingale-logger/src';
 import compose from 'koa-compose';
-import createContextFromEvent from './createContextFromEvent';
+import createContextFromEvent from './context/createContextFromEvent';
 import type { MiddlewareType } from './types';
 import type { TeamType } from '../types';
 

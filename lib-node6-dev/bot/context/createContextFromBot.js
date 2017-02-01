@@ -13,7 +13,7 @@ var _nightingaleLogger = require('nightingale-logger');
 
 var _nightingaleLogger2 = _interopRequireDefault(_nightingaleLogger);
 
-var _Bot = require('./Bot');
+var _Bot = require('../Bot');
 
 var _Bot2 = _interopRequireDefault(_Bot);
 
@@ -21,34 +21,12 @@ var _contextPrototype = require('./contextPrototype');
 
 var _contextPrototype2 = _interopRequireDefault(_contextPrototype);
 
-var _types = require('./types');
+var _types = require('../types');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const extractIdFromEvent = key => {
-  _assert(key, _tcombForked2.default.String, 'key');
-
-  return event => {
-    _assert(event, _tcombForked2.default.Object, 'event');
-
-    if (typeof event[key] === 'string') {
-      return event[key];
-    }
-    if (typeof event[key] === 'object') {
-      return event[key].id;
-    }
-
-    return null;
-  };
-};
-
-const extrackUserIdFromEvent = extractIdFromEvent('user');
-const extrackChannelIdFromEvent = extractIdFromEvent('channel');
-
-exports.default = function createContextFromEvent(bot, event) {
+exports.default = function createContextFromBot(bot) {
   _assert(bot, _Bot2.default, 'bot');
-
-  _assert(event, _tcombForked2.default.Object, 'event');
 
   return _assert(function () {
     const ctx = Object.create(_contextPrototype2.default);
@@ -57,17 +35,13 @@ exports.default = function createContextFromEvent(bot, event) {
       bot,
       rtm: bot.rtm,
       webClient: bot.webClient,
-      team: bot.team,
-      event,
-      userId: extrackUserIdFromEvent(event),
-      channelId: extrackChannelIdFromEvent(event)
+      team: bot.team
     });
 
     ctx.logger = new _nightingaleLogger2.default('bot');
     ctx.logger.setContext({
       team: bot.team,
-      user: ctx.user && ctx.user.name,
-      text: event.text
+      user: ctx.user && ctx.user.name
     });
 
     return ctx;
@@ -91,4 +65,4 @@ function _assert(x, type, name) {
 
   return x;
 }
-//# sourceMappingURL=createContextFromEvent.js.map
+//# sourceMappingURL=createContextFromBot.js.map

@@ -9,11 +9,14 @@ export type ContextType = {
   rtm: RtmClient,
   webClient: WebClient,
   logger: Logger,
-  // event: EventType,
-  event: Object,
   teamId: ?any,
   userId: ?any,
   channelId: ?any,
+};
+
+export type EventContextType = {
+  // event: EventType,
+  event: Object,
 };
 
 export type NextCallbackType = () => {};

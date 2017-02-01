@@ -3,6 +3,13 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _sendMessage = require('./prototype/sendMessage');
+
+var _sendMessage2 = _interopRequireDefault(_sendMessage);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 exports.default = {
   getChannelType() {
     switch (this.channelId[0]) {
@@ -45,12 +52,34 @@ exports.default = {
     return dm;
   },
 
-  reply(string) {
-    this.rtm.sendMessage(string, this.channelId);
+  /**
+   * Send a message in a channel
+   *
+   * If options is provided, use the webClient instead
+   */
+  sendMessage(channelId, message, options) {
+    return (0, _sendMessage2.default)(this, channelId, message, options);
   },
 
-  replyInDM(string) {
-    this.rtm.sendMessage(string, this.userDM);
+  /**
+   * Reply in the same channel as the event
+   */
+  reply(message, options) {
+    return this.sendMessage(this.channelId, message, options);
+  },
+
+  /**
+   * Reply in the DM of the event's user
+   */
+  replyInDM(message, options) {
+    if (this.channelId[0] === 'D') throw new Error('You are already in DM, use reply() instead');
+    const userDM = this.userDM;
+    if (userDM) {
+      return this.sendMessage(userDM.id, message, options);
+    }
+
+    const user = this.user;
+    this.webClient.im.open(user.id).then(res => (0, _sendMessage2.default)(res.channel.id, message, options));
   },
 
   mention(userId) {

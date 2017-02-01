@@ -1,4 +1,4 @@
-/* @flow */
+import sendMessage, { type SendMessageOptionsType } from './prototype/sendMessage';
 
 export default {
   getChannelType() {
@@ -42,12 +42,35 @@ export default {
     return dm;
   },
 
-  reply(string: string) {
-    this.rtm.sendMessage(string, this.channelId);
+  /**
+   * Send a message in a channel
+   *
+   * If options is provided, use the webClient instead
+   */
+  sendMessage(channelId: string, message: string, options: ?SendMessageOptionsType): Promise {
+    return sendMessage(this, channelId, message, options);
   },
 
-  replyInDM(string: string) {
-    this.rtm.sendMessage(string, this.userDM);
+  /**
+   * Reply in the same channel as the event
+   */
+  reply(message: string, options: ?SendMessageOptionsType): Promise {
+    return this.sendMessage(this.channelId, message, options);
+  },
+
+  /**
+   * Reply in the DM of the event's user
+   */
+  replyInDM(message: string, options: ?SendMessageOptionsType): Promise {
+    if (this.channelId[0] === 'D') throw new Error('You are already in DM, use reply() instead');
+    const userDM = this.userDM;
+    if (userDM) {
+      return this.sendMessage(userDM.id, message, options);
+    }
+
+    const user = this.user;
+    this.webClient.im.open(user.id)
+      .then((res) => sendMessage(res.channel.id, message, options));
   },
 
   mention(userId: ?string) {

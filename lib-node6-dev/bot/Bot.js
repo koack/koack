@@ -18,7 +18,7 @@ var _koaCompose = require('koa-compose');
 
 var _koaCompose2 = _interopRequireDefault(_koaCompose);
 
-var _createContextFromEvent = require('./createContextFromEvent');
+var _createContextFromEvent = require('./context/createContextFromEvent');
 
 var _createContextFromEvent2 = _interopRequireDefault(_createContextFromEvent);
 
