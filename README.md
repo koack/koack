@@ -18,7 +18,9 @@ npm install --save koack
 
 [https://christophehurpeau.github.io/koack/docs](http://christophehurpeau.github.io/koack/docs)
 
-## Usage
+## Usages
+
+### The bot
 
 > bot.js
 
@@ -75,7 +77,7 @@ export default (bot: Bot) => {
 }
 ```
 
-## With pool
+### Serving with pool
 
 > pool.js
 
@@ -103,7 +105,7 @@ process.on('SIGTERM', close);
 
 Note: [with a server](#with-a-server), `teamsIterator` is handled by the storage.
 
-## Only one bot
+### Serving without pool
 
 > index.js
 
@@ -123,31 +125,7 @@ process.on('SIGTERM', close);
 
 ```
 
-## Extends the context
-
-```js
-bot.context.myOwnContextMethod = () => console.log('Hello !');
-```
-
-## Use message-events-router
-
-```js
-import { RTM_EVENTS, RTM_MESSAGE_SUBTYPES } from 'koack/bot';
-import messageEventsRouter from 'koack/message-events-router';
-
-bot.on(
-  RTM_EVENTS.MESSAGE,
-
-  messageEventsRouter({
-    events: [RTM_MESSAGE_SUBTYPES.CHANNEL_JOIN, RTM_MESSAGE_SUBTYPES.GROUP_JOIN],
-    handler: ctx => {
-
-    },
-  }),
-);
-```
-
-## With a server
+### Serving with a web server
 
 A server allows:
 
@@ -173,6 +151,43 @@ server.listen({ port: Number(process.env.PORT) || 3000 });
 process.on('SIGINT', () => server.stop());
 process.on('SIGTERM', () => server.stop());
 ```
+
+## How to...
+
+### Extends the context
+
+```js
+bot.context.myOwnContextMethod = () => console.log('Hello !');
+```
+
+### Use message-events-router
+
+```js
+import { RTM_EVENTS, RTM_MESSAGE_SUBTYPES } from 'koack/bot';
+import messageEventsRouter from 'koack/message-events-router';
+
+bot.on(
+  RTM_EVENTS.MESSAGE,
+
+  messageEventsRouter({
+    events: [RTM_MESSAGE_SUBTYPES.CHANNEL_JOIN, RTM_MESSAGE_SUBTYPES.GROUP_JOIN],
+    handler: ctx => {
+
+    },
+  }),
+);
+```
+
+### Dev with HTTPS
+
+For some features like [interactives messages](https://api.slack.com/docs/message-buttons), you need to use https. They are many way to achieve it, here the most simple we know:
+
+- install globally localltunnel with `npm install -g localtunnel`
+- start your bot
+- bind your localtunnel in another console `lt --port 4321` (put the port you use in your .env file)
+
+_See [localtunnel](https://localtunnel.github.io/www/) for more details_
+
 
 [npm-image]: https://img.shields.io/npm/v/koack.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/koack
