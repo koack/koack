@@ -1,6 +1,6 @@
 /* @flow */
 import Koa from 'koa';
-import _ from 'koa-route';
+import route from 'koa-route';
 import alplisten from 'alp-listen/src';
 import object2map from 'object2map';
 import Pool from '../../src/pool';
@@ -18,6 +18,8 @@ type SlackServerConfigType = {|
   pool: Pool,
   storage: StorageType,
   scopes: Array<string>,
+  callbackUrl: ?string,
+  redirectUrl: ?string,
 |};
 
 type ListenConfigType = {|
@@ -28,21 +30,27 @@ type ListenConfigType = {|
 |};
 
 export default class SlackServer extends Koa {
-  slackClient: SlackClientConfigType;
   pool: Pool;
   storage: StorageType;
-  scopes: Array<string>;
 
-  constructor(config: SlackServerConfigType) {
+  constructor({
+    pool,
+    storage,
+    slackClient,
+    scopes,
+    callbackUrl = '/callback',
+    redirectUrl = '/success',
+  }: SlackServerConfigType) {
     super();
-    Object.assign(this, config);
+    this.pool = pool;
+    this.storage = storage;
     // this.use(bodyParser());
 
     const slackActions = createSlackActions({
-      client: config.slackClient,
-      scopes: config.scopes,
-      callbackUrl: '/callback',
-      successUrl: '/success',
+      client: slackClient,
+      scopes,
+      callbackUrl,
+      redirectUrl,
       callback: async (installInfo) => {
         const team: TeamType = await this.storage.installedTeam(installInfo);
         this.pool.addTeam(team);
@@ -50,9 +58,16 @@ export default class SlackServer extends Koa {
       },
     });
 
-    this.use(_.get('/', slackActions.authorize));
-    this.use(_.get('/callback', slackActions.callback));
-    this.use(_.get('/success', ctx => ctx.body = 'Youhou !!!'));
+    this.registerGet('/', slackActions.authorize);
+    this.registerGet(callbackUrl, slackActions.callback);
+  }
+
+  registerGet(url: string, callback: Function) {
+    this.use(route.get(url, callback));
+  }
+
+  registerPost(url: string, callback: Function) {
+    this.use(route.post(url, callback));
   }
 
   listen(config: ListenConfigType, certificatesDirname: ?string) {

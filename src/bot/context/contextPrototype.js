@@ -42,11 +42,11 @@ export default {
     return dm;
   },
 
-  reply(string) {
+  reply(string: string) {
     this.rtm.sendMessage(string, this.channelId);
   },
 
-  replyInDM(string) {
+  replyInDM(string: string) {
     this.rtm.sendMessage(string, this.userDM);
   },
 
