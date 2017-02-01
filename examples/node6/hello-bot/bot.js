@@ -4,6 +4,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+require('nightingale-app-console');
+
 var _bot = require('koack/bot');
 
 var _messageEventsRouter = require('koack/message-events-router');
@@ -33,16 +35,16 @@ exports.default = bot => {
     events: [_bot.RTM_MESSAGE_SUBTYPES.CHANNEL_JOIN, _bot.RTM_MESSAGE_SUBTYPES.GROUP_JOIN],
     handler: ctx => {
       if (ctx.fromMe) {
-        ctx.reply(`Hello ${ ctx.mention(ctx.event.inviter) }, thanks for inviting me !`);
+        ctx.reply(`Hello ${ctx.mention(ctx.event.inviter)}, thanks for inviting me !`);
       } else {
-        ctx.reply(`Welcome ${ ctx.mention() } !`);
+        ctx.reply(`Welcome ${ctx.mention()} !`);
       }
     }
   }]), (0, _messageRouter2.default)([{
     regexp: /\b(hello|hi|hey)\b/,
     // stop: false,
     handler: ctx => {
-      ctx.reply(`Hello ${ ctx.mention() }`);
+      ctx.reply(`Hello ${ctx.mention()}`);
     }
   }, {
     where: ['dm'],

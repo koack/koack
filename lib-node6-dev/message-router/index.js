@@ -65,7 +65,7 @@ exports.default = function messageRouter(actions) {
   return (ctx, next) => {
     if (!ctx.event.text || ctx.userId === ctx.rtm.activeUserId) return;
 
-    const botMention = `<@${ ctx.rtm.activeUserId }>`;
+    const botMention = `<@${ctx.rtm.activeUserId}>`;
 
     const { ts, text: originalText, type: messageType, subtype: messageSubtype } = ctx.event;
     const { teamId, userId, channelId } = ctx;

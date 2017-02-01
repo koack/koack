@@ -43,7 +43,7 @@ exports.default = function createEventHandlersMap(actions) {
         eventHandler.events.forEach(eventName => {
           _assert(eventName, _tcombForked2.default.String, 'eventName');
 
-          if (map[where].has(eventName)) throw new Error(`event redefined: "${ eventName }"`);
+          if (map[where].has(eventName)) throw new Error(`event redefined: "${eventName}"`);
           map[where].set(eventName, eventHandler);
         });
       });

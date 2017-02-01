@@ -23,7 +23,7 @@ exports.default = actions => {
 
     eventHandler.where.forEach(where => {
       eventHandler.events.forEach(eventName => {
-        if (map[where].has(eventName)) throw new Error(`event redefined: "${ eventName }"`);
+        if (map[where].has(eventName)) throw new Error(`event redefined: "${eventName}"`);
         map[where].set(eventName, eventHandler);
       });
     });

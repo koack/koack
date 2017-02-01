@@ -29,7 +29,6 @@ export default function createBot(teamOrAccessToken: TeamOrTokenType) {
     ));
   }
 
-  rtm.start();
-
-  return new Bot({ team, rtm, webClient, installerUsersWebClients });
+  const bot = new Bot({ team, rtm, webClient, installerUsersWebClients });
+  return bot.start();
 }

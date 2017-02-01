@@ -1,3 +1,4 @@
+import 'nightingale-app-console/src';
 import { RTM_EVENTS, RTM_MESSAGE_SUBTYPES } from 'koack/src/bot';
 import messageEventsRouter from 'koack/src/message-events-router';
 import messageRouter from 'koack/src/message-router';

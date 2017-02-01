@@ -4,6 +4,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _client = require('@slack/client');
+
 var _nightingaleLogger = require('nightingale-logger');
 
 var _nightingaleLogger2 = _interopRequireDefault(_nightingaleLogger);
@@ -12,9 +14,9 @@ var _koaCompose = require('koa-compose');
 
 var _koaCompose2 = _interopRequireDefault(_koaCompose);
 
-var _contextPrototype = require('./contextPrototype');
+var _createContextFromEvent = require('./createContextFromEvent');
 
-var _contextPrototype2 = _interopRequireDefault(_contextPrototype);
+var _createContextFromEvent2 = _interopRequireDefault(_createContextFromEvent);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -26,7 +28,6 @@ class Bot {
     this.middlewares = [];
 
     Object.assign(this, data);
-    this.context = Object.create(_contextPrototype2.default);
   }
 
   use(middleware) {
@@ -38,31 +39,19 @@ class Bot {
     const allMiddlewares = [...this.middlewares, ...middlewares];
     logger.debug('register middlewares on event', { name, middlewareLength: allMiddlewares.length });
     const callback = (0, _koaCompose2.default)(allMiddlewares);
-    this.rtm.on(name, event => callback(this.createContext(event)));
+    this.rtm.on(name, event => {
+      logger.debug('event', { name, event });
+      callback((0, _createContextFromEvent2.default)(this, event));
+    });
   }
 
-  createContext(event) {
-    console.log(event);
-    const ctx = Object.create(_contextPrototype2.default);
-
-    Object.assign(ctx, {
-      bot: this,
-      rtm: this.rtm,
-      webClient: this.webClient,
-      event,
-      teamId: event.team,
-      userId: event.user,
-      channelId: event.channel
+  start() {
+    this.rtm.on(_client.CLIENT_EVENTS.RTM.RTM_CONNECTION_OPENED, () => {
+      logger.infoSuccess('connection opened');
+      if (process.send) process.send('ready');
     });
-
-    ctx.logger = new _nightingaleLogger2.default('bot');
-    ctx.logger.setContext({
-      team: this.team,
-      user: ctx.user && ctx.user.name,
-      text: event.text
-    });
-
-    return ctx;
+    this.rtm.start();
+    return this;
   }
 
   close() {

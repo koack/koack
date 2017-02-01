@@ -1,7 +1,7 @@
 /* @flow */
 import Koa from 'koa';
 import _ from 'koa-route';
-import alplisten from 'alp-listen';
+import alplisten from 'alp-listen/src';
 import object2map from 'object2map';
 import Pool from '../../src/pool';
 // import bodyParser from 'koa-bodyparser';

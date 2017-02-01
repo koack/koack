@@ -33,8 +33,7 @@ function createBot(teamOrAccessToken) {
     installerUsersWebClients.forEach((accessToken, id) => installerUsersWebClients.set(id, new _client.WebClient(accessToken)));
   }
 
-  rtm.start();
-
-  return new _Bot2.default({ team, rtm, webClient, installerUsersWebClients });
+  const bot = new _Bot2.default({ team, rtm, webClient, installerUsersWebClients });
+  return bot.start();
 }
 //# sourceMappingURL=create.js.map

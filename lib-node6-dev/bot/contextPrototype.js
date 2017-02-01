@@ -64,8 +64,8 @@ exports.default = {
     _assert(userId, _tcombForked2.default.maybe(_tcombForked2.default.String), 'userId');
 
     if (userId === undefined) userId = this.userId;
-    if (userId[0] !== 'U') throw new Error(`Not a userId: "${ userId }"`);
-    return `<@${ userId }>`;
+    if (userId[0] !== 'U') throw new Error(`Not a userId: "${userId}"`);
+    return `<@${userId}>`;
   },
 
   get fromMe() {

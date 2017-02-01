@@ -63,7 +63,7 @@ exports.default = function slack({
     authorize: ctx => {
       ctx.redirect(oauth2.authorizationCode.authorizeURL({
         // eslint-disable-next-line camelcase
-        redirect_uri: `${ ctx.request.origin }${ callbackUrl }`,
+        redirect_uri: `${ctx.request.origin}${callbackUrl}`,
         scope: scopes,
         state: '<state>'
       }));
@@ -74,7 +74,7 @@ exports.default = function slack({
         const result = yield oauth2.clientCredentials.getToken({
           code: ctx.query.code,
           // eslint-disable-next-line camelcase
-          redirect_uri: `${ ctx.request.origin }${ callbackUrl }`
+          redirect_uri: `${ctx.request.origin}${callbackUrl}`
         });
 
         if (!result || !result.ok) {

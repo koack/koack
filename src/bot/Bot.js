@@ -1,9 +1,9 @@
 /* @flow */
-import { RtmClient, WebClient } from '@slack/client';
+import { RtmClient, WebClient, CLIENT_EVENTS } from '@slack/client';
 import Logger from 'nightingale-logger/src';
 import compose from 'koa-compose';
-import contextPrototype from './contextPrototype';
-import type { MiddlewareType, ContextType } from './types';
+import createContextFromEvent from './createContextFromEvent';
+import type { MiddlewareType } from './types';
 import type { TeamType } from '../types';
 
 type BotConstructorArguments = {|
@@ -24,7 +24,6 @@ export default class Bot {
 
   constructor(data: BotConstructorArguments) {
     Object.assign(this, data);
-    this.context = Object.create(contextPrototype);
   }
 
   use(middleware: MiddlewareType) {
@@ -36,31 +35,19 @@ export default class Bot {
     const allMiddlewares = [...this.middlewares, ...middlewares];
     logger.debug('register middlewares on event', { name, middlewareLength: allMiddlewares.length });
     const callback = compose(allMiddlewares);
-    this.rtm.on(name, event => callback(this.createContext(event)));
+    this.rtm.on(name, (event: Object) => {
+      logger.debug('event', { name, event });
+      callback(createContextFromEvent(this, event));
+    });
   }
 
-  createContext(event): ContextType {
-    console.log(event);
-    const ctx = Object.create(contextPrototype);
-
-    Object.assign(ctx, {
-      bot: this,
-      rtm: this.rtm,
-      webClient: this.webClient,
-      event,
-      teamId: event.team,
-      userId: event.user,
-      channelId: event.channel,
+  start() {
+    this.rtm.on(CLIENT_EVENTS.RTM.RTM_CONNECTION_OPENED, () => {
+      logger.infoSuccess('connection opened');
+      if (process.send) process.send('ready');
     });
-
-    ctx.logger = new Logger('bot');
-    ctx.logger.setContext({
-      team: this.team,
-      user: ctx.user && ctx.user.name,
-      text: event.text,
-    });
-
-    return ctx;
+    this.rtm.start();
+    return this;
   }
 
   close() {
