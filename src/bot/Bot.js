@@ -21,6 +21,10 @@ export default class Bot {
   webClient: WebClient;
   installerUsersWebClients: null | Map<string, WebClient>;
   middlewares: Array<MiddlewareType> = [];
+  /** bot id in the team */
+  id: ?string;
+  /** bot name in the team */
+  name: ?string;
 
   constructor(data: BotConstructorArguments) {
     Object.assign(this, data);
@@ -42,6 +46,11 @@ export default class Bot {
   }
 
   start() {
+    this.rtm.on(CLIENT_EVENTS.RTM.AUTHENTICATED, ({ self }) => {
+      this.id = self.id;
+      this.name = self.name;
+      logger.debugSuccess('authenticated', { id: self.id, name: self.name });
+    });
     this.rtm.on(CLIENT_EVENTS.RTM.RTM_CONNECTION_OPENED, () => {
       logger.infoSuccess('connection opened');
       if (process.send) process.send('ready');
