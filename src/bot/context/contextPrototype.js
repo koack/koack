@@ -69,7 +69,7 @@ export default {
     }
 
     const user = this.user;
-    this.webClient.im.open(user.id)
+    return this.webClient.im.open(user.id)
       .then((res) => sendMessage(res.channel.id, message, options));
   },
 
