@@ -1,12 +1,16 @@
 # koack [![NPM version][npm-image]][npm-url]
 
-
+Core brick to build Slack bots
 
 [![Build Status][circleci-status-image]][circleci-status-url]
 [![Travis Status][travisci-status-image]][travisci-status-url]
 [![Dependency ci Status][dependencyci-image]][dependencyci-url]
 [![Dependency Status][daviddm-image]][daviddm-url]
 [![Coverage percentage][coverage-image]][coverage-url]
+
+## Nightingale
+
+To read the full documentation on nightingale, go to [nightingale](https://npmjs.com/package/nightingale)
 
 ## Install
 
@@ -187,7 +191,6 @@ For some features like [interactives messages](https://api.slack.com/docs/messag
 - bind your localtunnel in another console `lt --port 4321` (put the port you use in your .env file)
 
 _See [localtunnel](https://localtunnel.github.io/www/) for more details_
-
 
 [npm-image]: https://img.shields.io/npm/v/koack.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/koack

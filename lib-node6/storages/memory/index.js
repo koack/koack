@@ -29,7 +29,7 @@ exports.default = () => {
         return team;
       });
 
-      return function installedTeam(_x) {
+      return function installedTeam() {
         return _ref.apply(this, arguments);
       };
     })()

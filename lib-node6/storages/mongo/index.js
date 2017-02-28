@@ -4,8 +4,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 var _mongodb = require('mongodb');
 
 var _utils = require('../utils');
@@ -29,7 +27,7 @@ exports.default = (() => {
           let team = yield teams.findOne({ _id: installInfo.team.id });
 
           if (!team) {
-            team = _extends({
+            team = Object.assign({
               _id: installInfo.team.id
             }, (0, _utils.createTeam)(installInfo));
 
@@ -41,14 +39,14 @@ exports.default = (() => {
           return team;
         });
 
-        return function installedTeam(_x2) {
+        return function installedTeam() {
           return _ref2.apply(this, arguments);
         };
       })()
     };
   });
 
-  return function (_x) {
+  return function () {
     return _ref.apply(this, arguments);
   };
 })();

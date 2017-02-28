@@ -4,33 +4,21 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _tcombForked = require('tcomb-forked');
-
-var _tcombForked2 = _interopRequireDefault(_tcombForked);
-
 var _simpleOauth = require('simple-oauth2');
 
 var _index = require('../../types/index');
+
+var _flowRuntime = require('flow-runtime');
+
+var _flowRuntime2 = _interopRequireDefault(_flowRuntime);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
-const ArgsType = _tcombForked2.default.interface({
-  client: _tcombForked2.default.interface({
-    clientID: _tcombForked2.default.String,
-    clientSecret: _tcombForked2.default.String
-  }, {
-    strict: true
-  }),
-  scopes: _tcombForked2.default.list(_tcombForked2.default.String),
-  callbackUrl: _tcombForked2.default.String,
-  redirectUrl: _tcombForked2.default.String,
-  callback: _tcombForked2.default.Function
-}, {
-  name: 'ArgsType',
-  strict: true
-});
+const InstallInfoType = _flowRuntime2.default.tdz(() => _index.InstallInfoType);
+
+const ArgsType = _flowRuntime2.default.type('ArgsType', _flowRuntime2.default.exactObject(_flowRuntime2.default.property('client', _flowRuntime2.default.exactObject(_flowRuntime2.default.property('clientID', _flowRuntime2.default.string()), _flowRuntime2.default.property('clientSecret', _flowRuntime2.default.string()))), _flowRuntime2.default.property('scopes', _flowRuntime2.default.array(_flowRuntime2.default.string())), _flowRuntime2.default.property('callbackUrl', _flowRuntime2.default.string()), _flowRuntime2.default.property('redirectUrl', _flowRuntime2.default.string()), _flowRuntime2.default.property('callback', _flowRuntime2.default.function(_flowRuntime2.default.param('_arg0', _flowRuntime2.default.ref(InstallInfoType)), _flowRuntime2.default.return(_flowRuntime2.default.union(_flowRuntime2.default.void(), _flowRuntime2.default.ref('Promise', _flowRuntime2.default.void())))))));
 
 exports.default = function slack({
   client,
@@ -39,13 +27,7 @@ exports.default = function slack({
   redirectUrl = '/success',
   callback
 }) {
-  _assert({
-    client,
-    scopes,
-    callbackUrl,
-    redirectUrl,
-    callback
-  }, ArgsType, '{ client, scopes, callbackUrl = \'/callback\', redirectUrl = \'/success\', callback }');
+  _flowRuntime2.default.param('arguments[0]', ArgsType).assert(arguments[0]);
 
   const oauth2 = (0, _simpleOauth.create)({
     client: {
@@ -93,41 +75,23 @@ exports.default = function slack({
           }
         } = result;
 
-        const installInfo = _assert({
+        const installInfo = _flowRuntime2.default.ref(InstallInfoType).assert({
           date: new Date(),
           scopes,
           team: { id: teamId, name: teamName },
           user: { id: userId, accessToken },
           bot: { id: botUserId, accessToken: botAccessToken }
-        }, _index.InstallInfoType, 'installInfo');
+        });
 
         if (callback) yield callback(installInfo);
 
         ctx.redirect(redirectUrl);
       });
 
-      return function callback(_x) {
+      return function callback() {
         return _ref.apply(this, arguments);
       };
     })()
   };
 };
-
-function _assert(x, type, name) {
-  if (false) {
-    _tcombForked2.default.fail = function (message) {
-      console.warn(message);
-    };
-  }
-
-  if (_tcombForked2.default.isType(type) && type.meta.kind !== 'struct') {
-    if (!type.is(x)) {
-      type(x, [name + ': ' + _tcombForked2.default.getTypeName(type)]);
-    }
-  } else if (!(x instanceof type)) {
-    _tcombForked2.default.fail('Invalid value ' + _tcombForked2.default.stringify(x) + ' supplied to ' + name + ' (expected a ' + _tcombForked2.default.getTypeName(type) + ')');
-  }
-
-  return x;
-}
 //# sourceMappingURL=index.js.map

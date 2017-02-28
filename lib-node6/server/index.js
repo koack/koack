@@ -32,18 +32,25 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 
 class SlackServer extends _koa2.default {
 
-  constructor(config) {
-    var _this;
+  constructor({
+    pool,
+    storage,
+    slackClient,
+    scopes,
+    callbackUrl = '/callback',
+    redirectUrl = '/success'
+  }) {
+    var _this = super();
 
-    _this = super();
-    Object.assign(this, config);
+    this.pool = pool;
+    this.storage = storage;
     // this.use(bodyParser());
 
     const slackActions = (0, _slack2.default)({
-      client: config.slackClient,
-      scopes: config.scopes,
-      callbackUrl: '/callback',
-      successUrl: '/success',
+      client: slackClient,
+      scopes,
+      callbackUrl,
+      redirectUrl,
       callback: (() => {
         var _ref = _asyncToGenerator(function* (installInfo) {
           const team = yield _this.storage.installedTeam(installInfo);
@@ -51,15 +58,22 @@ class SlackServer extends _koa2.default {
           _this.emit('installed', installInfo);
         });
 
-        return function callback(_x) {
+        return function callback() {
           return _ref.apply(this, arguments);
         };
       })()
     });
 
-    this.use(_koaRoute2.default.get('/', slackActions.authorize));
-    this.use(_koaRoute2.default.get('/callback', slackActions.callback));
-    this.use(_koaRoute2.default.get('/success', ctx => ctx.body = 'Youhou !!!'));
+    this.registerGet('/', slackActions.authorize);
+    this.registerGet(callbackUrl, slackActions.callback);
+  }
+
+  registerGet(url, callback) {
+    this.use(_koaRoute2.default.get(url, callback));
+  }
+
+  registerPost(url, callback) {
+    this.use(_koaRoute2.default.post(url, callback));
   }
 
   listen(config, certificatesDirname) {

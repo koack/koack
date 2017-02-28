@@ -4,10 +4,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _tcombForked = require('tcomb-forked');
-
-var _tcombForked2 = _interopRequireDefault(_tcombForked);
-
 var _koa = require('koa');
 
 var _koa2 = _interopRequireDefault(_koa);
@@ -34,83 +30,104 @@ var _slack2 = _interopRequireDefault(_slack);
 
 var _index = require('../types/index');
 
+var _flowRuntime = require('flow-runtime');
+
+var _flowRuntime2 = _interopRequireDefault(_flowRuntime);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 // import bodyParser from 'koa-bodyparser';
 
 
-const SlackClientConfigType = _tcombForked2.default.interface({
-  clientID: _tcombForked2.default.String,
-  clientSecret: _tcombForked2.default.String
-}, {
-  name: 'SlackClientConfigType',
-  strict: true
-});
+const StorageType = _flowRuntime2.default.tdz(() => _index.StorageType);
 
-const SlackServerConfigType = _tcombForked2.default.interface({
-  slackClient: SlackClientConfigType,
-  pool: _pool2.default,
-  storage: _index.StorageType,
-  scopes: _tcombForked2.default.list(_tcombForked2.default.String)
-}, {
-  name: 'SlackServerConfigType',
-  strict: true
-});
+const TeamType = _flowRuntime2.default.tdz(() => _index.TeamType);
 
-const ListenConfigType = _tcombForked2.default.interface({
-  tls: _tcombForked2.default.maybe(_tcombForked2.default.Boolean),
-  socketPath: _tcombForked2.default.maybe(_tcombForked2.default.String),
-  port: _tcombForked2.default.maybe(_tcombForked2.default.Number),
-  hostname: _tcombForked2.default.maybe(_tcombForked2.default.String)
-}, {
-  name: 'ListenConfigType',
-  strict: true
-});
+const SlackClientConfigType = _flowRuntime2.default.type('SlackClientConfigType', _flowRuntime2.default.exactObject(_flowRuntime2.default.property('clientID', _flowRuntime2.default.string()), _flowRuntime2.default.property('clientSecret', _flowRuntime2.default.string())));
+
+const SlackServerConfigType = _flowRuntime2.default.type('SlackServerConfigType', _flowRuntime2.default.exactObject(_flowRuntime2.default.property('slackClient', SlackClientConfigType), _flowRuntime2.default.property('pool', _flowRuntime2.default.ref(_pool2.default)), _flowRuntime2.default.property('storage', _flowRuntime2.default.ref(StorageType)), _flowRuntime2.default.property('scopes', _flowRuntime2.default.array(_flowRuntime2.default.string())), _flowRuntime2.default.property('callbackUrl', _flowRuntime2.default.nullable(_flowRuntime2.default.string())), _flowRuntime2.default.property('redirectUrl', _flowRuntime2.default.nullable(_flowRuntime2.default.string()))));
+
+const ListenConfigType = _flowRuntime2.default.type('ListenConfigType', _flowRuntime2.default.exactObject(_flowRuntime2.default.property('tls', _flowRuntime2.default.nullable(_flowRuntime2.default.boolean())), _flowRuntime2.default.property('socketPath', _flowRuntime2.default.nullable(_flowRuntime2.default.string())), _flowRuntime2.default.property('port', _flowRuntime2.default.nullable(_flowRuntime2.default.number())), _flowRuntime2.default.property('hostname', _flowRuntime2.default.nullable(_flowRuntime2.default.string()))));
 
 class SlackServer extends _koa2.default {
 
-  constructor(config) {
+  constructor({
+    pool,
+    storage,
+    slackClient,
+    scopes,
+    callbackUrl = '/callback',
+    redirectUrl = '/success'
+  }) {
     var _this;
 
-    _assert(config, SlackServerConfigType, 'config');
+    _flowRuntime2.default.param('arguments[0]', SlackServerConfigType).assert(arguments[0]);
 
     _this = super();
-    Object.assign(this, config);
+    this.pool = pool;
+    this.storage = storage;
     // this.use(bodyParser());
 
     const slackActions = (0, _slack2.default)({
-      client: config.slackClient,
-      scopes: config.scopes,
-      callbackUrl: '/callback',
-      successUrl: '/success',
+      client: slackClient,
+      scopes,
+      callbackUrl,
+      redirectUrl,
       callback: (() => {
         var _ref = _asyncToGenerator(function* (installInfo) {
-          const team = _assert((yield _this.storage.installedTeam(installInfo)), _index.TeamType, 'team');
+          const team = _flowRuntime2.default.ref(TeamType).assert((yield _this.storage.installedTeam(installInfo)));
           _this.pool.addTeam(team);
           _this.emit('installed', installInfo);
         });
 
-        return function callback(_x) {
+        return function callback() {
           return _ref.apply(this, arguments);
         };
       })()
     });
 
-    this.use(_koaRoute2.default.get('/', slackActions.authorize));
-    this.use(_koaRoute2.default.get('/callback', slackActions.callback));
-    this.use(_koaRoute2.default.get('/success', ctx => ctx.body = 'Youhou !!!'));
+    this.registerGet('/', slackActions.authorize);
+    this.registerGet(callbackUrl, slackActions.callback);
+  }
+
+  registerGet(url, callback) {
+    let _urlType = _flowRuntime2.default.string();
+
+    let _callbackType = _flowRuntime2.default.function();
+
+    _flowRuntime2.default.param('url', _urlType).assert(url);
+
+    _flowRuntime2.default.param('callback', _callbackType).assert(callback);
+
+    this.use(_koaRoute2.default.get(url, callback));
+  }
+
+  registerPost(url, callback) {
+    let _urlType2 = _flowRuntime2.default.string();
+
+    let _callbackType2 = _flowRuntime2.default.function();
+
+    _flowRuntime2.default.param('url', _urlType2).assert(url);
+
+    _flowRuntime2.default.param('callback', _callbackType2).assert(callback);
+
+    this.use(_koaRoute2.default.post(url, callback));
   }
 
   listen(config, certificatesDirname) {
-    _assert(config, ListenConfigType, 'config');
+    let _certificatesDirnameType = _flowRuntime2.default.nullable(_flowRuntime2.default.string());
 
-    _assert(certificatesDirname, _tcombForked2.default.maybe(_tcombForked2.default.String), 'certificatesDirname');
+    _flowRuntime2.default.param('config', ListenConfigType).assert(config);
+
+    _flowRuntime2.default.param('certificatesDirname', _certificatesDirnameType).assert(certificatesDirname);
 
     this.config = (0, _object2map2.default)(config);
     (0, _alpListen2.default)(certificatesDirname)(this);
     this.storage.forEach(team => {
-      _assert(team, _index.TeamType, 'team');
+      let _teamType = _flowRuntime2.default.ref(TeamType);
+
+      _flowRuntime2.default.param('team', _teamType).assert(team);
 
       return this.pool.addTeam(team);
     });
@@ -121,22 +138,4 @@ class SlackServer extends _koa2.default {
   }
 }
 exports.default = SlackServer;
-
-function _assert(x, type, name) {
-  if (false) {
-    _tcombForked2.default.fail = function (message) {
-      console.warn(message);
-    };
-  }
-
-  if (_tcombForked2.default.isType(type) && type.meta.kind !== 'struct') {
-    if (!type.is(x)) {
-      type(x, [name + ': ' + _tcombForked2.default.getTypeName(type)]);
-    }
-  } else if (!(x instanceof type)) {
-    _tcombForked2.default.fail('Invalid value ' + _tcombForked2.default.stringify(x) + ' supplied to ' + name + ' (expected a ' + _tcombForked2.default.getTypeName(type) + ')');
-  }
-
-  return x;
-}
 //# sourceMappingURL=index.js.map

@@ -1,0 +1,89 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _simpleOauth = require('simple-oauth2');
+
+var _index = require('../../types/index');
+
+var _flowRuntime = require('flow-runtime');
+
+var _flowRuntime2 = _interopRequireDefault(_flowRuntime);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+const InstallInfoType = _flowRuntime2.default.tdz(() => _index.InstallInfoType);
+
+const ArgsType = _flowRuntime2.default.type('ArgsType', _flowRuntime2.default.exactObject(_flowRuntime2.default.property('client', _flowRuntime2.default.exactObject(_flowRuntime2.default.property('clientID', _flowRuntime2.default.string()), _flowRuntime2.default.property('clientSecret', _flowRuntime2.default.string()))), _flowRuntime2.default.property('scopes', _flowRuntime2.default.array(_flowRuntime2.default.string())), _flowRuntime2.default.property('callbackUrl', _flowRuntime2.default.string()), _flowRuntime2.default.property('redirectUrl', _flowRuntime2.default.string()), _flowRuntime2.default.property('callback', _flowRuntime2.default.function(_flowRuntime2.default.param('_arg0', _flowRuntime2.default.ref(InstallInfoType)), _flowRuntime2.default.return(_flowRuntime2.default.union(_flowRuntime2.default.void(), _flowRuntime2.default.ref('Promise', _flowRuntime2.default.void())))))));
+
+exports.default = function slack({
+  client,
+  scopes,
+  callbackUrl = '/callback',
+  redirectUrl = '/success',
+  callback
+}) {
+  _flowRuntime2.default.param('arguments[0]', ArgsType).assert(arguments[0]);
+
+  const oauth2 = (0, _simpleOauth.create)({
+    client: {
+      id: client.clientID,
+      secret: client.clientSecret
+    },
+    auth: {
+      tokenHost: 'https://slack.com',
+      tokenPath: '/api/oauth.access',
+      authorizePath: '/oauth/authorize'
+    }
+  });
+
+  return {
+    authorize: ctx => {
+      ctx.redirect(oauth2.authorizationCode.authorizeURL({
+        // eslint-disable-next-line camelcase
+        redirect_uri: `${ctx.request.origin}${callbackUrl}`,
+        scope: scopes,
+        state: '<state>'
+      }));
+    },
+
+    callback: async ctx => {
+      const result = await oauth2.clientCredentials.getToken({
+        code: ctx.query.code,
+        // eslint-disable-next-line camelcase
+        redirect_uri: `${ctx.request.origin}${callbackUrl}`
+      });
+
+      if (!result || !result.ok) {
+        ctx.body = 'Error';
+      }
+
+      console.log(result);
+      const {
+        team_id: teamId,
+        team_name: teamName,
+        user_id: userId,
+        access_token: accessToken,
+        bot: {
+          bot_user_id: botUserId,
+          bot_access_token: botAccessToken
+        }
+      } = result;
+
+      const installInfo = _flowRuntime2.default.ref(InstallInfoType).assert({
+        date: new Date(),
+        scopes,
+        team: { id: teamId, name: teamName },
+        user: { id: userId, accessToken },
+        bot: { id: botUserId, accessToken: botAccessToken }
+      });
+
+      if (callback) await callback(installInfo);
+
+      ctx.redirect(redirectUrl);
+    }
+  };
+};
+//# sourceMappingURL=index.js.map

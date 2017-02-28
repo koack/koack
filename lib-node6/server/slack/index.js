@@ -74,7 +74,7 @@ exports.default = ({
         ctx.redirect(redirectUrl);
       });
 
-      return function callback(_x) {
+      return function callback() {
         return _ref.apply(this, arguments);
       };
     })()

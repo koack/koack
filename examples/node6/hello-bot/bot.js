@@ -26,7 +26,7 @@ exports.default = bot => {
       return Promise.resolve(console.log(ctx));
     });
 
-    return function (_x) {
+    return function () {
       return _ref.apply(this, arguments);
     };
   })());

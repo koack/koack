@@ -47,21 +47,21 @@ export default {
    *
    * If options is provided, use the webClient instead
    */
-  sendMessage(channelId: string, message: string, options: ?SendMessageOptionsType): Promise {
+  sendMessage(channelId: string, message: string, options: ?SendMessageOptionsType): Promise<any> {
     return sendMessage(this, channelId, message, options);
   },
 
   /**
    * Reply in the same channel as the event
    */
-  reply(message: string, options: ?SendMessageOptionsType): Promise {
+  reply(message: string, options: ?SendMessageOptionsType): Promise<any> {
     return this.sendMessage(this.channelId, message, options);
   },
 
   /**
    * Reply in the DM of the event's user
    */
-  replyInDM(message: string, options: ?SendMessageOptionsType): Promise {
+  replyInDM(message: string, options: ?SendMessageOptionsType): Promise<any> {
     if (this.channelId[0] === 'D') throw new Error('You are already in DM, use reply() instead');
     const userDM = this.userDM;
     if (userDM) {

@@ -3,9 +3,9 @@ import compose from 'koa-compose';
 import type { EventHandlerType } from './types';
 
 type EventHandlerMapType = {
-  dm: Map<EventHandlerType>,
-  channel: Map<EventHandlerType>,
-  group: Map<EventHandlerType>,
+  dm: Map<string, EventHandlerType>,
+  channel: Map<string, EventHandlerType>,
+  group: Map<string, EventHandlerType>,
 }
 
 export default (actions: Array<EventHandlerType>): EventHandlerMapType => {
