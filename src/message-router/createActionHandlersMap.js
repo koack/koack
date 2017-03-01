@@ -5,16 +5,16 @@ import type { ActionType } from './types';
 
 const logger = new Logger('koack:message-router:actions');
 
-type ActionHandlersType = {
+type ActionHandlersType = {|
   commands: Map<string, ActionType>,
   regexps: Array<ActionType>,
-};
+|};
 
-type ActionsMapType = {
+type ActionsMapType = {|
   dm: ActionHandlersType,
   channel: ActionHandlersType,
   group: ActionHandlersType,
-}
+|};
 
 export default (actions: Array<ActionType>): ActionsMapType => {
   const map: ActionsMapType = {
@@ -30,8 +30,8 @@ export default (actions: Array<ActionType>): ActionsMapType => {
     if (action.stop !== false) action.stop = true;
 
     action.where.forEach((where) => {
-      const commands = map[where].commands;
-      const regexps = map[where].regexps;
+      const commands: Map<string, ActionType> = map[where].commands;
+      const regexps: Array<ActionType> = map[where].regexps;
 
       if (action.commands) {
         action.commands.forEach((command: string) => {
@@ -39,7 +39,7 @@ export default (actions: Array<ActionType>): ActionsMapType => {
             logger.warn('override action', { command });
           }
 
-          commands.get(where).set(command, action);
+          commands.set(command, action);
         });
       }
 

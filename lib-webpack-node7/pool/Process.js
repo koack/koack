@@ -1,7 +1,5 @@
 import { fork } from 'child_process';
-
-
-export default class Process {
+let Process = class {
 
   constructor(pool) {
     this.pool = pool;
@@ -73,5 +71,6 @@ export default class Process {
 
     this.childProcess.send(Object.assign({ type: 'message', teamId }, data));
   }
-}
+};
+export { Process as default };
 //# sourceMappingURL=Process.js.map

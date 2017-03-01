@@ -3,6 +3,9 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.default = undefined;
+
+var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _desc, _value, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7;
 
 var _client = require('@slack/client');
 
@@ -28,6 +31,49 @@ var _flowRuntime2 = _interopRequireDefault(_flowRuntime);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _initDefineProp(target, property, descriptor, context) {
+  if (!descriptor) return;
+  Object.defineProperty(target, property, {
+    enumerable: descriptor.enumerable,
+    configurable: descriptor.configurable,
+    writable: descriptor.writable,
+    value: descriptor.initializer ? descriptor.initializer.call(context) : void 0
+  });
+}
+
+function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) {
+  var desc = {};
+  Object['keys'](descriptor).forEach(function (key) {
+    desc[key] = descriptor[key];
+  });
+  desc.enumerable = !!desc.enumerable;
+  desc.configurable = !!desc.configurable;
+
+  if ('value' in desc || desc.initializer) {
+    desc.writable = true;
+  }
+
+  desc = decorators.slice().reverse().reduce(function (desc, decorator) {
+    return decorator(target, property, desc) || desc;
+  }, desc);
+
+  if (context && desc.initializer !== void 0) {
+    desc.value = desc.initializer ? desc.initializer.call(context) : void 0;
+    desc.initializer = undefined;
+  }
+
+  if (desc.initializer === void 0) {
+    Object['defineProperty'](target, property, desc);
+    desc = null;
+  }
+
+  return desc;
+}
+
+function _initializerWarningHelper() {
+  throw new Error('Decorating class property failed. Please ensure that transform-class-properties is enabled.');
+}
+
 const TeamType = _flowRuntime2.default.tdz(() => _types2.TeamType);
 
 const MiddlewareType = _flowRuntime2.default.tdz(() => _types.MiddlewareType);
@@ -36,9 +82,29 @@ const BotConstructorArguments = _flowRuntime2.default.type('BotConstructorArgume
 
 const logger = new _nightingaleLogger2.default('koack:bot');
 
-class Bot {
+let Bot = (_dec = _flowRuntime2.default.decorate(_flowRuntime2.default.nullable(_flowRuntime2.default.ref(TeamType))), _dec2 = _flowRuntime2.default.decorate(function () {
+  return _flowRuntime2.default.ref(_client.RtmClient);
+}), _dec3 = _flowRuntime2.default.decorate(function () {
+  return _flowRuntime2.default.ref(_client.WebClient);
+}), _dec4 = _flowRuntime2.default.decorate(function () {
+  return _flowRuntime2.default.union(_flowRuntime2.default.null(), _flowRuntime2.default.ref('Map', _flowRuntime2.default.string(), _flowRuntime2.default.ref(_client.WebClient)));
+}), _dec5 = _flowRuntime2.default.decorate(_flowRuntime2.default.array(_flowRuntime2.default.ref(MiddlewareType))), _dec6 = _flowRuntime2.default.decorate(_flowRuntime2.default.nullable(_flowRuntime2.default.string())), _dec7 = _flowRuntime2.default.decorate(_flowRuntime2.default.nullable(_flowRuntime2.default.string())), (_class = class {
   /** bot id in the team */
   constructor(data) {
+    _initDefineProp(this, 'team', _descriptor, this);
+
+    _initDefineProp(this, 'rtm', _descriptor2, this);
+
+    _initDefineProp(this, 'webClient', _descriptor3, this);
+
+    _initDefineProp(this, 'installerUsersWebClients', _descriptor4, this);
+
+    _initDefineProp(this, 'middlewares', _descriptor5, this);
+
+    _initDefineProp(this, 'id', _descriptor6, this);
+
+    _initDefineProp(this, 'name', _descriptor7, this);
+
     _flowRuntime2.default.param('data', BotConstructorArguments).assert(data);
 
     Object.assign(this, data);
@@ -84,7 +150,7 @@ class Bot {
       logger.debugSuccess('authenticated', { id: self.id, name: self.name });
     });
     this.rtm.on(_client.CLIENT_EVENTS.RTM.RTM_CONNECTION_OPENED, () => {
-      logger.infoSuccess('connection opened');
+      logger.infoSuccess('connection opened', { id: this.id, name: this.name });
       if (process.send) process.send('ready');
     });
     this.rtm.start();
@@ -98,6 +164,29 @@ class Bot {
     delete this.webClient;
     delete this.installerUsersWebClients;
   }
-}
+}, (_descriptor = _applyDecoratedDescriptor(_class.prototype, 'team', [_dec], {
+  enumerable: true,
+  initializer: null
+}), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, 'rtm', [_dec2], {
+  enumerable: true,
+  initializer: null
+}), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, 'webClient', [_dec3], {
+  enumerable: true,
+  initializer: null
+}), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, 'installerUsersWebClients', [_dec4], {
+  enumerable: true,
+  initializer: null
+}), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, 'middlewares', [_dec5], {
+  enumerable: true,
+  initializer: function () {
+    return [];
+  }
+}), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, 'id', [_dec6], {
+  enumerable: true,
+  initializer: null
+}), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, 'name', [_dec7], {
+  enumerable: true,
+  initializer: null
+})), _class));
 exports.default = Bot;
 //# sourceMappingURL=Bot.js.map

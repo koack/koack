@@ -39,7 +39,7 @@ exports.default = actions => {
             logger.warn('override action', { command });
           }
 
-          commands.get(where).set(command, action);
+          commands.set(command, action);
         });
       }
 

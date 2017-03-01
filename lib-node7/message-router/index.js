@@ -4,17 +4,11 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _nightingaleLogger = require('nightingale-logger');
-
-var _nightingaleLogger2 = _interopRequireDefault(_nightingaleLogger);
-
 var _createActionHandlersMap = require('./createActionHandlersMap');
 
 var _createActionHandlersMap2 = _interopRequireDefault(_createActionHandlersMap);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-const logger = new _nightingaleLogger2.default('koack:message-router');
 
 const handle = (ctx, message, action, extendsContext) => {
   let messageCtx = Object.create(ctx);
@@ -56,9 +50,9 @@ exports.default = actions => {
     const destinationType = ctx.getChannelType();
     let text = originalText;
 
-    logger.debug('message', { ts, destinationType, text, messageType, messageSubtype });
+    ctx.logger.debug('message', { ts, destinationType, text, messageType, messageSubtype });
     if (!destinationType) {
-      logger.warn('Unsupported destination type', { destinationType });
+      ctx.logger.warn('Unsupported destination type', { destinationType });
       return next();
     }
 
@@ -87,7 +81,7 @@ exports.default = actions => {
     if (actionCommand && canCommandHandleWithMention(hasMention, actionCommand, destinationType)) {
       text = text.substr(command.length).replace(/^[\s:]*(?!\w)\s*/, '');
 
-      logger.debug('actionCommand', { command, text });
+      ctx.logger.debug('actionCommand', { command, text });
 
       handle(ctx, message, actionCommand, { text });
 
@@ -103,7 +97,7 @@ exports.default = actions => {
       const match = !action.regexp ? true : text.match(action.regexp);
       if (!match) return false;
 
-      logger.debug('actionRegexp', { text, match });
+      ctx.logger.debug('actionRegexp', { text, match });
       handle(ctx, message, action, { text, match });
 
       return action.stop;

@@ -6,7 +6,7 @@ import createContextFromEvent from './context/createContextFromEvent';
 
 const logger = new Logger('koack:bot');
 
-export default class Bot {
+let Bot = class {
   /** bot id in the team */
   constructor(data) {
     this.middlewares = [];
@@ -38,7 +38,7 @@ export default class Bot {
       logger.debugSuccess('authenticated', { id: self.id, name: self.name });
     });
     this.rtm.on(CLIENT_EVENTS.RTM.RTM_CONNECTION_OPENED, () => {
-      logger.infoSuccess('connection opened');
+      logger.infoSuccess('connection opened', { id: this.id, name: this.name });
       if (process.send) process.send('ready');
     });
     this.rtm.start();
@@ -52,5 +52,6 @@ export default class Bot {
     delete this.webClient;
     delete this.installerUsersWebClients;
   }
-}
+};
+export { Bot as default };
 //# sourceMappingURL=Bot.js.map

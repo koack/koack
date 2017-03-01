@@ -6,8 +6,8 @@ import t from 'flow-runtime';
 const ActionType = t.tdz(() => _ActionType);
 const logger = new Logger('koack:message-router:actions');
 
-const ActionHandlersType = t.type('ActionHandlersType', t.object(t.property('commands', t.ref('Map', t.string(), t.ref(ActionType))), t.property('regexps', t.array(t.ref(ActionType)))));
-const ActionsMapType = t.type('ActionsMapType', t.object(t.property('dm', ActionHandlersType), t.property('channel', ActionHandlersType), t.property('group', ActionHandlersType)));
+const ActionHandlersType = t.type('ActionHandlersType', t.exactObject(t.property('commands', t.ref('Map', t.string(), t.ref(ActionType))), t.property('regexps', t.array(t.ref(ActionType)))));
+const ActionsMapType = t.type('ActionsMapType', t.exactObject(t.property('dm', ActionHandlersType), t.property('channel', ActionHandlersType), t.property('group', ActionHandlersType)));
 
 
 export default (function createActionHandlersMap(actions) {
@@ -34,8 +34,8 @@ export default (function createActionHandlersMap(actions) {
     if (action.stop !== false) action.stop = true;
 
     action.where.forEach(where => {
-      const commands = map[where].commands;
-      const regexps = map[where].regexps;
+      const commands = t.ref('Map', t.string(), t.ref(ActionType)).assert(map[where].commands);
+      const regexps = t.array(t.ref(ActionType)).assert(map[where].regexps);
 
       if (action.commands) {
         action.commands.forEach(command => {
@@ -47,7 +47,7 @@ export default (function createActionHandlersMap(actions) {
             logger.warn('override action', { command });
           }
 
-          commands.get(where).set(command, action);
+          commands.set(command, action);
         });
       }
 

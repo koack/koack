@@ -24,9 +24,9 @@ const ActionType = _flowRuntime2.default.tdz(() => _types.ActionType);
 
 const logger = new _nightingaleLogger2.default('koack:message-router:actions');
 
-const ActionHandlersType = _flowRuntime2.default.type('ActionHandlersType', _flowRuntime2.default.object(_flowRuntime2.default.property('commands', _flowRuntime2.default.ref('Map', _flowRuntime2.default.string(), _flowRuntime2.default.ref(ActionType))), _flowRuntime2.default.property('regexps', _flowRuntime2.default.array(_flowRuntime2.default.ref(ActionType)))));
+const ActionHandlersType = _flowRuntime2.default.type('ActionHandlersType', _flowRuntime2.default.exactObject(_flowRuntime2.default.property('commands', _flowRuntime2.default.ref('Map', _flowRuntime2.default.string(), _flowRuntime2.default.ref(ActionType))), _flowRuntime2.default.property('regexps', _flowRuntime2.default.array(_flowRuntime2.default.ref(ActionType)))));
 
-const ActionsMapType = _flowRuntime2.default.type('ActionsMapType', _flowRuntime2.default.object(_flowRuntime2.default.property('dm', ActionHandlersType), _flowRuntime2.default.property('channel', ActionHandlersType), _flowRuntime2.default.property('group', ActionHandlersType)));
+const ActionsMapType = _flowRuntime2.default.type('ActionsMapType', _flowRuntime2.default.exactObject(_flowRuntime2.default.property('dm', ActionHandlersType), _flowRuntime2.default.property('channel', ActionHandlersType), _flowRuntime2.default.property('group', ActionHandlersType)));
 
 exports.default = function createActionHandlersMap(actions) {
   let _actionsType = _flowRuntime2.default.array(_flowRuntime2.default.ref(ActionType));
@@ -52,8 +52,8 @@ exports.default = function createActionHandlersMap(actions) {
     if (action.stop !== false) action.stop = true;
 
     action.where.forEach(where => {
-      const commands = map[where].commands;
-      const regexps = map[where].regexps;
+      const commands = _flowRuntime2.default.ref('Map', _flowRuntime2.default.string(), _flowRuntime2.default.ref(ActionType)).assert(map[where].commands);
+      const regexps = _flowRuntime2.default.array(_flowRuntime2.default.ref(ActionType)).assert(map[where].regexps);
 
       if (action.commands) {
         action.commands.forEach(command => {
@@ -65,7 +65,7 @@ exports.default = function createActionHandlersMap(actions) {
             logger.warn('override action', { command });
           }
 
-          commands.get(where).set(command, action);
+          commands.set(command, action);
         });
       }
 

@@ -3,6 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.default = undefined;
 
 var _nightingale = require('nightingale');
 
@@ -16,7 +17,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 const logger = new _nightingale2.default('koack:pool');
 
-class Pool {
+let Pool = class {
 
   constructor(options) {
     this.processNextId = 1;
@@ -50,6 +51,6 @@ class Pool {
     this.processNextId = 1;
     return Promise.all(promises);
   }
-}
+};
 exports.default = Pool;
 //# sourceMappingURL=index.js.map

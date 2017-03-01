@@ -3,6 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.default = undefined;
 
 var _client = require('@slack/client');
 
@@ -22,7 +23,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 const logger = new _nightingaleLogger2.default('koack:bot');
 
-class Bot {
+let Bot = class {
   /** bot id in the team */
   constructor(data) {
     this.middlewares = [];
@@ -54,7 +55,7 @@ class Bot {
       logger.debugSuccess('authenticated', { id: self.id, name: self.name });
     });
     this.rtm.on(_client.CLIENT_EVENTS.RTM.RTM_CONNECTION_OPENED, () => {
-      logger.infoSuccess('connection opened');
+      logger.infoSuccess('connection opened', { id: this.id, name: this.name });
       if (process.send) process.send('ready');
     });
     this.rtm.start();
@@ -68,6 +69,6 @@ class Bot {
     delete this.webClient;
     delete this.installerUsersWebClients;
   }
-}
+};
 exports.default = Bot;
 //# sourceMappingURL=Bot.js.map

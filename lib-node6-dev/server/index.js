@@ -3,6 +3,11 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.default = undefined;
+
+var _dec, _dec2, _desc, _value, _class, _descriptor, _descriptor2;
+// import bodyParser from 'koa-bodyparser';
+
 
 var _koa = require('koa');
 
@@ -37,8 +42,49 @@ var _flowRuntime2 = _interopRequireDefault(_flowRuntime);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
-// import bodyParser from 'koa-bodyparser';
 
+function _initDefineProp(target, property, descriptor, context) {
+  if (!descriptor) return;
+  Object.defineProperty(target, property, {
+    enumerable: descriptor.enumerable,
+    configurable: descriptor.configurable,
+    writable: descriptor.writable,
+    value: descriptor.initializer ? descriptor.initializer.call(context) : void 0
+  });
+}
+
+function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) {
+  var desc = {};
+  Object['keys'](descriptor).forEach(function (key) {
+    desc[key] = descriptor[key];
+  });
+  desc.enumerable = !!desc.enumerable;
+  desc.configurable = !!desc.configurable;
+
+  if ('value' in desc || desc.initializer) {
+    desc.writable = true;
+  }
+
+  desc = decorators.slice().reverse().reduce(function (desc, decorator) {
+    return decorator(target, property, desc) || desc;
+  }, desc);
+
+  if (context && desc.initializer !== void 0) {
+    desc.value = desc.initializer ? desc.initializer.call(context) : void 0;
+    desc.initializer = undefined;
+  }
+
+  if (desc.initializer === void 0) {
+    Object['defineProperty'](target, property, desc);
+    desc = null;
+  }
+
+  return desc;
+}
+
+function _initializerWarningHelper() {
+  throw new Error('Decorating class property failed. Please ensure that transform-class-properties is enabled.');
+}
 
 const StorageType = _flowRuntime2.default.tdz(() => _index.StorageType);
 
@@ -50,7 +96,9 @@ const SlackServerConfigType = _flowRuntime2.default.type('SlackServerConfigType'
 
 const ListenConfigType = _flowRuntime2.default.type('ListenConfigType', _flowRuntime2.default.exactObject(_flowRuntime2.default.property('tls', _flowRuntime2.default.nullable(_flowRuntime2.default.boolean())), _flowRuntime2.default.property('socketPath', _flowRuntime2.default.nullable(_flowRuntime2.default.string())), _flowRuntime2.default.property('port', _flowRuntime2.default.nullable(_flowRuntime2.default.number())), _flowRuntime2.default.property('hostname', _flowRuntime2.default.nullable(_flowRuntime2.default.string()))));
 
-class SlackServer extends _koa2.default {
+let SlackServer = (_dec = _flowRuntime2.default.decorate(function () {
+  return _flowRuntime2.default.ref(_pool2.default);
+}), _dec2 = _flowRuntime2.default.decorate(_flowRuntime2.default.ref(StorageType)), (_class = class extends _koa2.default {
 
   constructor({
     pool,
@@ -65,6 +113,11 @@ class SlackServer extends _koa2.default {
     _flowRuntime2.default.param('arguments[0]', SlackServerConfigType).assert(arguments[0]);
 
     _this = super();
+
+    _initDefineProp(this, 'pool', _descriptor, this);
+
+    _initDefineProp(this, 'storage', _descriptor2, this);
+
     this.pool = pool;
     this.storage = storage;
     // this.use(bodyParser());
@@ -136,6 +189,12 @@ class SlackServer extends _koa2.default {
   stop() {
     return this.pool.close();
   }
-}
+}, (_descriptor = _applyDecoratedDescriptor(_class.prototype, 'pool', [_dec], {
+  enumerable: true,
+  initializer: null
+}), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, 'storage', [_dec2], {
+  enumerable: true,
+  initializer: null
+})), _class));
 exports.default = SlackServer;
 //# sourceMappingURL=index.js.map

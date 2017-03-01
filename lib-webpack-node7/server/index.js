@@ -5,9 +5,7 @@ import object2map from 'object2map';
 
 // import bodyParser from 'koa-bodyparser';
 import createSlackActions from './slack';
-
-
-export default class SlackServer extends Koa {
+let SlackServer = class extends Koa {
 
   constructor({
     pool,
@@ -55,5 +53,6 @@ export default class SlackServer extends Koa {
   stop() {
     return this.pool.close();
   }
-}
+};
+export { SlackServer as default };
 //# sourceMappingURL=index.js.map

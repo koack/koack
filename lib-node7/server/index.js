@@ -3,6 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.default = undefined;
 
 var _koa = require('koa');
 
@@ -26,7 +27,7 @@ var _slack2 = _interopRequireDefault(_slack);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-class SlackServer extends _koa2.default {
+let SlackServer = class extends _koa2.default {
 
   constructor({
     pool,
@@ -74,7 +75,8 @@ class SlackServer extends _koa2.default {
   stop() {
     return this.pool.close();
   }
-}
-exports.default = SlackServer;
+};
 // import bodyParser from 'koa-bodyparser';
+
+exports.default = SlackServer;
 //# sourceMappingURL=index.js.map

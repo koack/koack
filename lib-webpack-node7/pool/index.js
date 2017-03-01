@@ -4,7 +4,7 @@ import startBot from './startBot';
 
 const logger = new Logger('koack:pool');
 
-export default class Pool {
+let Pool = class {
 
   constructor(options) {
     this.processNextId = 1;
@@ -38,5 +38,6 @@ export default class Pool {
     this.processNextId = 1;
     return Promise.all(promises);
   }
-}
+};
+export { Pool as default };
 //# sourceMappingURL=index.js.map

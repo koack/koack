@@ -3,10 +3,11 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.default = undefined;
 
 var _child_process = require('child_process');
 
-class Process {
+let Process = class {
 
   constructor(pool) {
     this.pool = pool;
@@ -78,6 +79,6 @@ class Process {
 
     this.childProcess.send(Object.assign({ type: 'message', teamId }, data));
   }
-}
+};
 exports.default = Process;
 //# sourceMappingURL=Process.js.map

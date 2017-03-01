@@ -3,6 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.default = undefined;
 
 var _koa = require('koa');
 
@@ -30,7 +31,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 // import bodyParser from 'koa-bodyparser';
 
 
-class SlackServer extends _koa2.default {
+let SlackServer = class extends _koa2.default {
 
   constructor({
     pool,
@@ -85,6 +86,6 @@ class SlackServer extends _koa2.default {
   stop() {
     return this.pool.close();
   }
-}
+};
 exports.default = SlackServer;
 //# sourceMappingURL=index.js.map

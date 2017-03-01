@@ -1,12 +1,9 @@
-import Logger from 'nightingale-logger';
 import { ActionType as _ActionType, MessageType as _MessageType } from './types';
 import createActionHandlersMap from './createActionHandlersMap';
 
 import t from 'flow-runtime';
 const ActionType = t.tdz(() => _ActionType);
 const MessageType = t.tdz(() => _MessageType);
-const logger = new Logger('koack:message-router');
-
 const handle = (ctx, message, action, extendsContext) => {
   let _messageType = t.ref(MessageType);
 
@@ -61,9 +58,9 @@ export default (function messageRouter(actions) {
     const destinationType = ctx.getChannelType();
     let text = originalText;
 
-    logger.debug('message', { ts, destinationType, text, messageType, messageSubtype });
+    ctx.logger.debug('message', { ts, destinationType, text, messageType, messageSubtype });
     if (!destinationType) {
-      logger.warn('Unsupported destination type', { destinationType });
+      ctx.logger.warn('Unsupported destination type', { destinationType });
       return next();
     }
 
@@ -92,7 +89,7 @@ export default (function messageRouter(actions) {
     if (actionCommand && canCommandHandleWithMention(hasMention, actionCommand, destinationType)) {
       text = text.substr(command.length).replace(/^[\s:]*(?!\w)\s*/, '');
 
-      logger.debug('actionCommand', { command, text });
+      ctx.logger.debug('actionCommand', { command, text });
 
       handle(ctx, message, actionCommand, { text });
 
@@ -108,7 +105,7 @@ export default (function messageRouter(actions) {
       const match = !action.regexp ? true : text.match(action.regexp);
       if (!match) return false;
 
-      logger.debug('actionRegexp', { text, match });
+      ctx.logger.debug('actionRegexp', { text, match });
       handle(ctx, message, action, { text, match });
 
       return action.stop;

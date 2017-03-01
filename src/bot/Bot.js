@@ -52,7 +52,7 @@ export default class Bot {
       logger.debugSuccess('authenticated', { id: self.id, name: self.name });
     });
     this.rtm.on(CLIENT_EVENTS.RTM.RTM_CONNECTION_OPENED, () => {
-      logger.infoSuccess('connection opened');
+      logger.infoSuccess('connection opened', { id: this.id, name: this.name });
       if (process.send) process.send('ready');
     });
     this.rtm.start();
