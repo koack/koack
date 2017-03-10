@@ -4,16 +4,16 @@ import createActionHandlersMap from './createActionHandlersMap';
 import t from 'flow-runtime';
 const ActionType = t.tdz(() => _ActionType);
 const MessageType = t.tdz(() => _MessageType);
-const handle = (ctx, message, action, extendsContext) => {
+const handle = (ctx, extendsContext, message, action) => {
+  let _extendsContextType = t.object();
+
   let _messageType = t.ref(MessageType);
 
   let _actionType = t.ref(ActionType);
 
-  let _extendsContextType = t.object();
-
+  t.param('extendsContext', _extendsContextType).assert(extendsContext);
   t.param('message', _messageType).assert(message);
   t.param('action', _actionType).assert(action);
-  t.param('extendsContext', _extendsContextType).assert(extendsContext);
 
   let messageCtx = Object.create(ctx);
 

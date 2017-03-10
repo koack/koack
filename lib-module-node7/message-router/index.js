@@ -2,7 +2,7 @@
 import createActionHandlersMap from './createActionHandlersMap';
 
 
-const handle = (ctx, message, action, extendsContext) => {
+const handle = (ctx, extendsContext, message, action) => {
   let messageCtx = Object.create(ctx);
 
   Object.assign(messageCtx, Object.assign({

@@ -10,7 +10,7 @@ var _createActionHandlersMap2 = _interopRequireDefault(_createActionHandlersMap)
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const handle = (ctx, message, action, extendsContext) => {
+const handle = (ctx, extendsContext, message, action) => {
   let messageCtx = Object.create(ctx);
 
   Object.assign(messageCtx, Object.assign({

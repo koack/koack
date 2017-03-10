@@ -20,18 +20,18 @@ const ActionType = _flowRuntime2.default.tdz(() => _types.ActionType);
 
 const MessageType = _flowRuntime2.default.tdz(() => _types.MessageType);
 
-const handle = (ctx, message, action, extendsContext) => {
+const handle = (ctx, extendsContext, message, action) => {
+  let _extendsContextType = _flowRuntime2.default.object();
+
   let _messageType = _flowRuntime2.default.ref(MessageType);
 
   let _actionType = _flowRuntime2.default.ref(ActionType);
 
-  let _extendsContextType = _flowRuntime2.default.object();
+  _flowRuntime2.default.param('extendsContext', _extendsContextType).assert(extendsContext);
 
   _flowRuntime2.default.param('message', _messageType).assert(message);
 
   _flowRuntime2.default.param('action', _actionType).assert(action);
-
-  _flowRuntime2.default.param('extendsContext', _extendsContextType).assert(extendsContext);
 
   let messageCtx = Object.create(ctx);
 

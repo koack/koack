@@ -2,7 +2,7 @@
 import type { ActionType, MessageType } from './types';
 import createActionHandlersMap from './createActionHandlersMap';
 
-const handle = (ctx, message: MessageType, action: ActionType, extendsContext: Object) => {
+const handle = (ctx, extendsContext: Object, message: MessageType, action: ActionType) => {
   let messageCtx = Object.create(ctx);
 
   Object.assign(messageCtx, {
