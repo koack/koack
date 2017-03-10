@@ -1,20 +1,8 @@
-import { ActionType as _ActionType, MessageType as _MessageType } from './types';
+
 import createActionHandlersMap from './createActionHandlersMap';
 
-import t from 'flow-runtime';
-const ActionType = t.tdz(() => _ActionType);
-const MessageType = t.tdz(() => _MessageType);
+
 const handle = (ctx, message, action, extendsContext) => {
-  let _messageType = t.ref(MessageType);
-
-  let _actionType = t.ref(ActionType);
-
-  let _extendsContextType = t.object();
-
-  t.param('message', _messageType).assert(message);
-  t.param('action', _actionType).assert(action);
-  t.param('extendsContext', _extendsContextType).assert(extendsContext);
-
   let messageCtx = Object.create(ctx);
 
   Object.assign(messageCtx, Object.assign({
@@ -40,11 +28,7 @@ const canCommandHandleWithMention = (hasMention, command, destinationType) => {
   return true;
 };
 
-export default (function messageRouter(actions) {
-  let _actionsType = t.array(t.ref(ActionType));
-
-  t.param('actions', _actionsType).assert(actions);
-
+export default (actions => {
   const mentionOnly = actions.every(action => action.mention === true);
   const map = createActionHandlersMap(actions);
 
@@ -71,7 +55,7 @@ export default (function messageRouter(actions) {
       return next();
     }
 
-    const message = t.ref(MessageType).assert({ ts, text: originalText, teamId, userId, channelId });
+    const message = { ts, text: originalText, teamId, userId, channelId };
 
     // Clean text
     // Remove mention
@@ -91,7 +75,7 @@ export default (function messageRouter(actions) {
 
       ctx.logger.debug('actionCommand', { command, text });
 
-      handle(ctx, message, actionCommand, { text });
+      handle(ctx, { text }, message, actionCommand);
 
       if (actionCommand.stop) {
         return;
@@ -106,7 +90,7 @@ export default (function messageRouter(actions) {
       if (!match) return false;
 
       ctx.logger.debug('actionRegexp', { text, match });
-      handle(ctx, message, action, { text, match });
+      handle(ctx, { text, match }, message, action);
 
       return action.stop;
     })) {

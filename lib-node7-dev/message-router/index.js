@@ -109,7 +109,7 @@ exports.default = function messageRouter(actions) {
 
       ctx.logger.debug('actionCommand', { command, text });
 
-      handle(ctx, message, actionCommand, { text });
+      handle(ctx, { text }, message, actionCommand);
 
       if (actionCommand.stop) {
         return;
@@ -124,7 +124,7 @@ exports.default = function messageRouter(actions) {
       if (!match) return false;
 
       ctx.logger.debug('actionRegexp', { text, match });
-      handle(ctx, message, action, { text, match });
+      handle(ctx, { text, match }, message, action);
 
       return action.stop;
     })) {
