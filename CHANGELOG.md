@@ -1,3 +1,12 @@
+<a name="0.0.4"></a>
+## [0.0.4](https://github.com/koack/koack/compare/v0.0.4-alpha2...v0.0.4) (2017-03-10)
+
+
+### Bug Fixes
+
+* message-router ([98bc024](https://github.com/koack/koack/commit/98bc024))
+
+
 <a name="0.0.4-alpha2"></a>
 ## [0.0.4-alpha2](https://github.com/koack/koack/compare/v0.0.4-alpha1...v0.0.4-alpha2) (2017-03-10)
 

@@ -1,6 +1,6 @@
 {
   "name": "koack",
-  "version": "0.0.4-alpha2",
+  "version": "0.0.4",
   "description": "Core brick to build Slack bots",
   "keywords": [
     "bots",
