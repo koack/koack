@@ -18,14 +18,14 @@ const InstallInfoType = _flowRuntime2.default.tdz(() => _index.InstallInfoType);
 
 const ArgsType = _flowRuntime2.default.type('ArgsType', _flowRuntime2.default.exactObject(_flowRuntime2.default.property('client', _flowRuntime2.default.exactObject(_flowRuntime2.default.property('clientID', _flowRuntime2.default.string()), _flowRuntime2.default.property('clientSecret', _flowRuntime2.default.string()))), _flowRuntime2.default.property('scopes', _flowRuntime2.default.array(_flowRuntime2.default.string())), _flowRuntime2.default.property('callbackUrl', _flowRuntime2.default.string()), _flowRuntime2.default.property('redirectUrl', _flowRuntime2.default.string()), _flowRuntime2.default.property('callback', _flowRuntime2.default.function(_flowRuntime2.default.param('_arg0', _flowRuntime2.default.ref(InstallInfoType)), _flowRuntime2.default.return(_flowRuntime2.default.union(_flowRuntime2.default.void(), _flowRuntime2.default.ref('Promise', _flowRuntime2.default.void())))))));
 
-exports.default = function slack({
-  client,
-  scopes,
-  callbackUrl = '/callback',
-  redirectUrl = '/success',
-  callback
-}) {
-  _flowRuntime2.default.param('arguments[0]', ArgsType).assert(arguments[0]);
+exports.default = function slack(_arg) {
+  let {
+    client,
+    scopes,
+    callbackUrl = '/callback',
+    redirectUrl = '/success',
+    callback
+  } = ArgsType.assert(_arg);
 
   const oauth2 = (0, _simpleOauth.create)({
     client: {

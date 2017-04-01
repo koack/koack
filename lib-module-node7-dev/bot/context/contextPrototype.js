@@ -56,13 +56,13 @@ export default {
 
     let _optionsType = t.nullable(t.ref(SendMessageOptionsType));
 
-    const _returnType = t.return(t.ref('Promise', t.any()));
+    const _returnType = t.return(t.any());
 
     t.param('channelId', _channelIdType).assert(channelId);
     t.param('message', _messageType).assert(message);
     t.param('options', _optionsType).assert(options);
 
-    return _returnType.assert(sendMessage(this, channelId, message, options));
+    return sendMessage(this, channelId, message, options).then(_arg => _returnType.assert(_arg));
   },
 
   /**
@@ -73,12 +73,12 @@ export default {
 
     let _optionsType2 = t.nullable(t.ref(SendMessageOptionsType));
 
-    const _returnType2 = t.return(t.ref('Promise', t.any()));
+    const _returnType2 = t.return(t.any());
 
     t.param('message', _messageType2).assert(message);
     t.param('options', _optionsType2).assert(options);
 
-    return _returnType2.assert(this.sendMessage(this.channelId, message, options));
+    return this.sendMessage(this.channelId, message, options).then(_arg2 => _returnType2.assert(_arg2));
   },
 
   /**
@@ -89,7 +89,7 @@ export default {
 
     let _optionsType3 = t.nullable(t.ref(SendMessageOptionsType));
 
-    const _returnType3 = t.return(t.ref('Promise', t.any()));
+    const _returnType3 = t.return(t.any());
 
     t.param('message', _messageType3).assert(message);
     t.param('options', _optionsType3).assert(options);
@@ -97,11 +97,11 @@ export default {
     if (this.channelId[0] === 'D') throw new Error('You are already in DM, use reply() instead');
     const userDM = this.userDM;
     if (userDM) {
-      return _returnType3.assert(this.sendMessage(userDM.id, message, options));
+      return this.sendMessage(userDM.id, message, options).then(_arg3 => _returnType3.assert(_arg3));
     }
 
     const user = this.user;
-    return _returnType3.assert(this.webClient.im.open(user.id).then(res => sendMessage(res.channel.id, message, options)));
+    return this.webClient.im.open(user.id).then(res => sendMessage(res.channel.id, message, options)).then(_arg4 => _returnType3.assert(_arg4));
   },
 
   mention(userId) {

@@ -100,17 +100,17 @@ let SlackServer = (_dec = _flowRuntime2.default.decorate(function () {
   return _flowRuntime2.default.ref(_pool2.default);
 }), _dec2 = _flowRuntime2.default.decorate(_flowRuntime2.default.ref(StorageType)), (_class = class extends _koa2.default {
 
-  constructor({
-    pool,
-    storage,
-    slackClient,
-    scopes,
-    callbackUrl = '/callback',
-    redirectUrl = '/success'
-  }) {
+  constructor(_arg) {
     var _this;
 
-    _flowRuntime2.default.param('arguments[0]', SlackServerConfigType).assert(arguments[0]);
+    let {
+      pool,
+      storage,
+      slackClient,
+      scopes,
+      callbackUrl = '/callback',
+      redirectUrl = '/success'
+    } = SlackServerConfigType.assert(_arg);
 
     _this = super();
 

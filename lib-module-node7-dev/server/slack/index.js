@@ -6,14 +6,14 @@ const InstallInfoType = t.tdz(() => _InstallInfoType);
 const ArgsType = t.type('ArgsType', t.exactObject(t.property('client', t.exactObject(t.property('clientID', t.string()), t.property('clientSecret', t.string()))), t.property('scopes', t.array(t.string())), t.property('callbackUrl', t.string()), t.property('redirectUrl', t.string()), t.property('callback', t.function(t.param('_arg0', t.ref(InstallInfoType)), t.return(t.union(t.void(), t.ref('Promise', t.void())))))));
 
 
-export default (function slack({
-  client,
-  scopes,
-  callbackUrl = '/callback',
-  redirectUrl = '/success',
-  callback
-}) {
-  t.param('arguments[0]', ArgsType).assert(arguments[0]);
+export default (function slack(_arg) {
+  let {
+    client,
+    scopes,
+    callbackUrl = '/callback',
+    redirectUrl = '/success',
+    callback
+  } = ArgsType.assert(_arg);
 
   const oauth2 = create({
     client: {

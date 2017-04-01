@@ -62,15 +62,15 @@ let SlackServer = (_dec = t.decorate(function () {
   return t.ref(Pool);
 }), _dec2 = t.decorate(t.ref(StorageType)), (_class = class extends Koa {
 
-  constructor({
-    pool,
-    storage,
-    slackClient,
-    scopes,
-    callbackUrl = '/callback',
-    redirectUrl = '/success'
-  }) {
-    t.param('arguments[0]', SlackServerConfigType).assert(arguments[0]);
+  constructor(_arg) {
+    let {
+      pool,
+      storage,
+      slackClient,
+      scopes,
+      callbackUrl = '/callback',
+      redirectUrl = '/success'
+    } = SlackServerConfigType.assert(_arg);
 
     super();
 

@@ -70,7 +70,7 @@ exports.default = {
 
     let _optionsType = _flowRuntime2.default.nullable(_flowRuntime2.default.ref(SendMessageOptionsType));
 
-    const _returnType = _flowRuntime2.default.return(_flowRuntime2.default.ref('Promise', _flowRuntime2.default.any()));
+    const _returnType = _flowRuntime2.default.return(_flowRuntime2.default.any());
 
     _flowRuntime2.default.param('channelId', _channelIdType).assert(channelId);
 
@@ -78,7 +78,7 @@ exports.default = {
 
     _flowRuntime2.default.param('options', _optionsType).assert(options);
 
-    return _returnType.assert((0, _sendMessage2.default)(this, channelId, message, options));
+    return (0, _sendMessage2.default)(this, channelId, message, options).then(_arg => _returnType.assert(_arg));
   },
 
   /**
@@ -89,13 +89,13 @@ exports.default = {
 
     let _optionsType2 = _flowRuntime2.default.nullable(_flowRuntime2.default.ref(SendMessageOptionsType));
 
-    const _returnType2 = _flowRuntime2.default.return(_flowRuntime2.default.ref('Promise', _flowRuntime2.default.any()));
+    const _returnType2 = _flowRuntime2.default.return(_flowRuntime2.default.any());
 
     _flowRuntime2.default.param('message', _messageType2).assert(message);
 
     _flowRuntime2.default.param('options', _optionsType2).assert(options);
 
-    return _returnType2.assert(this.sendMessage(this.channelId, message, options));
+    return this.sendMessage(this.channelId, message, options).then(_arg2 => _returnType2.assert(_arg2));
   },
 
   /**
@@ -106,7 +106,7 @@ exports.default = {
 
     let _optionsType3 = _flowRuntime2.default.nullable(_flowRuntime2.default.ref(SendMessageOptionsType));
 
-    const _returnType3 = _flowRuntime2.default.return(_flowRuntime2.default.ref('Promise', _flowRuntime2.default.any()));
+    const _returnType3 = _flowRuntime2.default.return(_flowRuntime2.default.any());
 
     _flowRuntime2.default.param('message', _messageType3).assert(message);
 
@@ -115,11 +115,11 @@ exports.default = {
     if (this.channelId[0] === 'D') throw new Error('You are already in DM, use reply() instead');
     const userDM = this.userDM;
     if (userDM) {
-      return _returnType3.assert(this.sendMessage(userDM.id, message, options));
+      return this.sendMessage(userDM.id, message, options).then(_arg3 => _returnType3.assert(_arg3));
     }
 
     const user = this.user;
-    return _returnType3.assert(this.webClient.im.open(user.id).then(res => (0, _sendMessage2.default)(res.channel.id, message, options)));
+    return this.webClient.im.open(user.id).then(res => (0, _sendMessage2.default)(res.channel.id, message, options)).then(_arg4 => _returnType3.assert(_arg4));
   },
 
   mention(userId) {
