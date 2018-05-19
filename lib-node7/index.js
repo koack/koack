@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Server = exports.Pool = exports.Bot = undefined;
+exports.INTERACTIVE_MESSAGE_RESPONSE = exports.Server = exports.Pool = exports.Bot = undefined;
 
 var _bot = require('./bot');
 
@@ -22,4 +22,5 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.Bot = _bot2.default;
 exports.Pool = _pool2.default;
 exports.Server = _server2.default;
+const INTERACTIVE_MESSAGE_RESPONSE = exports.INTERACTIVE_MESSAGE_RESPONSE = Symbol('INTERACTIVE_MESSAGE_RESPONSE');
 //# sourceMappingURL=index.js.map

@@ -8,6 +8,7 @@ exports.default = {
   slackClient: {
     clientID: '123123.123123',
     clientSecret: 'abcdefgh'
-  }
+  },
+  verificationToken: 'abcdefgh'
 };
 //# sourceMappingURL=config.example.js.map

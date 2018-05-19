@@ -13,6 +13,21 @@ type AttachmentFieldType = {|
   short: ?boolean,
 |};
 
+type AttachmentActionConfirmType = {|
+  title: string,
+  text: string,
+  okText: string,
+  dismissText: string,
+|};
+
+type AttachmentActionType = {|
+  name: string,
+  text: string,
+  type: string,
+  value: string,
+  confirm: ?AttachmentActionConfirmType,
+|};
+
 type AttachmentType = {|
   fallback: string,
   color: ?string,
@@ -26,6 +41,9 @@ type AttachmentType = {|
   thumbUrl: ?string,
   footer: ?string,
   footerIcon: ?string,
+  // interactive message
+  callbackId: ?string,
+  actions: ?Array<AttachmentActionType>,
 |};
 
 export type SendMessageOptionsType = {|
@@ -42,6 +60,19 @@ export type SendMessageOptionsType = {|
   replyBroadcast: ?boolean,
 |};
 
+const transformAttachmentAction = (action: AttachmentActionType) => ({
+  name: action.name,
+  text: action.text,
+  type: action.type,
+  value: action.value,
+  confirm: action.confirm && ({
+    title: action.title,
+    text: action.text,
+    ok_text: action.okText,
+    dismiss_text: action.dismissText,
+  }),
+});
+
 const transformAttachment = (attachment: AttachmentType) => ({
   fallback: attachment.fallback,
   color: attachment.color,
@@ -56,6 +87,9 @@ const transformAttachment = (attachment: AttachmentType) => ({
   thumb_url: attachment.thumbUrl,
   footer: attachment.footer,
   footer_icon: attachment.footerIcon,
+  // interactive message
+  callback_id: attachment.callbackId,
+  actions: attachment.actions && attachment.actions.map(transformAttachmentAction),
 });
 
 export default (ctx, channelId: string, message: string, options: ?SendMessageOptionsType) => {
@@ -69,7 +103,7 @@ export default (ctx, channelId: string, message: string, options: ?SendMessageOp
     attachments: options.attachments.map(transformAttachment),
     unfurl_links: options.unfurlLinks,
     unfurl_media: options.unfurlMedia,
-    username: options.username,
+    username: options.username || ctx.bot.name,
     as_user: options.asUser,
     icon_url: options.iconUrl,
     icon_emoji: options.iconEmoj,

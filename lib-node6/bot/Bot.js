@@ -15,22 +15,36 @@ var _koaCompose = require('koa-compose');
 
 var _koaCompose2 = _interopRequireDefault(_koaCompose);
 
+var _events = require('events');
+
+var _createContextFromBot = require('./context/createContextFromBot');
+
+var _createContextFromBot2 = _interopRequireDefault(_createContextFromBot);
+
 var _createContextFromEvent = require('./context/createContextFromEvent');
 
 var _createContextFromEvent2 = _interopRequireDefault(_createContextFromEvent);
+
+var _createContextFromInteractiveMessageResponse = require('./context/createContextFromInteractiveMessageResponse');
+
+var _createContextFromInteractiveMessageResponse2 = _interopRequireDefault(_createContextFromInteractiveMessageResponse);
+
+var _index = require('../index');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const logger = new _nightingaleLogger2.default('koack:bot');
 
 let Bot = class {
-  /** bot id in the team */
+  /** bot name in the team */
   constructor(data) {
     this.middlewares = [];
+    this.internalEventEmitter = new _events.EventEmitter();
 
     Object.assign(this, data);
+    this._ctx = (0, _createContextFromBot2.default)(this);
   }
-  /** bot name in the team */
+  /** bot id in the team */
 
 
   use(middleware) {
@@ -42,10 +56,25 @@ let Bot = class {
     const allMiddlewares = [...this.middlewares, ...middlewares];
     logger.debug('register middlewares on event', { name, middlewareLength: allMiddlewares.length });
     const callback = (0, _koaCompose2.default)(allMiddlewares);
+
+    if (typeof name === 'symbol') {
+      this.internalEventEmitter.on(name.toString(), callback);
+      return;
+    }
+
     this.rtm.on(name, event => {
       logger.debug('event', { name, event });
-      callback((0, _createContextFromEvent2.default)(this, event));
+      callback((0, _createContextFromEvent2.default)(this._ctx, event));
     });
+  }
+
+  messageReceived({ type, name, data }) {
+    if (type === 'event') {
+      if (name === _index.INTERACTIVE_MESSAGE_RESPONSE.toString()) {
+        const ctx = (0, _createContextFromInteractiveMessageResponse2.default)(this._ctx, data);
+        this.internalEventEmitter.emit(name, ctx);
+      }
+    }
   }
 
   start() {

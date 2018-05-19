@@ -3,7 +3,9 @@ export const UserType = t.type('UserType', t.object(t.property('id', t.string())
 
 export const InstallationInfoType = t.type('InstallationInfoType', t.object(t.property('user', UserType), t.property('date', t.union(t.ref('Date'), t.string())), t.property('scopes', t.array(t.string()))));
 
-export const TeamType = t.type('TeamType', t.object(t.property('id', t.string()), t.property('name', t.string()), t.property('bot', UserType), t.property('installations', t.nullable(t.array(InstallationInfoType)))));
+export const TeamIdType = t.type('TeamIdType', t.string());
+
+export const TeamType = t.type('TeamType', t.object(t.property('id', TeamIdType), t.property('name', t.string()), t.property('bot', UserType), t.property('installations', t.nullable(t.array(InstallationInfoType)))));
 
 export const InstallInfoType = t.type('InstallInfoType', t.intersection(InstallationInfoType, t.object(t.property('team', t.object(t.property('id', t.string()), t.property('name', t.string()))), t.property('bot', UserType))));
 

@@ -17,13 +17,25 @@ var _koaCompose = require('koa-compose');
 
 var _koaCompose2 = _interopRequireDefault(_koaCompose);
 
+var _events = require('events');
+
+var _createContextFromBot = require('./context/createContextFromBot');
+
+var _createContextFromBot2 = _interopRequireDefault(_createContextFromBot);
+
 var _createContextFromEvent = require('./context/createContextFromEvent');
 
 var _createContextFromEvent2 = _interopRequireDefault(_createContextFromEvent);
 
+var _createContextFromInteractiveMessageResponse = require('./context/createContextFromInteractiveMessageResponse');
+
+var _createContextFromInteractiveMessageResponse2 = _interopRequireDefault(_createContextFromInteractiveMessageResponse);
+
 var _types = require('./types');
 
 var _types2 = require('../types');
+
+var _index = require('../index');
 
 var _flowRuntime = require('flow-runtime');
 
@@ -89,7 +101,7 @@ let Bot = (_dec = _flowRuntime2.default.decorate(_flowRuntime2.default.nullable(
 }), _dec4 = _flowRuntime2.default.decorate(function () {
   return _flowRuntime2.default.union(_flowRuntime2.default.null(), _flowRuntime2.default.ref('Map', _flowRuntime2.default.string(), _flowRuntime2.default.ref(_client.WebClient)));
 }), _dec5 = _flowRuntime2.default.decorate(_flowRuntime2.default.array(_flowRuntime2.default.ref(MiddlewareType))), _dec6 = _flowRuntime2.default.decorate(_flowRuntime2.default.nullable(_flowRuntime2.default.string())), _dec7 = _flowRuntime2.default.decorate(_flowRuntime2.default.nullable(_flowRuntime2.default.string())), (_class = class {
-  /** bot id in the team */
+  /** bot name in the team */
   constructor(data) {
     _initDefineProp(this, 'team', _descriptor, this);
 
@@ -105,11 +117,14 @@ let Bot = (_dec = _flowRuntime2.default.decorate(_flowRuntime2.default.nullable(
 
     _initDefineProp(this, 'name', _descriptor7, this);
 
+    this.internalEventEmitter = new _events.EventEmitter();
+
     _flowRuntime2.default.param('data', BotConstructorArguments).assert(data);
 
     Object.assign(this, data);
+    this._ctx = (0, _createContextFromBot2.default)(this);
   }
-  /** bot name in the team */
+  /** bot id in the team */
 
 
   use(middleware) {
@@ -122,7 +137,7 @@ let Bot = (_dec = _flowRuntime2.default.decorate(_flowRuntime2.default.nullable(
   }
 
   on(name, ...middlewares) {
-    let _nameType = _flowRuntime2.default.string();
+    let _nameType = _flowRuntime2.default.union(_flowRuntime2.default.string(), _flowRuntime2.default.any());
 
     let _middlewaresType = _flowRuntime2.default.array(_flowRuntime2.default.ref(MiddlewareType));
 
@@ -133,14 +148,29 @@ let Bot = (_dec = _flowRuntime2.default.decorate(_flowRuntime2.default.nullable(
     const allMiddlewares = [...this.middlewares, ...middlewares];
     logger.debug('register middlewares on event', { name, middlewareLength: allMiddlewares.length });
     const callback = (0, _koaCompose2.default)(allMiddlewares);
+
+    if (typeof name === 'symbol') {
+      this.internalEventEmitter.on(name.toString(), callback);
+      return;
+    }
+
     this.rtm.on(name, event => {
       let _eventType = _flowRuntime2.default.object();
 
       _flowRuntime2.default.param('event', _eventType).assert(event);
 
       logger.debug('event', { name, event });
-      callback((0, _createContextFromEvent2.default)(this, event));
+      callback((0, _createContextFromEvent2.default)(this._ctx, event));
     });
+  }
+
+  messageReceived({ type, name, data }) {
+    if (type === 'event') {
+      if (name === _index.INTERACTIVE_MESSAGE_RESPONSE.toString()) {
+        const ctx = (0, _createContextFromInteractiveMessageResponse2.default)(this._ctx, data);
+        this.internalEventEmitter.emit(name, ctx);
+      }
+    }
   }
 
   start() {

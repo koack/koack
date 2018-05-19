@@ -4,4 +4,5 @@ export default {
     clientID: '123123.123123',
     clientSecret: 'abcdefgh',
   },
+  verificationToken: 'abcdefgh',
 };

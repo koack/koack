@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.StorageType = exports.WhereType = exports.InstallInfoType = exports.TeamType = exports.InstallationInfoType = exports.UserType = undefined;
+exports.StorageType = exports.WhereType = exports.InstallInfoType = exports.TeamType = exports.TeamIdType = exports.InstallationInfoType = exports.UserType = undefined;
 
 var _flowRuntime = require('flow-runtime');
 
@@ -15,7 +15,9 @@ const UserType = exports.UserType = _flowRuntime2.default.type('UserType', _flow
 
 const InstallationInfoType = exports.InstallationInfoType = _flowRuntime2.default.type('InstallationInfoType', _flowRuntime2.default.object(_flowRuntime2.default.property('user', UserType), _flowRuntime2.default.property('date', _flowRuntime2.default.union(_flowRuntime2.default.ref('Date'), _flowRuntime2.default.string())), _flowRuntime2.default.property('scopes', _flowRuntime2.default.array(_flowRuntime2.default.string()))));
 
-const TeamType = exports.TeamType = _flowRuntime2.default.type('TeamType', _flowRuntime2.default.object(_flowRuntime2.default.property('id', _flowRuntime2.default.string()), _flowRuntime2.default.property('name', _flowRuntime2.default.string()), _flowRuntime2.default.property('bot', UserType), _flowRuntime2.default.property('installations', _flowRuntime2.default.nullable(_flowRuntime2.default.array(InstallationInfoType)))));
+const TeamIdType = exports.TeamIdType = _flowRuntime2.default.type('TeamIdType', _flowRuntime2.default.string());
+
+const TeamType = exports.TeamType = _flowRuntime2.default.type('TeamType', _flowRuntime2.default.object(_flowRuntime2.default.property('id', TeamIdType), _flowRuntime2.default.property('name', _flowRuntime2.default.string()), _flowRuntime2.default.property('bot', UserType), _flowRuntime2.default.property('installations', _flowRuntime2.default.nullable(_flowRuntime2.default.array(InstallationInfoType)))));
 
 const InstallInfoType = exports.InstallInfoType = _flowRuntime2.default.type('InstallInfoType', _flowRuntime2.default.intersection(InstallationInfoType, _flowRuntime2.default.object(_flowRuntime2.default.property('team', _flowRuntime2.default.object(_flowRuntime2.default.property('id', _flowRuntime2.default.string()), _flowRuntime2.default.property('name', _flowRuntime2.default.string()))), _flowRuntime2.default.property('bot', UserType))));
 

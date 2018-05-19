@@ -44,7 +44,7 @@ exports.default = function createContextFromBot(bot) {
 
   ctx.logger = new _nightingaleLogger2.default('bot');
   ctx.logger.setContext({
-    team: bot.team,
+    team: bot.team && { id: bot.team.id, name: bot.team.name },
     user: ctx.user && ctx.user.name
   });
 

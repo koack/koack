@@ -77,7 +77,7 @@ let Process = class {
       throw new Error('Cannot send a message in a killed process');
     }
 
-    this.childProcess.send(Object.assign({ type: 'message', teamId }, data));
+    this.childProcess.send({ type: 'message', teamId, data });
   }
 };
 exports.default = Process;

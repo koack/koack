@@ -4,11 +4,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _createContextFromBot = require('./createContextFromBot');
-
-var _createContextFromBot2 = _interopRequireDefault(_createContextFromBot);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const extractIdFromEvent = key => event => {
   if (typeof event[key] === 'string') {
@@ -24,19 +19,14 @@ const extractIdFromEvent = key => event => {
 const extrackUserIdFromEvent = extractIdFromEvent('user');
 const extrackChannelIdFromEvent = extractIdFromEvent('channel');
 
-exports.default = (bot, event) => {
-  const ctx = (0, _createContextFromBot2.default)(bot);
+exports.default = (botContext, event) => {
+  const ctx = Object.create(botContext);
 
-  Object.assign(ctx, {
+  return Object.assign(ctx, {
     event,
     userId: extrackUserIdFromEvent(event),
-    channelId: extrackChannelIdFromEvent(event)
+    channelId: extrackChannelIdFromEvent(event),
+    logger: ctx.logger.context({ text: event.text })
   });
-
-  ctx.logger.extendsContext({
-    text: event.text
-  });
-
-  return ctx;
 };
 //# sourceMappingURL=createContextFromEvent.js.map

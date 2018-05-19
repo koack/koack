@@ -3,10 +3,28 @@ import t from 'flow-runtime';
 const ParseType = t.type('ParseType', t.union(t.string('none'), t.string('full')));
 const AuthorType = t.type('AuthorType', t.exactObject(t.property('name', t.nullable(t.string())), t.property('link', t.nullable(t.string())), t.property('icon', t.nullable(t.string()))));
 const AttachmentFieldType = t.type('AttachmentFieldType', t.exactObject(t.property('title', t.string()), t.property('value', t.string()), t.property('short', t.nullable(t.boolean()))));
-const AttachmentType = t.type('AttachmentType', t.exactObject(t.property('fallback', t.string()), t.property('color', t.nullable(t.string())), t.property('pretext', t.nullable(t.string())), t.property('author', t.nullable(AuthorType)), t.property('title', t.nullable(t.string())), t.property('titleLink', t.nullable(t.string())), t.property('text', t.string()), t.property('fields', t.nullable(t.array(AttachmentFieldType))), t.property('imageUrl', t.nullable(t.string())), t.property('thumbUrl', t.nullable(t.string())), t.property('footer', t.nullable(t.string())), t.property('footerIcon', t.nullable(t.string()))));
+const AttachmentActionConfirmType = t.type('AttachmentActionConfirmType', t.exactObject(t.property('title', t.string()), t.property('text', t.string()), t.property('okText', t.string()), t.property('dismissText', t.string())));
+const AttachmentActionType = t.type('AttachmentActionType', t.exactObject(t.property('name', t.string()), t.property('text', t.string()), t.property('type', t.string()), t.property('value', t.string()), t.property('confirm', t.nullable(AttachmentActionConfirmType))));
+const AttachmentType = t.type('AttachmentType', t.exactObject(t.property('fallback', t.string()), t.property('color', t.nullable(t.string())), t.property('pretext', t.nullable(t.string())), t.property('author', t.nullable(AuthorType)), t.property('title', t.nullable(t.string())), t.property('titleLink', t.nullable(t.string())), t.property('text', t.string()), t.property('fields', t.nullable(t.array(AttachmentFieldType))), t.property('imageUrl', t.nullable(t.string())), t.property('thumbUrl', t.nullable(t.string())), t.property('footer', t.nullable(t.string())), t.property('footerIcon', t.nullable(t.string())), t.property('callbackId', t.nullable(t.string())), t.property('actions', t.nullable(t.array(AttachmentActionType)))));
 
 
 export const SendMessageOptionsType = t.type('SendMessageOptionsType', t.exactObject(t.property('parse', t.nullable(ParseType)), t.property('linkNames', t.nullable(t.boolean())), t.property('attachments', t.nullable(t.array(AttachmentType))), t.property('unfurlLinks', t.nullable(t.boolean())), t.property('unfurlMedia', t.nullable(t.boolean())), t.property('username', t.nullable(t.string())), t.property('asUser', t.nullable(t.boolean())), t.property('iconUrl', t.nullable(t.boolean())), t.property('iconEmoj', t.nullable(t.boolean())), t.property('threadTs', t.nullable(t.string())), t.property('replyBroadcast', t.nullable(t.boolean()))));
+
+const transformAttachmentAction = action => {
+  t.param('action', AttachmentActionType).assert(action);
+  return {
+    name: action.name,
+    text: action.text,
+    type: action.type,
+    value: action.value,
+    confirm: action.confirm && {
+      title: action.title,
+      text: action.text,
+      ok_text: action.okText,
+      dismiss_text: action.dismissText
+    }
+  };
+};
 
 const transformAttachment = attachment => {
   t.param('attachment', AttachmentType).assert(attachment);
@@ -23,7 +41,10 @@ const transformAttachment = attachment => {
     image_url: attachment.imageUrl,
     thumb_url: attachment.thumbUrl,
     footer: attachment.footer,
-    footer_icon: attachment.footerIcon
+    footer_icon: attachment.footerIcon,
+    // interactive message
+    callback_id: attachment.callbackId,
+    actions: attachment.actions && attachment.actions.map(transformAttachmentAction)
   };
 };
 
@@ -48,7 +69,7 @@ export default (function sendMessage(ctx, channelId, message, options) {
     attachments: options.attachments.map(transformAttachment),
     unfurl_links: options.unfurlLinks,
     unfurl_media: options.unfurlMedia,
-    username: options.username,
+    username: options.username || ctx.bot.name,
     as_user: options.asUser,
     icon_url: options.iconUrl,
     icon_emoji: options.iconEmoj,

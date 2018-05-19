@@ -48,6 +48,15 @@ process.on('message', message => {
         break;
       }
 
+    case 'message':
+      {
+        const { teamId, data } = t.object(t.property('teamId', t.string())).assert(message);
+        if (!teamId) throw new Error('Invalid teamId');
+        const bot = t.ref(Bot).assert(teams.get(teamId));
+        bot.messageReceived(data);
+        break;
+      }
+
     default:
       {
         logger.warn('Unsupported message', message);

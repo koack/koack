@@ -2,7 +2,7 @@
 import { fork } from 'child_process';
 import type { ChildProcess } from 'child_process';
 import Pool from './index';
-import type { TeamType } from '../../src/types';
+import type { TeamIdType, TeamType } from '../../src/types';
 
 export default class Process {
   pool: Pool;
@@ -74,11 +74,11 @@ export default class Process {
     this.startTeam(team);
   }
 
-  sendMessage(teamId: number, data: Object) {
+  sendMessage(teamId: TeamIdType, data: Object) {
     if (!this.childProcess) {
       throw new Error('Cannot send a message in a killed process');
     }
 
-    this.childProcess.send({ type: 'message', teamId, ...data });
+    this.childProcess.send({ type: 'message', teamId, data });
   }
 }

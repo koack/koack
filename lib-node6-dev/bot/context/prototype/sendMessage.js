@@ -18,9 +18,30 @@ const AuthorType = _flowRuntime2.default.type('AuthorType', _flowRuntime2.defaul
 
 const AttachmentFieldType = _flowRuntime2.default.type('AttachmentFieldType', _flowRuntime2.default.exactObject(_flowRuntime2.default.property('title', _flowRuntime2.default.string()), _flowRuntime2.default.property('value', _flowRuntime2.default.string()), _flowRuntime2.default.property('short', _flowRuntime2.default.nullable(_flowRuntime2.default.boolean()))));
 
-const AttachmentType = _flowRuntime2.default.type('AttachmentType', _flowRuntime2.default.exactObject(_flowRuntime2.default.property('fallback', _flowRuntime2.default.string()), _flowRuntime2.default.property('color', _flowRuntime2.default.nullable(_flowRuntime2.default.string())), _flowRuntime2.default.property('pretext', _flowRuntime2.default.nullable(_flowRuntime2.default.string())), _flowRuntime2.default.property('author', _flowRuntime2.default.nullable(AuthorType)), _flowRuntime2.default.property('title', _flowRuntime2.default.nullable(_flowRuntime2.default.string())), _flowRuntime2.default.property('titleLink', _flowRuntime2.default.nullable(_flowRuntime2.default.string())), _flowRuntime2.default.property('text', _flowRuntime2.default.string()), _flowRuntime2.default.property('fields', _flowRuntime2.default.nullable(_flowRuntime2.default.array(AttachmentFieldType))), _flowRuntime2.default.property('imageUrl', _flowRuntime2.default.nullable(_flowRuntime2.default.string())), _flowRuntime2.default.property('thumbUrl', _flowRuntime2.default.nullable(_flowRuntime2.default.string())), _flowRuntime2.default.property('footer', _flowRuntime2.default.nullable(_flowRuntime2.default.string())), _flowRuntime2.default.property('footerIcon', _flowRuntime2.default.nullable(_flowRuntime2.default.string()))));
+const AttachmentActionConfirmType = _flowRuntime2.default.type('AttachmentActionConfirmType', _flowRuntime2.default.exactObject(_flowRuntime2.default.property('title', _flowRuntime2.default.string()), _flowRuntime2.default.property('text', _flowRuntime2.default.string()), _flowRuntime2.default.property('okText', _flowRuntime2.default.string()), _flowRuntime2.default.property('dismissText', _flowRuntime2.default.string())));
+
+const AttachmentActionType = _flowRuntime2.default.type('AttachmentActionType', _flowRuntime2.default.exactObject(_flowRuntime2.default.property('name', _flowRuntime2.default.string()), _flowRuntime2.default.property('text', _flowRuntime2.default.string()), _flowRuntime2.default.property('type', _flowRuntime2.default.string()), _flowRuntime2.default.property('value', _flowRuntime2.default.string()), _flowRuntime2.default.property('confirm', _flowRuntime2.default.nullable(AttachmentActionConfirmType))));
+
+const AttachmentType = _flowRuntime2.default.type('AttachmentType', _flowRuntime2.default.exactObject(_flowRuntime2.default.property('fallback', _flowRuntime2.default.string()), _flowRuntime2.default.property('color', _flowRuntime2.default.nullable(_flowRuntime2.default.string())), _flowRuntime2.default.property('pretext', _flowRuntime2.default.nullable(_flowRuntime2.default.string())), _flowRuntime2.default.property('author', _flowRuntime2.default.nullable(AuthorType)), _flowRuntime2.default.property('title', _flowRuntime2.default.nullable(_flowRuntime2.default.string())), _flowRuntime2.default.property('titleLink', _flowRuntime2.default.nullable(_flowRuntime2.default.string())), _flowRuntime2.default.property('text', _flowRuntime2.default.string()), _flowRuntime2.default.property('fields', _flowRuntime2.default.nullable(_flowRuntime2.default.array(AttachmentFieldType))), _flowRuntime2.default.property('imageUrl', _flowRuntime2.default.nullable(_flowRuntime2.default.string())), _flowRuntime2.default.property('thumbUrl', _flowRuntime2.default.nullable(_flowRuntime2.default.string())), _flowRuntime2.default.property('footer', _flowRuntime2.default.nullable(_flowRuntime2.default.string())), _flowRuntime2.default.property('footerIcon', _flowRuntime2.default.nullable(_flowRuntime2.default.string())), _flowRuntime2.default.property('callbackId', _flowRuntime2.default.nullable(_flowRuntime2.default.string())), _flowRuntime2.default.property('actions', _flowRuntime2.default.nullable(_flowRuntime2.default.array(AttachmentActionType)))));
 
 const SendMessageOptionsType = exports.SendMessageOptionsType = _flowRuntime2.default.type('SendMessageOptionsType', _flowRuntime2.default.exactObject(_flowRuntime2.default.property('parse', _flowRuntime2.default.nullable(ParseType)), _flowRuntime2.default.property('linkNames', _flowRuntime2.default.nullable(_flowRuntime2.default.boolean())), _flowRuntime2.default.property('attachments', _flowRuntime2.default.nullable(_flowRuntime2.default.array(AttachmentType))), _flowRuntime2.default.property('unfurlLinks', _flowRuntime2.default.nullable(_flowRuntime2.default.boolean())), _flowRuntime2.default.property('unfurlMedia', _flowRuntime2.default.nullable(_flowRuntime2.default.boolean())), _flowRuntime2.default.property('username', _flowRuntime2.default.nullable(_flowRuntime2.default.string())), _flowRuntime2.default.property('asUser', _flowRuntime2.default.nullable(_flowRuntime2.default.boolean())), _flowRuntime2.default.property('iconUrl', _flowRuntime2.default.nullable(_flowRuntime2.default.boolean())), _flowRuntime2.default.property('iconEmoj', _flowRuntime2.default.nullable(_flowRuntime2.default.boolean())), _flowRuntime2.default.property('threadTs', _flowRuntime2.default.nullable(_flowRuntime2.default.string())), _flowRuntime2.default.property('replyBroadcast', _flowRuntime2.default.nullable(_flowRuntime2.default.boolean()))));
+
+const transformAttachmentAction = action => {
+  _flowRuntime2.default.param('action', AttachmentActionType).assert(action);
+
+  return {
+    name: action.name,
+    text: action.text,
+    type: action.type,
+    value: action.value,
+    confirm: action.confirm && {
+      title: action.title,
+      text: action.text,
+      ok_text: action.okText,
+      dismiss_text: action.dismissText
+    }
+  };
+};
 
 const transformAttachment = attachment => {
   _flowRuntime2.default.param('attachment', AttachmentType).assert(attachment);
@@ -38,7 +59,10 @@ const transformAttachment = attachment => {
     image_url: attachment.imageUrl,
     thumb_url: attachment.thumbUrl,
     footer: attachment.footer,
-    footer_icon: attachment.footerIcon
+    footer_icon: attachment.footerIcon,
+    // interactive message
+    callback_id: attachment.callbackId,
+    actions: attachment.actions && attachment.actions.map(transformAttachmentAction)
   };
 };
 
@@ -65,7 +89,7 @@ exports.default = function sendMessage(ctx, channelId, message, options) {
     attachments: options.attachments.map(transformAttachment),
     unfurl_links: options.unfurlLinks,
     unfurl_media: options.unfurlMedia,
-    username: options.username,
+    username: options.username || ctx.bot.name,
     as_user: options.asUser,
     icon_url: options.iconUrl,
     icon_emoji: options.iconEmoj,

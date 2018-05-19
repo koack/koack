@@ -72,6 +72,8 @@ function _initializerWarningHelper() {
 
 const TeamType = _flowRuntime2.default.tdz(() => _types.TeamType);
 
+const TeamIdType = _flowRuntime2.default.tdz(() => _types.TeamIdType);
+
 const logger = new _nightingale2.default('koack:pool');
 
 const PoolOptionsType = _flowRuntime2.default.type('PoolOptionsType', _flowRuntime2.default.exactObject(_flowRuntime2.default.property('size', _flowRuntime2.default.number()), _flowRuntime2.default.property('path', _flowRuntime2.default.string())));
@@ -105,7 +107,7 @@ let Pool = (_dec = _flowRuntime2.default.decorate(_flowRuntime2.default.number()
   }
 
   sendBotMessage(teamId, data) {
-    let _teamIdType = _flowRuntime2.default.number();
+    let _teamIdType = _flowRuntime2.default.ref(TeamIdType);
 
     let _dataType = _flowRuntime2.default.object();
 

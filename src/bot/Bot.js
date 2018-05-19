@@ -1,10 +1,14 @@
 /* @flow */
 import { RtmClient, WebClient, CLIENT_EVENTS } from '@slack/client';
-import Logger from 'nightingale-logger/src';
+import Logger from 'nightingale-logger';
 import compose from 'koa-compose';
+import { EventEmitter } from 'events';
+import createContextFromBot from './context/createContextFromBot';
 import createContextFromEvent from './context/createContextFromEvent';
+import createContextFromHttp from './context/createContextFromInteractiveMessageResponse';
 import type { MiddlewareType } from './types';
 import type { TeamType } from '../types';
+import { INTERACTIVE_MESSAGE_RESPONSE } from '../index';
 
 type BotConstructorArguments = {|
   team: ?TeamType,
@@ -25,9 +29,11 @@ export default class Bot {
   id: ?string;
   /** bot name in the team */
   name: ?string;
+  internalEventEmitter = new EventEmitter();
 
   constructor(data: BotConstructorArguments) {
     Object.assign(this, data);
+    this._ctx = createContextFromBot(this);
   }
 
   use(middleware: MiddlewareType) {
@@ -35,14 +41,29 @@ export default class Bot {
     this.middlewares.push(middleware);
   }
 
-  on(name: string, ...middlewares: Array<MiddlewareType>) {
+  on(name: string | any, ...middlewares: Array<MiddlewareType>) {
     const allMiddlewares = [...this.middlewares, ...middlewares];
     logger.debug('register middlewares on event', { name, middlewareLength: allMiddlewares.length });
     const callback = compose(allMiddlewares);
+
+    if (typeof name === 'symbol') {
+      this.internalEventEmitter.on(name.toString(), callback);
+      return;
+    }
+
     this.rtm.on(name, (event: Object) => {
       logger.debug('event', { name, event });
-      callback(createContextFromEvent(this, event));
+      callback(createContextFromEvent(this._ctx, event));
     });
+  }
+
+  messageReceived({ type, name, data }) {
+    if (type === 'event') {
+      if (name === INTERACTIVE_MESSAGE_RESPONSE.toString()) {
+        const ctx = createContextFromHttp(this._ctx, data);
+        this.internalEventEmitter.emit(name, ctx);
+      }
+    }
   }
 
   start() {

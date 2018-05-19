@@ -11,8 +11,10 @@ export type InstallationInfoType = {
   scopes: Array<string>,
 };
 
+export type TeamIdType = string;
+
 export type TeamType = {
-  id: string,
+  id: TeamIdType,
   name: string,
   bot: UserType,
   installations: ?Array<InstallationInfoType>,

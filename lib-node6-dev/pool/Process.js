@@ -64,6 +64,8 @@ function _initializerWarningHelper() {
   throw new Error('Decorating class property failed. Please ensure that transform-class-properties is enabled.');
 }
 
+const TeamIdType = _flowRuntime2.default.tdz(() => _types.TeamIdType);
+
 const TeamType = _flowRuntime2.default.tdz(() => _types.TeamType);
 
 const ChildProcess = _flowRuntime2.default.tdz(() => _child_process.ChildProcess);
@@ -164,7 +166,7 @@ let Process = (_dec = _flowRuntime2.default.decorate(function () {
   }
 
   sendMessage(teamId, data) {
-    let _teamIdType = _flowRuntime2.default.number();
+    let _teamIdType = _flowRuntime2.default.ref(TeamIdType);
 
     let _dataType = _flowRuntime2.default.object();
 
@@ -176,7 +178,7 @@ let Process = (_dec = _flowRuntime2.default.decorate(function () {
       throw new Error('Cannot send a message in a killed process');
     }
 
-    this.childProcess.send(Object.assign({ type: 'message', teamId }, data));
+    this.childProcess.send({ type: 'message', teamId, data });
   }
 }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, 'pool', [_dec], {
   enumerable: true,

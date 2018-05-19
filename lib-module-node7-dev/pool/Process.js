@@ -46,9 +46,10 @@ function _initializerWarningHelper() {
 import { fork } from 'child_process';
 import { ChildProcess as _ChildProcess } from 'child_process';
 import Pool from './index';
-import { TeamType as _TeamType } from '../../types';
+import { TeamIdType as _TeamIdType, TeamType as _TeamType } from '../../types';
 
 import t from 'flow-runtime';
+const TeamIdType = t.tdz(() => _TeamIdType);
 const TeamType = t.tdz(() => _TeamType);
 const ChildProcess = t.tdz(() => _ChildProcess);
 let Process = (_dec = t.decorate(function () {
@@ -146,7 +147,7 @@ let Process = (_dec = t.decorate(function () {
   }
 
   sendMessage(teamId, data) {
-    let _teamIdType = t.number();
+    let _teamIdType = t.ref(TeamIdType);
 
     let _dataType = t.object();
 
@@ -157,7 +158,7 @@ let Process = (_dec = t.decorate(function () {
       throw new Error('Cannot send a message in a killed process');
     }
 
-    this.childProcess.send(Object.assign({ type: 'message', teamId }, data));
+    this.childProcess.send({ type: 'message', teamId, data });
   }
 }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, 'pool', [_dec], {
   enumerable: true,

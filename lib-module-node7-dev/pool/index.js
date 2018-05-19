@@ -45,11 +45,12 @@ function _initializerWarningHelper() {
 
 import Logger from 'nightingale';
 import startBot from './startBot';
-import { TeamType as _TeamType } from '../types/';
+import { TeamType as _TeamType, TeamIdType as _TeamIdType } from '../types/';
 import Process from './Process';
 
 import t from 'flow-runtime';
 const TeamType = t.tdz(() => _TeamType);
+const TeamIdType = t.tdz(() => _TeamIdType);
 const logger = new Logger('koack:pool');
 
 const PoolOptionsType = t.type('PoolOptionsType', t.exactObject(t.property('size', t.number()), t.property('path', t.string())));
@@ -81,7 +82,7 @@ let Pool = (_dec = t.decorate(t.number()), _dec2 = t.decorate(t.string()), _dec3
   }
 
   sendBotMessage(teamId, data) {
-    let _teamIdType = t.number();
+    let _teamIdType = t.ref(TeamIdType);
 
     let _dataType = t.object();
 

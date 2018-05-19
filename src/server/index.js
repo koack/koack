@@ -1,4 +1,3 @@
-/* @flow */
 import Koa from 'koa';
 import route from 'koa-route';
 import alplisten from 'alp-listen/src';

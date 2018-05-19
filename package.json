@@ -61,6 +61,7 @@
     "nightingale": "^6.1.1",
     "nightingale-app-console": "^0.4.0",
     "nightingale-logger": "^3.3.0",
+    "node-fetch": "^2.1.2",
     "object2map": "^1.1.0",
     "simple-oauth2": "^1.1.0"
   },

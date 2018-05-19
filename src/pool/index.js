@@ -1,7 +1,7 @@
 /* @flow */
 import Logger from 'nightingale/src';
 import startBot from './startBot';
-import type { TeamType } from '../types/';
+import type { TeamType, TeamIdType } from '../types/';
 import Process from './Process';
 
 const logger = new Logger('koack:pool');
@@ -26,7 +26,7 @@ export default class Pool {
     startBot(this, team);
   }
 
-  sendBotMessage(teamId: number, data: Object) {
+  sendBotMessage(teamId: TeamIdType, data: Object) {
     const process = this.teamsToProcess.get(teamId);
     if (!process) {
       logger.warn('No team', { teamId });

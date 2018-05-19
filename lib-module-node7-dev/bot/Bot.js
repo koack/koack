@@ -46,9 +46,13 @@ function _initializerWarningHelper() {
 import { RtmClient, WebClient, CLIENT_EVENTS } from '@slack/client';
 import Logger from 'nightingale-logger';
 import compose from 'koa-compose';
+import { EventEmitter } from 'events';
+import createContextFromBot from './context/createContextFromBot';
 import createContextFromEvent from './context/createContextFromEvent';
+import createContextFromHttp from './context/createContextFromInteractiveMessageResponse';
 import { MiddlewareType as _MiddlewareType } from './types';
 import { TeamType as _TeamType } from '../types';
+import { INTERACTIVE_MESSAGE_RESPONSE } from '../index';
 
 import t from 'flow-runtime';
 const TeamType = t.tdz(() => _TeamType);
@@ -65,7 +69,7 @@ let Bot = (_dec = t.decorate(t.nullable(t.ref(TeamType))), _dec2 = t.decorate(fu
 }), _dec4 = t.decorate(function () {
   return t.union(t.null(), t.ref('Map', t.string(), t.ref(WebClient)));
 }), _dec5 = t.decorate(t.array(t.ref(MiddlewareType))), _dec6 = t.decorate(t.nullable(t.string())), _dec7 = t.decorate(t.nullable(t.string())), (_class = class {
-  /** bot id in the team */
+  /** bot name in the team */
   constructor(data) {
     _initDefineProp(this, 'team', _descriptor, this);
 
@@ -81,11 +85,13 @@ let Bot = (_dec = t.decorate(t.nullable(t.ref(TeamType))), _dec2 = t.decorate(fu
 
     _initDefineProp(this, 'name', _descriptor7, this);
 
+    this.internalEventEmitter = new EventEmitter();
     t.param('data', BotConstructorArguments).assert(data);
 
     Object.assign(this, data);
+    this._ctx = createContextFromBot(this);
   }
-  /** bot name in the team */
+  /** bot id in the team */
 
 
   use(middleware) {
@@ -98,7 +104,7 @@ let Bot = (_dec = t.decorate(t.nullable(t.ref(TeamType))), _dec2 = t.decorate(fu
   }
 
   on(name, ...middlewares) {
-    let _nameType = t.string();
+    let _nameType = t.union(t.string(), t.any());
 
     let _middlewaresType = t.array(t.ref(MiddlewareType));
 
@@ -108,14 +114,29 @@ let Bot = (_dec = t.decorate(t.nullable(t.ref(TeamType))), _dec2 = t.decorate(fu
     const allMiddlewares = [...this.middlewares, ...middlewares];
     logger.debug('register middlewares on event', { name, middlewareLength: allMiddlewares.length });
     const callback = compose(allMiddlewares);
+
+    if (typeof name === 'symbol') {
+      this.internalEventEmitter.on(name.toString(), callback);
+      return;
+    }
+
     this.rtm.on(name, event => {
       let _eventType = t.object();
 
       t.param('event', _eventType).assert(event);
 
       logger.debug('event', { name, event });
-      callback(createContextFromEvent(this, event));
+      callback(createContextFromEvent(this._ctx, event));
     });
+  }
+
+  messageReceived({ type, name, data }) {
+    if (type === 'event') {
+      if (name === INTERACTIVE_MESSAGE_RESPONSE.toString()) {
+        const ctx = createContextFromHttp(this._ctx, data);
+        this.internalEventEmitter.emit(name, ctx);
+      }
+    }
   }
 
   start() {

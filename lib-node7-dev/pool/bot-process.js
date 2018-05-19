@@ -65,6 +65,15 @@ process.on('message', message => {
         break;
       }
 
+    case 'message':
+      {
+        const { teamId, data } = _flowRuntime2.default.object(_flowRuntime2.default.property('teamId', _flowRuntime2.default.string())).assert(message);
+        if (!teamId) throw new Error('Invalid teamId');
+        const bot = _flowRuntime2.default.ref(Bot).assert(teams.get(teamId));
+        bot.messageReceived(data);
+        break;
+      }
+
     default:
       {
         logger.warn('Unsupported message', message);

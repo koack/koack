@@ -182,6 +182,40 @@ bot.on(
 );
 ```
 
+### Interactive messages
+
+> server.js
+
+```js
+import { Pool, Server } from 'koack';
+import interactiveMessage from 'koack/interactive-messages';
+
+const pool = new Pool({ ... });
+const server = new Server({ pool, ... });
+
+server.use(interactiveMessage({
+  pool,
+  url: '/interactive-message', // optional
+  token: 'xxxx',
+}));
+```
+
+> bot.js
+
+```js
+import { INTERACTIVE_MESSAGE_REPONSE } from 'koack/interactive-messages';
+
+bot.on(
+  INTERACTIVE_MESSAGE_REPONSE,
+
+  (ctx) => {
+    ctx.replyEphemeral('text', { replace: false });
+    // or
+    ctx.reply('text', { replace: false })
+  },
+);
+```
+
 ### Dev with HTTPS
 
 For some features like [interactives messages](https://api.slack.com/docs/message-buttons), you need to use https. They are many way to achieve it, here the most simple we know:

@@ -1,6 +1,4 @@
-import Bot from '../Bot';
-import createContextFromBot from './createContextFromBot';
-import type { EventContextType } from '../types';
+import type { EventContextType, ContextType } from '../types';
 
 const extractIdFromEvent = (key: string) => (
   (event: Object) => {
@@ -18,18 +16,13 @@ const extractIdFromEvent = (key: string) => (
 const extrackUserIdFromEvent = extractIdFromEvent('user');
 const extrackChannelIdFromEvent = extractIdFromEvent('channel');
 
-export default (bot: Bot, event: Object): EventContextType => {
-  const ctx = createContextFromBot(bot);
+export default (botContext: ContextType, event: Object): EventContextType => {
+  const ctx = Object.create(botContext);
 
-  Object.assign(ctx, {
+  return Object.assign(ctx, {
     event,
     userId: extrackUserIdFromEvent(event),
     channelId: extrackChannelIdFromEvent(event),
+    logger: ctx.logger.context({ text: event.text }),
   });
-
-  ctx.logger.extendsContext({
-    text: event.text,
-  });
-
-  return ctx;
 };
