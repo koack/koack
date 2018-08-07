@@ -1,3 +1,12 @@
+<a name="0.0.6"></a>
+## [0.0.6](https://github.com/koack/koack/compare/v0.0.5...v0.0.6) (2018-08-07)
+
+
+### Features
+
+* add interactive message (#8) ([2ee2114](https://github.com/koack/koack/commit/2ee2114))
+
+
 <a name="0.0.5"></a>
 ## [0.0.5](https://github.com/koack/koack/compare/v0.0.4...v0.0.5) (2017-04-01)
 
