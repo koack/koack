@@ -1,0 +1,21 @@
+{
+  "name": "koack-symbols",
+  "version": "0.0.0",
+  "description": "",
+  "keywords": [],
+  "author": "Christophe Hurpeau <christophe@hurpeau.com> (https://christophe.hurpeau.com)",
+  "license": "ISC",
+  "repository": "git@github.com:koack/koack.git",
+  "homepage": "https://github.com/koack/koack",
+  "engines": {
+    "node": ">=6.5.0"
+  },
+  "main": "./lib/index.js",
+  "typings": "./lib/index.d.ts",
+  "scripts": {
+    "build": "echo \"No build script.\"",
+    "lint": "echo \"No lint\"",
+    "test": "echo \"No tests\"",
+    "watch": "echo \"No watch script.\""
+  }
+}

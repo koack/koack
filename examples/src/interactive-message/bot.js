@@ -1,18 +1,16 @@
-import 'nightingale-app-console/src';
-import { INTERACTIVE_MESSAGE_RESPONSE } from 'koack/src/';
-import { RTM_EVENTS } from 'koack/src/bot';
-import messageRouter from 'koack/src/message-router';
-import type { Bot } from 'koack/src/bot';
+import 'nightingale-app-console';
+import { INTERACTIVE_MESSAGE_RESPONSE } from 'koack-symbols';
+import messageRouter from 'koack-message-router';
 // import { INTERACTIVE_MESSAGE_RESPONSE } from 'koack/src/interactive-message';
 
-export default (bot: Bot) => {
+export default bot => {
   bot.on(
-    RTM_EVENTS.MESSAGE,
+    'message',
     messageRouter([
       {
         regexp: /\b(hello|hi|hey)\b/,
         // stop: false,
-        handler: (ctx) => {
+        handler: ctx => {
           ctx.reply(`Hello ${ctx.mention()}`);
           ctx.reply('Having a good day ?', {
             attachments: [
@@ -36,7 +34,7 @@ export default (bot: Bot) => {
     ]),
   );
 
-  bot.on(INTERACTIVE_MESSAGE_RESPONSE, (ctx) => {
+  bot.on(INTERACTIVE_MESSAGE_RESPONSE, ctx => {
     if (ctx.actions[0].value === 'yes') {
       ctx.reply('Great ! So happy for you !');
     } else if (ctx.actions[0].value === 'no') {

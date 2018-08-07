@@ -1,22 +1,18 @@
 {
   "name": "koack",
+  "private": true,
   "version": "0.0.5",
   "description": "Core brick to build Slack bots",
-  "keywords": [
-    "bots",
-    "chatbots",
-    "slack"
-  ],
+  "keywords": ["bots", "chatbots", "slack"],
   "author": "Christophe Hurpeau <christophe@hurpeau.com> (https://christophe.hurpeau.com)",
-  "contributors": [
-    "Julien Tilap LA VINH <jlaving@gmail.com>"
-  ],
+  "contributors": ["Julien Tilap LA VINH <jlaving@gmail.com>"],
   "license": "ISC",
   "repository": "git@github.com:koack/koack.git",
   "homepage": "https://github.com/koack/koack",
   "engines": {
     "node": ">=6.5.0"
   },
+  "workspaces": ["packages/*"],
   "main": "./index.js",
   "module:node": "./lib-module-node7/index.js",
   "module:node-dev": "./lib-module-node7-dev/index.js",
@@ -35,55 +31,39 @@
     "./server.js": "./lib-module-node7-dev/server.js"
   },
   "scripts": {
-    "build": "pob-build",
+    "build": "lerna run --ignore \"*-example\" build",
     "clean": "rm -Rf docs dist test/node6 coverage",
-    "generate:api": "rm -Rf docs/ ; mkdir docs/ ; pob-build doc ; jsdoc README.md lib-doc --recurse --destination docs/ --configure jsdoc.conf.json ; rm -Rf lib-doc",
-    "generate:docs": "npm run generate:api && npm run generate:test-coverage",
-    "generate:test-coverage": "rm -Rf coverage/ ; NODE_ENV=production POBREGISTER_ONLY=./test node node_modules/istanbul/lib/cli.js cover node_modules/.bin/_mocha -- --require pob-babel/register --recursive --bail -u tdd test",
-    "lint": "eslint --ext .js,.jsx src/ test/",
-    "prepare": "ln -s ../../git-hooks/pre-commit .git/hooks/pre-commit 2>/dev/null || true ; ln -s ../../git-hooks/post-checkout .git/hooks/post-checkout 2>/dev/null || true ; ln -s ../../git-hooks/post-merge .git/hooks/post-merge 2>/dev/null || true ; ln -s ../../git-hooks/prepare-commit-msg .git/hooks/prepare-commit-msg 2>/dev/null || true",
-    "prepublish": "ln -s ../../git-hooks/pre-commit .git/hooks/pre-commit 2>/dev/null || true ; ln -s ../../git-hooks/post-checkout .git/hooks/post-checkout 2>/dev/null || true ; ln -s ../../git-hooks/post-merge .git/hooks/post-merge 2>/dev/null || true ; ln -s ../../git-hooks/prepare-commit-msg .git/hooks/prepare-commit-msg 2>/dev/null || true",
-    "preversion": "yarn run lint && yarn run build && pob-repository-check-clean",
-    "release": "pob-repository-check-clean && pob-release",
-    "test": "POBREGISTER_ONLY=./test mocha --require pob-babel/register --recursive --bail -u tdd test",
-    "version": "pob-version",
-    "watch": "pob-watch"
+    "commitmsg": "commitlint -e $GIT_PARAMS",
+    "generate:api":
+      "rm -Rf docs/ ; mkdir docs/ ; pob-build doc ; jsdoc README.md lib-doc --recurse --destination docs/ --configure jsdoc.conf.json ; rm -Rf lib-doc",
+    "generate:docs": "lerna run --parallel --ignore \"*-example\" generate:docs",
+    "generate:test-coverage":
+      "rm -Rf coverage/ ; NODE_ENV=production POBREGISTER_ONLY=./test node node_modules/istanbul/lib/cli.js cover node_modules/.bin/_mocha -- --require pob-babel/register --recursive --bail -u tdd test",
+    "lint": "lerna run --stream lint",
+    "postcheckout": "yarnhook",
+    "postmerge": "yarnhook",
+    "postrewrite": "yarnhook",
+    "precommit": "lint-staged",
+    "preversion": "yarn run lint && yarn run build && yarn run generate:docs",
+    "release": "lerna publish --conventional-commits -m 'chore: release'",
+    "test": "lerna run --stream test",
+    "watch": "lerna run --parallel --ignore \"*-example\" watch"
   },
-  "dependencies": {
-    "@slack/client": "^3.8.1",
-    "alp-listen": "^1.3.1",
-    "co-body": "^5.0.2",
-    "flow-runtime": "^0.10.0",
-    "koa": "^2.1.0",
-    "koa-compose": "next",
-    "koa-route": "next",
-    "mongodb": "^2.2.24",
-    "nightingale": "^6.1.1",
-    "nightingale-app-console": "^0.4.0",
-    "nightingale-logger": "^3.3.0",
-    "node-fetch": "^2.1.2",
-    "object2map": "^1.1.0",
-    "simple-oauth2": "^1.1.0"
+  "lint-staged": {
+    "{package.json,packages/*/package.json,,.eslintrc.json}": ["prettier --write", "git add"],
+    "packages/*/lib/**/*.json": ["prettier --write", "git add"],
+    "packages/*/lib/**/*.js": ["eslint --fix --quiet", "git add"]
+  },
+  "commitlint": {
+    "extends": ["@commitlint/config-conventional"]
   },
   "devDependencies": {
-    "babel-eslint": "^7.2.1",
-    "babel-plugin-add-jsdoc-annotations": "^5.1.0",
-    "babel-preset-jsdoc": "^0.4.0",
-    "babel-preset-latest-node": "^0.2.2",
-    "eslint": "^3.19.0",
-    "eslint-config-airbnb-base": "^11.1.2",
-    "eslint-config-pob": "^11.1.0",
-    "eslint-plugin-babel": "^4.1.1",
-    "eslint-plugin-flowtype": "^2.30.4",
-    "eslint-plugin-import": "^2.2.0",
-    "istanbul": "^0.4.5",
-    "jsdoc": "^3.4.3",
-    "komet": "^0.1.4",
-    "komet-karma": "^0.2.5",
-    "minami": "^1.1.1",
-    "mocha": "^3.2.0",
-    "pob-babel": "^17.1.1",
-    "pob-release": "^3.1.0",
-    "xunit-file": "^1.0.0"
+    "@commitlint/cli": "^7.0.0",
+    "@commitlint/config-conventional": "^7.0.1",
+    "husky": "^0.14.3",
+    "lerna": "3.0.0-beta.21",
+    "lint-staged": "^7.2.0",
+    "pob-release": "^4.1.2",
+    "yarnhook": "^0.2.0"
   }
 }

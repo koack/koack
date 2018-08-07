@@ -1,0 +1,1 @@
+{"version":3,"file":"index-node8.cjs.js","sources":["../src/index.ts"],"sourcesContent":["export const INTERACTIVE_MESSAGE_RESPONSE = Symbol('INTERACTIVE_MESSAGE_RESPONSE');\n"],"names":["INTERACTIVE_MESSAGE_RESPONSE","Symbol"],"mappings":";;;;MAAaA,+BAA+BC,OAAO,8BAAP,CAArC;;;;"}

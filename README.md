@@ -1,16 +1,31 @@
-# koack [![NPM version][npm-image]][npm-url]
+<h3 align="center">
+  koack
+</h3>
 
-Core brick to build Slack bots
+<p align="center">
+  Core brick to build Slack bots
+</p>
 
-[![Build Status][circleci-status-image]][circleci-status-url]
-[![Travis Status][travisci-status-image]][travisci-status-url]
-[![Dependency ci Status][dependencyci-image]][dependencyci-url]
-[![Dependency Status][daviddm-image]][daviddm-url]
-[![Coverage percentage][coverage-image]][coverage-url]
+<h1>Packages</h1>
 
-## Nightingale
+This repository is a monorepo that we manage using [Lerna](https://github.com/lerna/lerna).
 
-To read the full documentation on nightingale, go to [nightingale](https://npmjs.com/package/nightingale)
+| Package | Version | Description |
+|---------|---------|-------------|
+| [koack](/packages/koack) | <a href="https://npmjs.org/package/koack"><img src="https://img.shields.io/npm/v/koack.svg?style=flat-square"></a> | 
+| [koack-bot](/packages/koack-bot) | <a href="https://npmjs.org/package/koack-bot"><img src="https://img.shields.io/npm/v/koack-bot.svg?style=flat-square"></a> | Bot koack
+| [koack-core](/packages/koack-core) | <a href="https://npmjs.org/package/koack-core"><img src="https://img.shields.io/npm/v/koack-core.svg?style=flat-square"></a> | 
+| [koack-examples](/packages/koack-examples) | <a href="https://npmjs.org/package/koack-examples"><img src="https://img.shields.io/npm/v/koack-examples.svg?style=flat-square"></a> | 
+| [koack-interactive-messages](/packages/koack-interactive-messages) | <a href="https://npmjs.org/package/koack-interactive-messages"><img src="https://img.shields.io/npm/v/koack-interactive-messages.svg?style=flat-square"></a> | 
+| [koack-message-events-router](/packages/koack-message-events-router) | <a href="https://npmjs.org/package/koack-message-events-router"><img src="https://img.shields.io/npm/v/koack-message-events-router.svg?style=flat-square"></a> | 
+| [koack-message-router](/packages/koack-message-router) | <a href="https://npmjs.org/package/koack-message-router"><img src="https://img.shields.io/npm/v/koack-message-router.svg?style=flat-square"></a> | 
+| [koack-pool](/packages/koack-pool) | <a href="https://npmjs.org/package/koack-pool"><img src="https://img.shields.io/npm/v/koack-pool.svg?style=flat-square"></a> | 
+| [koack-server](/packages/koack-server) | <a href="https://npmjs.org/package/koack-server"><img src="https://img.shields.io/npm/v/koack-server.svg?style=flat-square"></a> | 
+| [koack-storage-memory](/packages/koack-storage-memory) | <a href="https://npmjs.org/package/koack-storage-memory"><img src="https://img.shields.io/npm/v/koack-storage-memory.svg?style=flat-square"></a> | 
+| [koack-storage-mongo](/packages/koack-storage-mongo) | <a href="https://npmjs.org/package/koack-storage-mongo"><img src="https://img.shields.io/npm/v/koack-storage-mongo.svg?style=flat-square"></a> | 
+| [koack-storage-utils](/packages/koack-storage-utils) | <a href="https://npmjs.org/package/koack-storage-utils"><img src="https://img.shields.io/npm/v/koack-storage-utils.svg?style=flat-square"></a> | 
+| [koack-symbols](/packages/koack-symbols) | <a href="https://npmjs.org/package/koack-symbols"><img src="https://img.shields.io/npm/v/koack-symbols.svg?style=flat-square"></a> | 
+| [koack-types](/packages/koack-types) | <a href="https://npmjs.org/package/koack-types"><img src="https://img.shields.io/npm/v/koack-types.svg?style=flat-square"></a> | 
 
 ## Install
 
@@ -29,7 +44,6 @@ npm install --save koack
 > bot.js
 
 ```js
-import { RTM_EVENTS } from 'koack/bot';
 import messageRouter from 'koack/message-router';
 import type { Bot } from 'koack/bot';
 
@@ -40,14 +54,14 @@ const loggerMiddleware = ({ event }, next) => {
 
 export default (bot: Bot) => {
   bot.on(
-    RTM_EVENTS.CHANNEL_JOINED,
+    'channel_joined',
     loggerMiddleware,
     (ctx) => console.log(ctx),
     async (ctx) => Promise.resolve(console.log(ctx)),
   );
 
   bot.on(
-    RTM_EVENTS.MESSAGE,
+    'message',
     messageRouter([
       {
         commands: ['like'], // @mybot like: something
@@ -167,14 +181,13 @@ bot.context.myOwnContextMethod = () => console.log('Hello !');
 ### Use message-events-router
 
 ```js
-import { RTM_EVENTS, RTM_MESSAGE_SUBTYPES } from 'koack/bot';
 import messageEventsRouter from 'koack/message-events-router';
 
 bot.on(
-  RTM_EVENTS.MESSAGE,
+  'message',
 
   messageEventsRouter({
-    events: [RTM_MESSAGE_SUBTYPES.CHANNEL_JOIN, RTM_MESSAGE_SUBTYPES.GROUP_JOIN],
+    events: ['channel_join', 'group_join'],
     handler: ctx => {
 
     },
