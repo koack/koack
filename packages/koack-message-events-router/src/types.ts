@@ -1,6 +1,6 @@
-import { WhereType } from 'koack-types';
+import { ChannelType } from 'koack-types';
 import { Middleware } from 'koa-compose';
-import { EventContext } from 'koack-bot/src/types';
+import { EventContext } from 'koack-bot/types';
 
 export interface MessageEvent {
   ts: string;
@@ -10,21 +10,21 @@ export interface MessageEvent {
 }
 
 export interface MessageContext extends EventContext {
-  messageEvent: MessageEvent,
+  messageEvent: MessageEvent;
 }
 
 export interface BaseEventHandler {
   events: Array<string>;
-  where?: Array<WhereType>;
+  where?: Array<ChannelType>;
 }
 
 export interface CallbackEventHandler extends BaseEventHandler {
-  handler: (ctx: MessageContext);
+  handler: (ctx: MessageContext) => void | Promise<void>;
 }
 
 export interface MiddlewaresEventHandler extends BaseEventHandler {
   handler?: undefined;
-  middlewares: Array<Middleware>;
+  middlewares: Array<Middleware<MessageContext>>;
 }
 
 export type EventHandler = CallbackEventHandler | MiddlewaresEventHandler;

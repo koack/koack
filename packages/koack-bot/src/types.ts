@@ -1,12 +1,10 @@
 import { RTMClient, WebClient } from '@slack/client';
 import Logger from 'nightingale-logger';
-import { Team } from 'koack-types';
+import { Team, ChannelType } from 'koack-types';
 import Bot from './Bot';
 import { SendMessageOptions, MessageResult } from './context/prototype/sendMessage';
 
-export { Team };
-
-export type ChannelType = 'dm' | 'channel' | 'group';
+export { Team, ChannelType };
 
 // export type Context<Event> = {
 export interface BaseContext {
@@ -41,7 +39,6 @@ export interface BotContext extends BaseContext {
 
 export interface EventContext extends BotContext {
   // event: Event,
-  // eslint-disable-next-line no-restricted-globals
   event: object;
   userId: string;
   channelId: string;

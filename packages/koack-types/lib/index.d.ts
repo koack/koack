@@ -24,7 +24,7 @@ export interface InstallInfo extends InstallationInfo {
   bot: User;
 }
 
-export type WhereType = 'dm' | 'channel' | 'group';
+export type ChannelType = 'dm' | 'channel' | 'group';
 
 type CallbackTeam = (team: Team) => void;
 

@@ -1,12 +1,12 @@
 import compose from 'koa-compose';
 import Logger from 'nightingale-logger';
-import { Action } from './types';
+import { Action, ActionWithHandler } from './types';
 
 const logger = new Logger('koack:message-router:actions');
 
 export interface ActionHandlers {
-  commands: Map<string, Action>;
-  regexps: Array<Action>;
+  commands: Map<string, ActionWithHandler>;
+  regexps: Array<ActionWithHandler>;
 }
 
 export interface ActionsMap {
@@ -25,7 +25,7 @@ export default (actions: Array<Action>): ActionsMap => {
   actions.forEach((action: Action) => {
     if (!action.where) action.where = ['dm', 'channel', 'group'];
     if (!action.mention) action.mention = action.where.filter(v => v !== 'dm');
-    if (!action.handler) action.handler = compose(action.middlewares);
+    if (action.middlewares) (action as ActionWithHandler).handler = compose(action.middlewares);
     if (action.stop !== false) action.stop = true;
 
     action.where.forEach(where => {

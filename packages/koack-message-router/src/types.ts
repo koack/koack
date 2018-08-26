@@ -1,14 +1,5 @@
-import { WhereType } from 'koack-types';
-
-export interface Action {
-  commands?: Array<string>;
-  where?: Array<WhereType>;
-  regexp?: RegExp;
-  stop?: boolean; // default true
-  mention?: false | Array<WhereType>;
-  handler?: Function;
-  middlewares?: Array<Function>;
-}
+import { ChannelType } from 'koack-types';
+import { Middleware } from 'koa-compose';
 
 export interface Message {
   ts: string;
@@ -17,3 +8,29 @@ export interface Message {
   userId: any;
   channelId: any;
 }
+
+export interface MessageContext {
+  message: Message,
+}
+
+
+export type Handler = (ctx: MessageContext) => void;
+
+export interface BaseAction {
+  commands?: Array<string>;
+  where?: Array<ChannelType>;
+  regexp?: RegExp;
+  stop?: boolean; // default true
+  mention?: false | Array<ChannelType>;
+  middlewares?: Array<Middleware<MessageContext>>;
+}
+
+export interface ActionWithHandler extends BaseAction {
+  handler: Handler;
+}
+
+export interface ActionWithMiddlewares extends BaseAction {
+  middlewares: Array<Middleware<MessageContext>>;
+}
+
+export type Action = ActionWithHandler | ActionWithMiddlewares;

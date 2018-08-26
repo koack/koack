@@ -1,10 +1,10 @@
 
 // eslint-disable-next-line import/no-unresolved, import/extensions
 import { MongoClient } from 'mongodb';
-import type { InstallInfoType, StorageType, TeamType } from '../../types';
-import { createTeam, updateTeam } from '../utils';
+import { Storage, InstallInfo, Team } from 'koack-types';
+import { createTeam, updateTeam } from 'koack-storage-utils';
 
-export default async (mongoUrl: string): Promise<StorageType> => {
+export default async (mongoUrl: string): Promise<Storage> => {
   const connection = await MongoClient.connect(mongoUrl);
   const teams = connection.collection('teams');
 

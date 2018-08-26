@@ -15,41 +15,41 @@
   "module:node": "./dist/index-node8.es.js",
   "module:node-dev": "./dist/index-node8-dev.es.js",
   "scripts": {
-    "build": "pob-build && tsc -p tsconfig.build.json --declarationMap --emitDeclarationOnly",
-    "generate:api": "typedoc --out docs --tsconfig tsconfig.build.json",
+    "build": "pob-build && tsc -p tsconfig.build.json",
+    "generate:api": "typedoc --out docs --tsconfig tsconfig.doc.json",
     "generate:docs": "rm -Rf docs ; yarn run generate:api",
-    "lint": "tsc --noEmit && eslint --ext .ts  src/",
+    "lint": "npm run typescript-check && eslint --ext .ts  src/",
     "test": "echo \"No tests\"",
+    "typescript-check": "tsc --noEmit",
     "watch": "pob-watch"
   },
   "prettier": {
     "trailingComma": "all",
     "singleQuote": true,
-    "printWidth": 100
+    "arrowParens": "always"
   },
   "dependencies": {
-    "@slack/client": "^4.3.1",
+    "@slack/client": "^4.5.0",
     "koa-compose": "^4.1.0",
     "koack-symbols": "^0.0.0",
     "koack-types": "^0.0.0",
     "nightingale-logger": "^5.1.0",
-    "node-fetch": "^2.1.2"
+    "node-fetch": "^2.2.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.0.0-beta.51",
+    "@babel/core": "7.0.0-rc.3",
     "babel-core": "7.0.0-bridge.0",
-    "babel-eslint": "^8.2.5",
-    "babel-preset-latest-node": "^2.0.0-beta.3",
-    "eslint": "^4.19.1",
-    "eslint-config-pob": "^20.0.0",
-    "eslint-plugin-babel": "^5.1.0",
-    "eslint-plugin-import": "^2.13.0",
-    "eslint-plugin-prettier": "^2.6.1",
-    "eslint-plugin-typescript": "^0.12.0",
-    "pob-babel": "^22.2.5",
-    "prettier": "^1.13.7",
-    "typedoc": "^0.11.1",
-    "typescript": "^2.9.2",
-    "typescript-eslint-parser": "^16.0.1"
+    "babel-eslint": "9.0.0-beta.3",
+    "babel-preset-latest-node": "2.0.0-beta.3",
+    "eslint": "5.4.0",
+    "eslint-config-pob": "22.0.3",
+    "eslint-plugin-babel": "5.1.0",
+    "eslint-plugin-import": "2.14.0",
+    "eslint-plugin-typescript": "0.12.0",
+    "pob-babel": "22.4.0",
+    "prettier": "1.14.2",
+    "typedoc": "0.12.0",
+    "typescript": "3.0.1",
+    "typescript-eslint-parser": "18.0.0"
   }
 }

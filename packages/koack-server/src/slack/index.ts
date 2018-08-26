@@ -1,5 +1,6 @@
 import { create } from 'simple-oauth2';
 import { InstallInfo } from 'koack-types';
+import { Context } from 'koa';
 
 interface ClientConfig {
   clientID: string;
@@ -33,19 +34,19 @@ export default ({
   });
 
   return {
-    authorize: ctx => {
+    authorize: (ctx: Context) => {
       ctx.redirect(
         oauth2.authorizationCode.authorizeURL({
           // eslint-disable-next-line camelcase
           redirect_uri: `${ctx.request.origin}${callbackUrl}`,
-          scope: scopes,
+          scope: scopes.join(' '),
           state: '<state>',
         }),
       );
     },
 
-    callback: async ctx => {
-      const result = await oauth2.clientCredentials.getToken({
+    callback: async (ctx: Context) => {
+      const result = await oauth2.authorizationCode.getToken({
         code: ctx.query.code,
         // eslint-disable-next-line camelcase
         redirect_uri: `${ctx.request.origin}${callbackUrl}`,

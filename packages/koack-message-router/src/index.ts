@@ -1,10 +1,9 @@
-import { Action, Message } from './types';
+import { ChannelType } from 'koack-types';
+import {Action, ActionWithHandler, MessageContext, Message } from './types';
 import createActionHandlersMap from './createActionHandlersMap';
 
-const handle = (ctx, extendsContext: Object, message: Message, action: Action) => {
-  const messageCtx = Object.create(ctx);
-
-  Object.assign(messageCtx, {
+const handle = (ctx: any, extendsContext: Object, message: Message, action: ActionWithHandler) => {
+  const messageCtx: MessageContext = Object.assign(Object.create(ctx), {
     message,
     ...extendsContext,
     logger: ctx.logger.context({
@@ -18,11 +17,11 @@ const handle = (ctx, extendsContext: Object, message: Message, action: Action) =
 
 const canCommandHandleWithMention = (
   hasMention: boolean,
-  command,
+  command: ActionWithHandler,
   destinationType: ChannelType,
 ) => {
   if (!hasMention) {
-    if (command.mention === false) return true;
+    if (!command.mention) return true;
     if (command.mention.includes(destinationType)) return false;
   } else {
     // if hasMention
@@ -36,14 +35,14 @@ export default (actions: Array<Action>) => {
   const mentionOnly = actions.every(action => action.mention === true);
   const map = createActionHandlersMap(actions);
 
-  return (ctx, next) => {
+  return (ctx: any, next: any) => {
     if (!ctx.event.text || ctx.userId === ctx.rtm.activeUserId) return;
 
     const botMention = `<@${ctx.rtm.activeUserId}>`;
 
     const { ts, text: originalText, type: messageType, subtype: messageSubtype } = ctx.event;
     const { teamId, userId, channelId } = ctx;
-    const destinationType = ctx.getChannelType();
+    const destinationType: ChannelType = ctx.getChannelType();
     let text = originalText;
 
     ctx.logger.debug('message', { ts, destinationType, text, messageType, messageSubtype });
@@ -72,7 +71,7 @@ export default (actions: Array<Action>) => {
 
     // try to find a command
     const command = text.split(' ', 2)[0].toLowerCase();
-    const actionCommand = command && map[destinationType].commands.get(command);
+    const actionCommand: ActionWithHandler = command && map[destinationType].commands.get(command);
 
     if (actionCommand && canCommandHandleWithMention(hasMention, actionCommand, destinationType)) {
       text = text.substr(command.length).replace(/^[\s:]*(?!\w)\s*/, '');
@@ -97,7 +96,7 @@ export default (actions: Array<Action>) => {
         ctx.logger.debug('actionRegexp', { text, match });
         handle(ctx, { text, match }, message, action);
 
-        return action.stop;
+        return action.stop || false;
       })
     ) {
       return;

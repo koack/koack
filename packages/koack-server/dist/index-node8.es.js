@@ -26,12 +26,12 @@ var createSlackActions = (({
       ctx.redirect(oauth2.authorizationCode.authorizeURL({
         // eslint-disable-next-line camelcase
         redirect_uri: `${ctx.request.origin}${callbackUrl}`,
-        scope: scopes,
+        scope: scopes.join(' '),
         state: '<state>'
       }));
     },
     callback: async ctx => {
-      const result = await oauth2.clientCredentials.getToken({
+      const result = await oauth2.authorizationCode.getToken({
         code: ctx.query.code,
         // eslint-disable-next-line camelcase
         redirect_uri: `${ctx.request.origin}${callbackUrl}`

@@ -1,5 +1,5 @@
 import compose from 'koa-compose';
-import { WhereType } from 'koack-types';
+import { ChannelType } from 'koack-types';
 import { CallbackEventHandler, EventHandler, MiddlewaresEventHandler } from './types';
 
 export interface EventHandlerMap {
@@ -21,7 +21,7 @@ export default (actions: Array<EventHandler>): EventHandlerMap => {
       );
     }
 
-    eventHandler.where.forEach((where: WhereType) => {
+    eventHandler.where.forEach((where: ChannelType) => {
       eventHandler.events.forEach((eventName: string) => {
         if (map[where].has(eventName)) throw new Error(`event redefined: "${eventName}"`);
         map[where].set(eventName, eventHandler as CallbackEventHandler);
